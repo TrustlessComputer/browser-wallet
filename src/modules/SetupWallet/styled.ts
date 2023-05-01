@@ -6,7 +6,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
-  max-width: 800px;
+  max-width: 1000px;
 `;
 
 const Dash = styled.div`
