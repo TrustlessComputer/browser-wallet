@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WalletState } from '@/state/user/types';
+import { ISetMasterCreated, WalletState } from '@/state/user/types';
+import { TC_SDK } from '@/lib';
 
 export const initialState: WalletState = {
   master: undefined,
@@ -24,14 +25,14 @@ const userSlice = createSlice({
     resetUser(state) {
       state.master = undefined;
       state.selectedUser = undefined;
+      delete state.master;
+      delete state.selectedUser;
+    },
+    setMasterCreated(state, action: PayloadAction<ISetMasterCreated>) {
+      state.master = action.payload.master;
     },
   },
-  // extraReducers: builder => {
-  //   builder.addCase(createAccount.fulfilled, (state, action) => {
-  //     // console.log('SANG TEST: ', state, action);
-  //   });
-  // },
 });
 
-export const { resetUser, setShowSetupWallet } = userSlice.actions;
+export const { resetUser, setShowSetupWallet, setMasterCreated } = userSlice.actions;
 export default userSlice.reducer;

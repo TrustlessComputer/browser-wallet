@@ -22,4 +22,8 @@ interface ICreateAccountPayload {
   password: string;
 }
 
-export type { ISelectedUser, ICreateAccountPayload };
+interface ISetMasterCreated {
+  master: TC_SDK.MasterWallet;
+}
+
+export type { ISelectedUser, ICreateAccountPayload, ISetMasterCreated };
