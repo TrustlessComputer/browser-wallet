@@ -1,3 +1,5 @@
+import { DefaultTheme } from 'styled-components';
+
 export const colors = {
   white: '#FFFFFF',
   black: '#000000',
@@ -46,7 +48,7 @@ export const colors = {
   },
 };
 
-export type ColorsTheme = typeof darkTheme;
+export type ColorsTheme = DefaultTheme;
 
 const commonTheme = {
   ...colors,
@@ -59,21 +61,17 @@ export const darkTheme = {
   ...commonTheme,
 
   // text
-  text: {
-    primary: colors.light['100'],
-    secondary: colors.dark['10'],
-    third: colors.yellow['A'],
-  },
+  'text-primary': colors.light['100'],
+  'text-secondary': colors.dark['10'],
+  'text-highlight': colors.yellow['A'],
+  'text-parallel': colors.dark['100'],
 
-  button: {
-    primary: colors.yellow['A'],
-    border: colors.yellow['A'],
-  },
+  // button
+  'button-primary': colors.yellow['A'],
 
-  border: {
-    primary: colors.dark['60'],
-    secondary: colors.yellow['A'],
-  },
+  // border
+  'border-primary': colors.dark['60'],
+  'border-secondary': colors.yellow['A'],
 
   bg: {
     primary: colors.dark['110'],
@@ -90,22 +88,17 @@ export const lightTheme = {
   ...commonTheme,
 
   // text
+  'text-primary': colors.dark['100'],
+  'text-secondary': colors.dark['60'],
+  'text-highlight': colors.yellow['A'],
+  'text-parallel': colors.dark['100'],
 
-  text: {
-    primary: colors.dark['100'],
-    secondary: colors.dark['60'],
-    third: colors.yellow['A'],
-  },
+  // button
+  'button-primary': colors.yellow['C'],
 
-  button: {
-    primary: colors.yellow['C'],
-    border: colors.yellow['C'],
-  },
-
-  border: {
-    primary: colors.dark['10'],
-    secondary: colors.yellow['C'],
-  },
+  // border
+  'border-primary': colors.dark['10'],
+  'border-secondary': colors.yellow['C'],
 
   bg: {
     primary: colors.white,

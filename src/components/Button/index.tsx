@@ -1,28 +1,29 @@
 import { PropsWithChildren } from 'react';
-import { CSSProperties } from 'styled-components';
 import { StyledButton } from './Button.styled';
+import { ButtonSizes, ButtonVariants } from '@/components/Button/button.type';
+import cs from 'classnames';
 
 export type ButtonProps = {
-  bg?: CSSProperties['backgroundColor'];
-  color?: CSSProperties['backgroundColor'];
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
   props?: HTMLButtonElement;
   type?: 'submit' | 'reset' | 'button' | undefined;
+  variants?: ButtonVariants;
+  sizes?: ButtonSizes;
 };
 
 const Button = ({
   type,
-  bg = 'bg1',
-  color = 'text8',
   className,
   onClick,
   children,
+  variants = 'primary',
+  sizes = 'normal',
   ...props
 }: PropsWithChildren<ButtonProps>) => {
   return (
-    <StyledButton type={type} bg={bg} color={color} className={className} onClick={onClick} {...props}>
+    <StyledButton type={type} className={cs(className, variants, sizes)} onClick={onClick} {...props}>
       {children}
     </StyledButton>
   );

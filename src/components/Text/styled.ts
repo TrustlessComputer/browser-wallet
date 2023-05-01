@@ -1,35 +1,55 @@
 import px2rem from '@/utils/px2rem';
 import styled from 'styled-components';
 
-const BaseText = styled.p<{ color: string | undefined; align: string; maxWidth: string | number }>`
-  color: ${({ color, theme }) => (color ? (theme as any)[color] : theme.white)};
+const BaseText = styled.p<{
+  color: string | undefined;
+  align: string;
+  maxWidth: string | number;
+}>`
+  color: ${({ color, theme }) => (color ? (theme as any)[color] : theme['text-primary'])};
   text-align: ${({ align }) => align};
   max-width: ${({ maxWidth }) => maxWidth};
+  line-height: 140%;
 
   // FONT-SIZE
-  &.size-extra-small {
-    font-size: ${px2rem(11)};
-    line-height: 160%;
-  }
-  &.size-small {
+  &.size-tini {
     font-size: ${px2rem(12)};
-    line-height: 160%;
   }
-  &.size-regular {
+  &.size-note {
     font-size: ${px2rem(14)};
-    line-height: 160%;
   }
-  &.size-medium {
+  &.size-body {
     font-size: ${px2rem(16)};
-    line-height: 160%;
   }
-  &.size-large {
+  &.size-body-large {
     font-size: ${px2rem(18)};
-    line-height: 160%;
+  }
+  &.size-h6 {
+    font-size: ${px2rem(20)};
   }
   &.size-h5 {
     font-size: ${px2rem(24)};
-    line-height: 160%;
+  }
+  &.size-h4 {
+    font-size: ${px2rem(36)};
+  }
+  &.size-h3 {
+    font-size: ${px2rem(40)};
+  }
+  &.size-h2 {
+    font-size: ${px2rem(48)};
+  }
+  &.size-h1 {
+    font-size: ${px2rem(56)};
+  }
+  &.size-d3 {
+    font-size: ${px2rem(72)};
+  }
+  &.size-d2 {
+    font-size: ${px2rem(96)};
+  }
+  &.size-d1 {
+    font-size: ${px2rem(128)};
   }
 
   // FONT-WEIGHT

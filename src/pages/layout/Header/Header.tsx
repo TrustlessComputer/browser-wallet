@@ -21,7 +21,7 @@ const Header = () => {
         });
       }
     }
-  }, [isOpenMenu]);
+  }, []);
 
   return (
     <Wrapper>

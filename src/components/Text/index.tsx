@@ -6,7 +6,7 @@ import { ColorsTheme } from '@/theme/colors';
 type TText = {
   fontWeight?: 'bold' | 'semibold' | 'medium' | 'regular' | 'light';
   style?: CSSProperties;
-  size?: 'extra-small' | 'small' | 'regular' | 'medium' | 'large' | 'h5';
+  size?: 'tini' | 'note' | 'body' | 'body-large' | 'h6' | 'h5' | 'h4' | 'h3' | 'h2' | 'h1' | 'd3' | 'd2' | 'd1';
   align?: 'center' | 'left' | 'right' | 'unset';
   color?: keyof ColorsTheme;
   className?: string;
@@ -17,7 +17,7 @@ type TText = {
 const Text = ({
   children,
   fontWeight = 'regular',
-  size = 'small',
+  size = 'body',
   align = 'unset',
   style,
   color,

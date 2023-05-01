@@ -1,35 +1,36 @@
-import styled, { DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
+import px2rem from '@/utils/px2rem';
 
-export const StyledButton = styled.button<{ bg: string; color: string }>`
-  --bg-color: ${({ bg, theme }: { bg: string; theme: DefaultTheme }) => (theme as any)[bg] || theme.white};
-  --text-color: ${({ color, theme }: { color: string; theme: DefaultTheme }) => (theme as any)[color]};
-
+export const StyledButton = styled.button`
+  border-width: 1px;
   border-radius: 200px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  border: none;
-  padding: 0;
-  outline: none;
 
-  &:disabled {
-    background-color: var(--bg-color);
-    opacity: 0.8;
-    cursor: auto;
+  &.primary {
+    background-color: ${({ theme }) => theme['button-primary']};
+    color: ${({ theme }) => theme['text-parallel']};
   }
+
+  &.outline {
+    background-color: transparent;
+    color: ${({ theme }) => theme['text-highlight']};
+    border: 1px solid ${({ theme }) => theme['button-primary']};
+  }
+
+  &.normal {
+    padding: 11px 34px;
+    font-size: ${px2rem(16)};
+  }
+  &.stretch {
+    padding: 15px 20px;
+    width: 100%;
+    font-size: ${px2rem(16)};
+  }
+
   &:hover {
-    background-color: var(--bg-color);
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   &:active {
-    background-color: var(--bg-color);
-  }
-
-  &.btn-primary {
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: var(--bg-color);
-    --bs-btn-active-border-color: var(--bg-color);
-    --bs-btn-disabled-bg: var(--bg-color);
-    --bs-btn-disabled-border-color: var(--bg-color);
+    transform: scale(1.01); /* Equal to scaleX(0.7) scaleY(0.7) */
   }
 `;

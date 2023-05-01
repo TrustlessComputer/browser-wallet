@@ -5,7 +5,7 @@ import { setShowSetupWallet } from '@/state/user/reducer';
 import useAsyncEffect from 'use-async-effect';
 import { isShowSetupSelector } from '@/state/user/selector';
 import { useCurrentUser } from '@/state/user/hooks';
-import SetupWallet from '@/modules/SetupWallet';
+import AuthWallet from '@/modules/AuthWallet';
 import sleep from '@/utils/sleep';
 
 export interface IInitialContext {
@@ -51,7 +51,7 @@ export const InitialProvider: React.FC<PropsWithChildren> = ({ children }: Props
     // empty
     if (initing) return <></>;
     if (!currentUser || isShowSetup) {
-      return <SetupWallet />;
+      return <AuthWallet />;
     }
     return children;
   };
