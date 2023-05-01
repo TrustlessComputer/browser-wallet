@@ -10,6 +10,8 @@ import './reset.scss';
 import '@/styles/index.scss';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
+import { WalletProvider } from '@/contexts/wallet.context';
+import { InitialProvider } from '@/contexts/initial.context';
 
 let persistor = persistStore(store);
 const App: React.FC = (): React.ReactElement => {
@@ -19,7 +21,9 @@ const App: React.FC = (): React.ReactElement => {
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
           <ThemedGlobalStyle />
-          {element}
+          <WalletProvider>
+            <InitialProvider>{element}</InitialProvider>
+          </WalletProvider>
           <Toaster position="top-center" reverseOrder={false} />
         </ThemeProvider>
       </PersistGate>
