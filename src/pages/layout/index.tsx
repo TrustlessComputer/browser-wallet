@@ -1,46 +1,5 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import Meta from './Meta';
-import Footer from './Footer';
-import Header from './Header';
-import styled from 'styled-components';
-import px2rem from '@/utils/px2rem';
+export { default as LayoutOutlet } from './Layout.outlet';
+export { default as LayoutContent } from './Layout.content';
 
-const HEADER_HEIGHT = 80;
-const FO0TER_HEIGHT = 80;
-
-export const Container = styled.div`
-  min-height: 100vh;
-  max-width: 1920px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 0 ${px2rem(32)};
-`;
-
-const ContentWrapper = styled.div`
-  min-height: calc(100vh - 140px);
-  display: flex;
-  align-self: center;
-  width: 100%;
-
-  > div {
-    width: 100%;
-  }
-`;
-
-const Layout = () => {
-  return (
-    <Container>
-      <Meta />
-      <Header height={HEADER_HEIGHT} />
-      <ContentWrapper>
-        <Outlet />
-      </ContentWrapper>
-      <Footer height={FO0TER_HEIGHT} />
-    </Container>
-  );
-};
-
-export default Layout;
+export * from './Layout.styled';
+export * from './constant';

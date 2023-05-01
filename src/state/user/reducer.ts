@@ -26,11 +26,11 @@ const userSlice = createSlice({
       state.selectedUser = undefined;
     },
   },
-  extraReducers: builder => {
-    builder.addCase(createAccount.fulfilled, (state, action) => {
-      // console.log('SANG TEST: ', state, action);
-    });
-  },
+  // extraReducers: builder => {
+  //   builder.addCase(createAccount.fulfilled, (state, action) => {
+  //     // console.log('SANG TEST: ', state, action);
+  //   });
+  // },
 });
 
 export const { resetUser, setShowSetupWallet } = userSlice.actions;

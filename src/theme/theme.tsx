@@ -11,6 +11,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 export const ThemedGlobalStyle = createGlobalStyle`
   html{
     font-size: 16px;
+    background-color:  ${({ theme }) => theme.bg.primary};
 
     @media screen and (min-width: 1920px) {
       font-size: 18px;

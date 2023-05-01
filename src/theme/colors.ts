@@ -3,6 +3,8 @@ export const colors = {
   black: '#000000',
 
   dark: {
+    '120': '#010101',
+    '110': '#0F0F0F',
     '100': '#1C1C1C',
     '80': '#2E2E2E',
     '60': '#5B5B5B',
@@ -60,7 +62,7 @@ export const darkTheme = {
   text: {
     primary: colors.light['100'],
     secondary: colors.dark['10'],
-    subA: colors.yellow['A'],
+    third: colors.yellow['A'],
   },
 
   button: {
@@ -72,6 +74,16 @@ export const darkTheme = {
     primary: colors.dark['60'],
     secondary: colors.yellow['A'],
   },
+
+  bg: {
+    primary: colors.dark['110'],
+    secondary: colors.dark['80'],
+  },
+
+  card: {
+    primary: colors.dark['120'],
+    secondary: colors.dark['110'],
+  },
 };
 
 export const lightTheme = {
@@ -82,7 +94,7 @@ export const lightTheme = {
   text: {
     primary: colors.dark['100'],
     secondary: colors.dark['60'],
-    subA: colors.yellow['A'],
+    third: colors.yellow['A'],
   },
 
   button: {
@@ -93,5 +105,15 @@ export const lightTheme = {
   border: {
     primary: colors.dark['10'],
     secondary: colors.yellow['C'],
+  },
+
+  bg: {
+    primary: colors.white,
+    secondary: colors.light['80'],
+  },
+
+  card: {
+    primary: colors.dark['120'],
+    secondary: colors.light['80'],
   },
 };
