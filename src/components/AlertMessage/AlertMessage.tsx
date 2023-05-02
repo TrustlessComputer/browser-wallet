@@ -13,6 +13,7 @@ export enum AlertMessageType {
 interface AlertMessageProps {
   type: AlertMessageType;
   message?: string;
+  className?: string;
 }
 
 const AlertMessage = (props: AlertMessageProps) => {
@@ -29,9 +30,9 @@ const AlertMessage = (props: AlertMessageProps) => {
       break;
   }
   return (
-    <Container type={props.type}>
+    <Container className={props.className} type={props.type}>
       {ic}
-      <Text size="note" className="text-warning">
+      <Text size="note" fontWeight="medium" className="text-warning">
         {props.message}
       </Text>
     </Container>

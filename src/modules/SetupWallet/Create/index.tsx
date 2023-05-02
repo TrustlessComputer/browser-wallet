@@ -4,7 +4,7 @@ import Steps, { IStep } from '@/components/Steps/Steps';
 import BackupPhrase from './components/BackupPhrase';
 import VerifyPhrase from '@/modules/SetupWallet/Create/components/VerifyPhrase';
 import SetPassword from '@/modules/SetupWallet/Create/components/SetPassword';
-import WalletCreated from '@/modules/SetupWallet/Create/components/WalletCreated';
+// import WalletCreated from '@/modules/SetupWallet/Create/components/WalletCreated';
 import { randomMnemonic } from '@/lib/wallet.helpers';
 import { TC_SDK } from '@/lib';
 import useAsyncEffect from 'use-async-effect';
@@ -69,10 +69,10 @@ const Home = React.memo(({ setStep }: IProps) => {
       title: 'Set a password',
       content: () => <SetPassword loading={loading} onConfirmPassword={onConfirmPasswordSuccess} />,
     },
-    {
-      title: 'Wallet created',
-      content: () => <WalletCreated />,
-    },
+    // {
+    //   title: 'Wallet created',
+    //   content: () => <WalletCreated />,
+    // },
   ];
 
   return (

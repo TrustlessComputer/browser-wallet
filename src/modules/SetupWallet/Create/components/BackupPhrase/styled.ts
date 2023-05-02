@@ -33,6 +33,12 @@ const Content = styled.div`
       border-radius: 8px;
     }
   }
+
+  .alert-wrapper {
+    padding: 6px 16px;
+    border: 1px solid ${({ theme }) => theme['border-secondary']};
+    border-radius: 8px;
+  }
 `;
 
 export { Content };

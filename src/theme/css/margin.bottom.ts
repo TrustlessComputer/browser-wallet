@@ -3,6 +3,9 @@ import px2rem from '@/utils/px2rem';
 
 export const ScreenMarginBottom = css`
   // margin bottom
+  .mb-8 {
+    margin-bottom: ${px2rem(8)};
+  }
   .mb-12 {
     margin-bottom: ${px2rem(12)};
   }

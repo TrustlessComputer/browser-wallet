@@ -3,6 +3,9 @@ import px2rem from '@/utils/px2rem';
 
 export const ScreenMarginLeft = css`
   // margin left
+  .ml-8 {
+    margin-left: ${px2rem(8)};
+  }
   .ml-12 {
     margin-left: ${px2rem(12)};
   }

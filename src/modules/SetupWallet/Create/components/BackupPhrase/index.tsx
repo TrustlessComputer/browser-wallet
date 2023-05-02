@@ -5,6 +5,8 @@ import copy from 'copy-to-clipboard';
 import throttle from 'lodash/throttle';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
+import AlertMessage from '@/components/AlertMessage';
+import { AlertMessageType } from '@/components/AlertMessage/AlertMessage';
 
 interface BackupPhraseProps {
   phrase: string;
@@ -13,7 +15,6 @@ interface BackupPhraseProps {
 
 const BackupPhrase = (props: BackupPhraseProps) => {
   const [hidePhrase, setHidePhrase] = React.useState(true);
-  const [errorVisible, setErrorVisible] = React.useState(false);
 
   const onClick = React.useCallback(
     throttle(
@@ -61,6 +62,11 @@ const BackupPhrase = (props: BackupPhraseProps) => {
           <Spinner />
         </div>
       )}
+      <AlertMessage
+        className="mt-24 alert-wrapper"
+        type={AlertMessageType.warning}
+        message="Never disclose your backup phrase. Write it down and store in a secure location."
+      />
       <Button className="mt-60" sizes="stretch" onClick={props.onContinue} disabled={!props.phrase}>
         Continue
       </Button>
