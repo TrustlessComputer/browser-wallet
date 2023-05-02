@@ -9,6 +9,10 @@ export const Container = styled.div`
   justify-content: center;
   padding-left: ${px2rem(32)};
   padding-right: ${px2rem(32)};
+  @media screen and (max-width: ${BREAKPOINTS.xs}) {
+    padding-left: ${px2rem(16)};
+    padding-right: ${px2rem(16)};
+  }
 `;
 
 export const StepItem = styled.div<{
@@ -30,18 +34,18 @@ export const StepItem = styled.div<{
         height: 1px;
         flex: 1;
         background-color: ${({ theme, hideIndicatorLeft, isVerify, isSelected }) =>
-          hideIndicatorLeft ? 'transparent' : isVerify || isSelected ? theme['button-primary'] : theme.dark['60']};
+          hideIndicatorLeft ? 'transparent' : isVerify || isSelected ? theme['button-primary'] : theme['bg'].secondary};
       }
       .indicator-right {
         height: 1px;
         flex: 1;
         background-color: ${({ theme, hideIndicatorRight, isVerify }) =>
-          isVerify ? theme['button-primary'] : hideIndicatorRight ? 'transparent' : theme.dark['60']};
+          isVerify ? theme['button-primary'] : hideIndicatorRight ? 'transparent' : theme['bg'].secondary};
       }
       .number-container {
-        width: 40px;
-        height: 40px;
-        border-radius: 20px;
+        width: ${px2rem(40)};
+        height: ${px2rem(40)};
+        border-radius: ${px2rem(20)};
         background-color: ${({ theme, isSelected, isVerify }) =>
           isSelected || isVerify ? theme['button-primary'] : theme['bg'].secondary};
         display: flex;
@@ -68,14 +72,16 @@ export const StepItem = styled.div<{
       margin-top: 16px;
       color: ${({ theme, isSelected, isVerify }) =>
         isSelected || isVerify ? theme['text-highlight'] : theme['text-secondary']};
+      height: 42px;
     }
   }
 
-  @media screen and (min-width: ${BREAKPOINTS.md}) {
+  @media screen and (max-width: ${BREAKPOINTS.xs}) {
     .content {
       .title {
         padding-left: 4px;
         padding-right: 4px;
+        height: 62px;
       }
     }
   }
