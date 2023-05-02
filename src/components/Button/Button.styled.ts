@@ -4,7 +4,10 @@ import px2rem from '@/utils/px2rem';
 export const StyledButton = styled.button`
   border-width: 1px;
   border-radius: 200px;
-
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   &.primary {
     background-color: ${({ theme }) => theme['button-primary']};
     color: ${({ theme }) => theme['text-parallel']};
@@ -20,6 +23,7 @@ export const StyledButton = styled.button`
     padding: 11px 34px;
     font-size: ${px2rem(16)};
   }
+
   &.stretch {
     padding: 15px 20px;
     width: 100%;
@@ -31,6 +35,15 @@ export const StyledButton = styled.button`
   }
 
   &:active {
-    transform: scale(1.01); /* Equal to scaleX(0.7) scaleY(0.7) */
+    transform: scale(1.01);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  .spinner {
+    margin-left: 24px;
   }
 `;

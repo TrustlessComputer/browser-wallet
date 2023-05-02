@@ -7,6 +7,7 @@ import { isShowSetupSelector } from '@/state/user/selector';
 import { useCurrentUser } from '@/state/user/hooks';
 import AuthWallet from '@/modules/AuthWallet';
 import sleep from '@/utils/sleep';
+import LoadingContainer from '@/components/Loader';
 
 export interface IInitialContext {
   onPreloader: () => void;
@@ -67,7 +68,7 @@ export const InitialProvider: React.FC<PropsWithChildren> = ({ children }: Props
   return (
     <InitialContext.Provider value={contextValues}>
       {renderContent()}
-      {initing && <div />}
+      <LoadingContainer loaded={!initing} />
     </InitialContext.Provider>
   );
 };

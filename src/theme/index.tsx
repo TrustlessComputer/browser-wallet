@@ -1,4 +1,5 @@
 import { darkTheme, lightTheme } from '@/theme/colors';
+import { css } from 'styled-components';
 
 export const BREAKPOINTS = {
   xs: '396px',
@@ -40,6 +41,16 @@ function getSettings() {
     fontSizes,
   };
 }
+
+type MediaWidthsType = typeof BREAKPOINTS;
+type MediaWidthsKeysType = keyof MediaWidthsType;
+
+export const MediaQueryBuilder = (key: MediaWidthsKeysType, innerCSS?: any) =>
+  css`
+    @media (max-width: ${BREAKPOINTS[key]}) {
+      ${innerCSS};
+    }
+  `;
 
 export function getTheme(darkMode: boolean) {
   return {

@@ -36,10 +36,6 @@ const ContentWrapper = styled.div`
   display: flex;
   align-self: center;
   width: 100%;
-
-  > div {
-    width: 100%;
-  }
 `;
 
 export { Container, ContentWrapper, LayoutPadding };

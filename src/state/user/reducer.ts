@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ISetMasterCreated, WalletState } from '@/state/user/types';
-import { TC_SDK } from '@/lib';
 
 export const initialState: WalletState = {
   master: undefined,

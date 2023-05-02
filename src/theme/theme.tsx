@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react';
 import { createGlobalStyle, ThemeProvider as StyledComponentsThemeProvider } from 'styled-components';
 import { getTheme } from '@/theme/index';
-import px2rem from '@/utils/px2rem';
+import { ScreenMarginTop } from '@/theme/css/margin.top';
+import { ScreenMarginBottom } from '@/theme/css/margin.bottom';
+import { ScreenMarginLeft } from '@/theme/css/margin.left';
+import { ScreenMarginRight } from '@/theme/css/margin.right';
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const darkMode = true;
@@ -33,85 +36,10 @@ export const ThemedGlobalStyle = createGlobalStyle`
       }
     }
 
-    // margin bottom
-    .mb-12 {
-      margin-bottom: ${px2rem(12)};
-    }
-    .mb-16 {
-      margin-bottom: ${px2rem(16)};
-    }
-    .mb-24 {
-      margin-bottom: ${px2rem(24)};
-    }
-    .mb-32 {
-      margin-bottom: ${px2rem(32)};
-    }
-    .mb-48 {
-      margin-bottom: ${px2rem(48)};
-    }
-    .mb-60 {
-      margin-bottom: ${px2rem(60)};
-    }
-    
-    // margin top
-    .mt-12 {
-      margin-top: ${px2rem(12)};
-    }
-    .mt-16 {
-      margin-top: ${px2rem(16)};
-    }
-    .mt-24 {
-      margin-top: ${px2rem(24)};
-    }
-    .mt-32 {
-      margin-top: ${px2rem(32)};
-    }
-    .mt-48 {
-      margin-top: ${px2rem(48)};
-    }
-    .mt-60 {
-      margin-top: ${px2rem(60)};
-    }
-    
-    // margin left
-    .ml-12 {
-      margin-left: ${px2rem(12)};
-    }
-    .ml-16 {
-      margin-left: ${px2rem(16)};
-    }
-    .ml-24 {
-      margin-left: ${px2rem(24)};
-    }
-    .ml-32 {
-      margin-left: ${px2rem(32)};
-    }
-    .ml-48 {
-      margin-left: ${px2rem(48)};
-    }
-    .ml-60 {
-      margin-left: ${px2rem(60)};
-    }
-    
-    // margin left
-    .mr-12 {
-      margin-right: ${px2rem(12)};
-    }
-    .mr-16 {
-      margin-right: ${px2rem(16)};
-    }
-    .mr-24 {
-      margin-right: ${px2rem(24)};
-    }
-    .mr-32 {
-      margin-right: ${px2rem(32)};
-    }
-    .mr-48 {
-      margin-right: ${px2rem(48)};
-    }
-    .mr-60 {
-      margin-right: ${px2rem(60)};
-    }
+    ${ScreenMarginTop}
+    ${ScreenMarginBottom}
+    ${ScreenMarginLeft}
+    ${ScreenMarginRight}
 }
 
   summary::-webkit-details-marker {

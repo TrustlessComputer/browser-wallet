@@ -1,6 +1,7 @@
 export const ERROR_CODE = {
-  CONNECT_WALLET: '0',
-  EMPTY_USER: '-1',
+  CONNECT_WALLET: '1000',
+  EMPTY_USER: '-1001',
+  FIND_CURRENT_ACCOUNT: '-1002',
 };
 
 export const ERROR_MESSAGE = {
@@ -11,6 +12,10 @@ export const ERROR_MESSAGE = {
   [ERROR_CODE.EMPTY_USER]: {
     message: 'Please reconnect wallet.',
     desc: 'Please reconnect wallet.',
+  },
+  [ERROR_CODE.FIND_CURRENT_ACCOUNT]: {
+    message: 'Can not find current account by storage.',
+    desc: 'Can not find current account by storage.',
   },
 };
 

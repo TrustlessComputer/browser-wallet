@@ -19,7 +19,7 @@ const Home = React.memo(({ setStep }: IProps) => {
   const dispatch = useAppDispatch();
 
   const [phrase, setPhrase] = React.useState<TC_SDK.IHDWallet | undefined>(undefined);
-  const [currentStep, setCurrentStep] = React.useState(CreateWalletSteps.backup);
+  const [currentStep, setCurrentStep] = React.useState(CreateWalletSteps.setPassword);
   const [loading, setLoading] = React.useState(false);
 
   const createWalletActions: ICreateWalletAction = new CreateWalletAction({
@@ -34,25 +34,40 @@ const Home = React.memo(({ setStep }: IProps) => {
     setStep('auth');
   };
 
+  const onContinueBackupPhrase = () => {
+    setCurrentStep(CreateWalletSteps.verifyPhrase);
+  };
+
+  const onVerifyPhraseSuccess = () => {
+    setCurrentStep(CreateWalletSteps.setPassword);
+  };
+
   const generateMnemonic = async () => {
     const mnemonic = await randomMnemonic();
     setPhrase(mnemonic);
   };
 
-  useAsyncEffect(generateMnemonic, []);
+  const onConfirmPasswordSuccess = (password: string) => {
+    if (!phrase) return;
+    createWalletActions.createWallet(phrase, password);
+  };
+
+  useAsyncEffect(() => {
+    setTimeout(generateMnemonic, 100);
+  }, []);
 
   const steps: IStep[] = [
     {
       title: 'Secret backup phrase',
-      content: () => <BackupPhrase />,
+      content: () => <BackupPhrase phrase={phrase?.mnemonic || ''} onContinue={onContinueBackupPhrase} />,
     },
     {
       title: 'Verify your phrase',
-      content: () => <VerifyPhrase />,
+      content: () => <VerifyPhrase phrase={phrase?.mnemonic || ''} onVerifySuccess={onVerifyPhraseSuccess} />,
     },
     {
       title: 'Set a password',
-      content: () => <SetPassword />,
+      content: () => <SetPassword loading={loading} onConfirmPassword={onConfirmPasswordSuccess} />,
     },
     {
       title: 'Wallet created',

@@ -8,14 +8,10 @@ export interface WalletState {
   password: string;
 }
 
-interface ISelectedUser {
-  // trustless
-  tcPrivateKey: string;
-  tcAddress: string;
-
+interface ISelectedUser extends TC_SDK.IDeriveKey {
   // bitcoin taproot
-  tpPrivateKey: string;
-  tpAddress: string;
+  btcAddress: string;
+  btcPrivateKey: string;
 }
 
 interface ICreateAccountPayload {
