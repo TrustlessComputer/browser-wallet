@@ -61,7 +61,7 @@ const BackupPhrase = (props: BackupPhraseProps) => {
           <Spinner />
         </div>
       )}
-      <Button className="mt-60" sizes="stretch" onClick={props.onContinue}>
+      <Button className="mt-60" sizes="stretch" onClick={props.onContinue} disabled={!props.phrase}>
         Continue
       </Button>
     </Content>

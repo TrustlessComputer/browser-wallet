@@ -19,7 +19,7 @@ const Home = React.memo(({ setStep }: IProps) => {
   const dispatch = useAppDispatch();
 
   const [phrase, setPhrase] = React.useState<TC_SDK.IHDWallet | undefined>(undefined);
-  const [currentStep, setCurrentStep] = React.useState(CreateWalletSteps.setPassword);
+  const [currentStep, setCurrentStep] = React.useState(CreateWalletSteps.backup);
   const [loading, setLoading] = React.useState(false);
 
   const createWalletActions: ICreateWalletAction = new CreateWalletAction({
