@@ -8,20 +8,30 @@ export interface INetwork {
   ChainID: number | string;
   TCNode: string;
   BTCNetwork: IBTCNetwork;
+  Explorer: string;
 }
 
 const NETWORKS: Array<INetwork> = [
   {
     Name: 'Mainnet',
+    BTCNetwork: 'mainnet',
     ChainID: 22213,
     TCNode: 'https://tc-node.trustless.computer',
-    BTCNetwork: 'mainnet',
+    Explorer: 'https://explorer.regtest.trustless.computer',
   },
   {
-    Name: 'Regtest',
+    Name: 'Regtest manual',
     ChainID: 22213,
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
+    Explorer: 'https://explorer.regtest.trustless.computer',
+  },
+  {
+    Name: 'Regtest auto',
+    ChainID: 22213,
+    TCNode: 'https://tc-node-manual.regtest.trustless.computer',
+    BTCNetwork: 'regtest',
+    Explorer: 'https://explorer.regtest.trustless.computer',
   },
 ];
 
