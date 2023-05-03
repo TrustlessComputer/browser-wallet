@@ -8,6 +8,7 @@ const Container = styled.div`
   border: 1px solid ${({ theme }) => theme['border-primary']};
   padding: ${px2rem(8)} ${px2rem(12)};
   border-radius: 8px;
+  min-width: 350px;
   .box-center {
     gap: 4px;
     margin-left: ${px2rem(12)};

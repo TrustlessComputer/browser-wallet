@@ -1,6 +1,16 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { LayoutPadding } from '@/pages/layout/Layout.styled';
 import px2rem from '@/utils/px2rem';
+import { MediaQueryBuilder } from '@/theme';
+
+const MediaLarge = css`
+  .balance-wrapper {
+    display: none;
+  }
+  .external-wrapper {
+    display: none;
+  }
+`;
 
 const Wrapper = styled(LayoutPadding)`
   display: flex;
@@ -16,6 +26,14 @@ const Wrapper = styled(LayoutPadding)`
     width: ${px2rem(60)};
     height: ${px2rem(60)};
   }
+
+  .external-wrapper {
+    max-width: 30vw;
+    display: flex;
+    justify-content: end;
+  }
+
+  ${MediaQueryBuilder('lg', MediaLarge)}
 `;
 
 export { Wrapper };

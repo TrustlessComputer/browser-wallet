@@ -9,6 +9,7 @@ import { Row } from '@/components/Row';
 import AssetBox from '@/components/AssetBox';
 import BitcoinIcon from '@/components/icons/Bitcoin';
 import { useCurrentUser } from '@/state/wallet/hooks';
+import Button from '@/components/Button';
 
 const Header = () => {
   const refMenu = useRef<HTMLDivElement | null>(null);
@@ -36,11 +37,23 @@ const Header = () => {
           <LogoIcon className="ic-logo" />
         </Link>
         {!!user && (
-          <Row gap="40px">
+          <Row gap="40px" className="balance-wrapper">
             <AssetBox icon={<PenguinIcon />} title="TRUSTLESS BALANCE" amount="0.001" address={user.address} />
             <AssetBox icon={<BitcoinIcon />} title="BITCOIN BALANCE" amount="0.001" address={user.btcAddress} />
           </Row>
         )}
+      </Row>
+      <Row gap="32px" className="external-wrapper">
+        <Button variants="outline">
+          <a href="https://trustlessfaucet.io/" target="_blank">
+            Faucet
+          </a>
+        </Button>
+        <Button>
+          <a href="https://trustless.computer/" target="_blank">
+            Explore Dapp Store
+          </a>
+        </Button>
       </Row>
     </Wrapper>
   );
