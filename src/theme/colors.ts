@@ -45,6 +45,7 @@ export const colors = {
   red: {
     A: '#FF4747',
     B: '#FF8B8B',
+    C: '#FF6666',
   },
 };
 
@@ -76,6 +77,7 @@ export const darkTheme = {
   bg: {
     primary: colors.dark['110'],
     secondary: colors.dark['80'],
+    third: colors.dark['100'],
   },
 
   card: {
@@ -103,6 +105,7 @@ export const lightTheme = {
   bg: {
     primary: colors.white,
     secondary: colors.light['80'],
+    third: colors.light['100'],
   },
 
   card: {

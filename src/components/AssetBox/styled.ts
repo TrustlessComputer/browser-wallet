@@ -16,6 +16,7 @@ const Container = styled.div`
       text-transform: uppercase;
     }
   }
+
   .box-end {
     display: flex;
     gap: 12px;

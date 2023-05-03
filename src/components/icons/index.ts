@@ -5,3 +5,6 @@ export { default as ErrorIcon } from './Error';
 export { default as WarningIcon } from './Warning';
 export { default as PasswordIcon } from './Password';
 export { default as PenguinIcon } from './Penguin';
+export { default as MoreVerticalIcon } from './MoreVerical';
+export { default as DisconnectIcon } from './Disconnect';
+export { default as ExchangeIcon } from './Exchange';
