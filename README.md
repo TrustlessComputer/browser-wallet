@@ -17,6 +17,12 @@ npm
 yarn
 ```
 
+1. Setup environments:
+
+```bash
+cp ./envs/.env.example .env
+```
+
 2. Start development server
 
 ```bash

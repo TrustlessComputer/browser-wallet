@@ -12,6 +12,7 @@ import { CreateWalletSteps, ISetAuthStepProps } from '@/modules/SetupWallet/type
 import { CreateWalletAction, ICreateWalletAction } from '@/modules/SetupWallet/Create.actions';
 import { useAppDispatch } from '@/state/hooks';
 import HeaderBack from '@/components/HeaderBack';
+import LoadingContainer from '@/components/Loader';
 
 interface IProps extends ISetAuthStepProps {}
 
@@ -81,6 +82,7 @@ const Home = React.memo(({ setStep }: IProps) => {
         onClickGoBack={onGotoHome}
       />
       {steps[currentStep].content()}
+      <LoadingContainer loaded={!loading} />
     </Container>
   );
 });

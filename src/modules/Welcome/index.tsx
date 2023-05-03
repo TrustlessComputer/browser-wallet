@@ -4,7 +4,7 @@ import { isShowSetupSelector } from '@/state/wallet/selector';
 import SetupWallet from '@/modules/SetupWallet';
 import UnlockWallet from '@/modules/UnlockWallet';
 
-const AuthWallet = React.memo(() => {
+const Welcome = React.memo(() => {
   const isShowSetup = useAppSelector(isShowSetupSelector);
   if (isShowSetup) {
     return <SetupWallet />;
@@ -13,4 +13,4 @@ const AuthWallet = React.memo(() => {
   return <UnlockWallet />;
 });
 
-export default AuthWallet;
+export default Welcome;
