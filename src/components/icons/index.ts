@@ -4,3 +4,4 @@ export { default as ArrowLeftIcon } from './ArrowLeft';
 export { default as ErrorIcon } from './Error';
 export { default as WarningIcon } from './Warning';
 export { default as PasswordIcon } from './Password';
+export { default as PenguinIcon } from './Penguin';

@@ -9,7 +9,7 @@ export type IconSVGProps = {
   maxHeight?: string;
   type?: string;
   color?: string;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
 };
 
 const IconSVG: FC<IconSVGProps> = ({
@@ -30,7 +30,7 @@ const IconSVG: FC<IconSVGProps> = ({
       color={color}
       onClick={onClick}
     >
-      <SVG src={src}></SVG>
+      <SVG src={src} />
     </StyledIconSVG>
   );
 };
