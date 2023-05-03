@@ -35,6 +35,7 @@ const InputWrapper = styled.div`
     font-size: 16px;
     line-height: 140%;
     color: ${({ theme }) => theme['text-primary']};
+    height: 100%;
   }
 
   .icon-container {
