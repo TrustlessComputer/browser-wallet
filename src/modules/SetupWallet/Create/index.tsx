@@ -9,7 +9,7 @@ import { randomMnemonic } from '@/lib/wallet.helpers';
 import { TC_SDK } from '@/lib';
 import useAsyncEffect from 'use-async-effect';
 import { CreateWalletSteps, ISetAuthStepProps } from '@/modules/SetupWallet/types';
-import { CreateWalletAction, ICreateWalletAction } from '@/modules/SetupWallet/Create/Create.actions';
+import { CreateWalletAction, ICreateWalletAction } from '@/modules/SetupWallet/Create.actions';
 import { useAppDispatch } from '@/state/hooks';
 import HeaderBack from '@/components/HeaderBack';
 
@@ -25,7 +25,6 @@ const Home = React.memo(({ setStep }: IProps) => {
   const createWalletActions: ICreateWalletAction = new CreateWalletAction({
     component: {
       setLoading,
-      setCurrentStep,
     },
     dispatch,
   });

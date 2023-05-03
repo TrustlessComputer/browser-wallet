@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '@/state/hooks';
-import { isShowSetupSelector } from '@/state/user/selector';
+import { isShowSetupSelector } from '@/state/wallet/selector';
 import SetupWallet from '@/modules/SetupWallet';
 import UnlockWallet from '@/modules/UnlockWallet';
 

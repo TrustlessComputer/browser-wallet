@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Spinner from '@/components/Spinner';
+import { opacify } from '@/theme/utils';
 
 const Container = styled.div<{ opacity: number }>`
   width: 100%;
@@ -10,6 +11,7 @@ const Container = styled.div<{ opacity: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: ${({ theme }) => opacify(50, theme.bg.primary)};
 `;
 
 const LoadingContainer = ({ loaded, opacity = 0 }: { loaded: boolean; opacity?: number }) => {

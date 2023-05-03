@@ -1,43 +1,73 @@
 import React from 'react';
-import { Container, Dash } from '@/modules/SetupWallet/styled';
-import { LayoutContent } from '@/pages/layout';
-import Logo from '@/components/icons/Logo';
-import Text from '@/components/Text';
-import Button from '@/components/Button';
-import { Row } from '@/components/Row';
+import { Container } from '@/modules/SetupWallet/styled';
+import ImportPhrase from '@/modules/SetupWallet/Import/components/ImportPharse';
+import { IStep } from '@/components/Steps';
+import SetPassword from '@/modules/SetupWallet/Create/components/SetPassword';
+import { ImportWalletSteps, ISetAuthStepProps } from '@/modules/SetupWallet/types';
+import { TC_SDK } from '@/lib';
+import HeaderBack from '@/components/HeaderBack/Header';
+import Steps from '@/components/Steps/Steps';
+import { CreateWalletAction, ICreateWalletAction } from '@/modules/SetupWallet/Create.actions';
+import { useAppDispatch } from '@/state/hooks';
+import LoadingContainer from '@/components/Loader';
 
-const Home = React.memo(() => {
+interface IProps extends ISetAuthStepProps {}
+
+const Import = React.memo((props: IProps) => {
+  const [currentStep, setCurrentStep] = React.useState(ImportWalletSteps.import);
+  const [loading, setLoading] = React.useState(false);
+  const [errMess, setErrMess] = React.useState<string | undefined>();
+  const [mnemonic, setMnemonic] = React.useState<string>('');
+  // const [phrase, setPhrase] = React.useState<TC_SDK.IHDWallet | undefined>(undefined);
+
+  const dispatch = useAppDispatch();
+
+  const createWalletActions: ICreateWalletAction = new CreateWalletAction({
+    component: {
+      setLoading,
+      setErrMess,
+    },
+    dispatch,
+  });
+
+  const onGotoHome = () => props.setStep('auth');
+
+  const onImportPhrase = async (mnemonic: string) => {
+    setMnemonic(mnemonic);
+    setCurrentStep(ImportWalletSteps.setPassword);
+  };
+
+  const onConfirmPassword = async (password: string) => {
+    try {
+      setLoading(true);
+      const hdWallet = await TC_SDK.generateHDWalletFromMnemonic(mnemonic);
+      await createWalletActions.createWallet(hdWallet, password);
+    } catch (e) {
+      /* error handled in [createWallet] action */
+    }
+  };
+
+  const steps: IStep[] = [
+    {
+      title: 'Import wallet',
+      content: () => <ImportPhrase onImportPhrase={onImportPhrase} />,
+    },
+    {
+      title: 'Set a password',
+      content: () => <SetPassword loading={loading} errorMess={errMess} onConfirmPassword={onConfirmPassword} />,
+    },
+  ];
+
   return (
-    <LayoutContent>
-      <Container>
-        <Logo className="mt-60" />
-        <Text size="h4" className="mt-48">
-          Create your wallet
-        </Text>
-        <Text size="h6" className="mt-16" color="text-secondary" align="center">
-          When you create a new wallet, new phrase are generated. Your phrase are the master key of your wallet accounts
-          and any value the hold.
-        </Text>
-        <Button variants="primary" sizes="stretch" className="mt-60">
-          Create
-        </Button>
-        <Row className="mt-60 mb-60">
-          <Dash />
-          <Text size="h5" className="ml-12 mr-12">
-            OR
-          </Text>
-          <Dash />
-        </Row>
-        <Text size="h4">Import wallet</Text>
-        <Text size="h6" className="mt-16" color="text-secondary" align="center">
-          Import your existing wallet using a 12 word seed phrase.
-        </Text>
-        <Button variants="outline" sizes="stretch" className="mt-60">
-          Import
-        </Button>
-      </Container>
-    </LayoutContent>
+    <Container className="mt-60">
+      <HeaderBack
+        centerComponent={() => <Steps currentStep={currentStep} steps={steps} />}
+        onClickGoBack={onGotoHome}
+      />
+      {steps[currentStep].content()}
+      <LoadingContainer loaded={!loading} />
+    </Container>
   );
 });
 
-export default Home;
+export default Import;

@@ -51,7 +51,7 @@ const InputWrapper = styled.div`
   }
 `;
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string;
   type: 'text' | 'password';
   placeholder?: string;
@@ -76,6 +76,7 @@ const Input = (props: InputProps) => {
     classInputWrapper,
     classInput,
     title,
+    ...rest
   } = props;
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -100,6 +101,7 @@ const Input = (props: InputProps) => {
       )}
       <InputWrapper className={classInputWrapper}>
         <input
+          {...rest}
           ref={refInput}
           className={`input-container-style ${classInput}`}
           type={currentType}

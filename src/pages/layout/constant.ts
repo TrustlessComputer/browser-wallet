@@ -1,3 +1,4 @@
-const FO0TER_HEIGHT = 80;
+const HEADER_ID = 'HEADER_ID';
+const FOOTER_ID = 'FOOTER_ID';
 
-export { FO0TER_HEIGHT };
+export { HEADER_ID, FOOTER_ID };

@@ -1,7 +1,7 @@
 import * as TC_SDK from 'trustless-computer-sdk';
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
-import { ISelectedUser } from '@/state/user/types';
+import { ISelectedUser } from '@/state/wallet/types';
 import WError, { ERROR_CODE } from '@/utils/error';
 
 const randomMnemonic = async (): Promise<TC_SDK.IHDWallet> => {
@@ -26,7 +26,11 @@ const getStoredCurrentAddress = () => {
   return storageLocal.get(LocalStorageKey.CURRENT_ACCOUNT_ADDRESS);
 };
 
-const loadCurrentAccount = (masterIns: TC_SDK.MasterWallet): ISelectedUser => {
+const clearStoredCurrentAddress = () => {
+  return storageLocal.remove(LocalStorageKey.CURRENT_ACCOUNT_ADDRESS);
+};
+
+const selectCurrentNode = (masterIns: TC_SDK.MasterWallet): ISelectedUser => {
   const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
   const nodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
   const address: string = getStoredCurrentAddress();
@@ -36,11 +40,13 @@ const loadCurrentAccount = (masterIns: TC_SDK.MasterWallet): ISelectedUser => {
   if (address && nodes && nodes.length && btcPrivateKey) {
     const account = nodes.find(node => node.address === address);
     if (account) {
+      const btcPrivateKeyBuffer = TC_SDK.convertPrivateKeyFromStr(btcPrivateKey);
+      const btcAddress = TC_SDK.generateTaprootAddress(btcPrivateKeyBuffer);
       return {
         ...account,
         btcPrivateKey: btcPrivateKey,
-        // btcAddress: TC_SDK,
-        btcAddress: '',
+        btcPrivateKeyBuffer,
+        btcAddress,
       };
     }
   }
@@ -53,5 +59,6 @@ export {
   restoreMasterWallet,
   setStoredCurrentAddress,
   getStoredCurrentAddress,
-  loadCurrentAccount,
+  clearStoredCurrentAddress,
+  selectCurrentNode,
 };

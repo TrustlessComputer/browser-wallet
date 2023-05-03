@@ -1,5 +1,5 @@
-import user from '@/state/user/reducer';
+import wallet from '@/state/wallet/reducer';
 
 export default {
-  user,
+  wallet,
 };

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import px2rem from '@/utils/px2rem';
-
 const Content = styled.div`
   position: relative;
   display: flex;

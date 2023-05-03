@@ -1,11 +1,18 @@
 import React from 'react';
-import { Container } from './styled';
 import { LayoutContent } from '@/pages/layout';
+import UnlockContent from './components/Content';
+import { setMasterCreated } from '@/state/wallet/reducer';
+import { useAppDispatch } from '@/state/hooks';
+import { ISetMasterCreated } from '@/state/wallet/types';
 
 const UnlockWallet = React.memo(() => {
+  const dispatch = useAppDispatch();
+  const onSuccess = async (data: ISetMasterCreated) => {
+    dispatch(setMasterCreated(data));
+  };
   return (
     <LayoutContent>
-      <Container />
+      <UnlockContent onSuccess={onSuccess} />
     </LayoutContent>
   );
 });

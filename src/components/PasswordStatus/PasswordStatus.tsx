@@ -10,6 +10,7 @@ export enum PasswordStatusType {
 }
 
 interface PasswordStatusProps {
+  requireLength: number;
   value: string;
   onPasswordStrong?: () => void;
 }
@@ -56,7 +57,7 @@ const PasswordStatus = (props: PasswordStatusProps) => {
       //   props.onPasswordStrong && props.onPasswordStrong();
       // }
 
-      if (passwordLength < 8) {
+      if (passwordLength < props.requireLength) {
         type = PasswordStatusType.veryWeak;
         message = 'Weak!';
       }

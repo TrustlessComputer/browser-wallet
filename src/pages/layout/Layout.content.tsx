@@ -2,17 +2,19 @@ import React, { PropsWithChildren } from 'react';
 import Meta from './Meta';
 import Footer from './Footer';
 import Header from './Header';
-import { FO0TER_HEIGHT, Container, ContentWrapper } from '@/pages/layout';
+import { Container, ContentWrapper } from '@/pages/layout';
+import { useContentSize } from '@/hooks/useContentSize';
 
 const LayoutContent = ({ children }: PropsWithChildren) => {
+  const { height } = useContentSize();
   return (
     <>
       <Meta />
       <Header />
       <Container>
-        <ContentWrapper>{children}</ContentWrapper>
+        <ContentWrapper style={{ minHeight: height }}>{children}</ContentWrapper>
       </Container>
-      <Footer height={FO0TER_HEIGHT} />
+      <Footer />
     </>
   );
 };

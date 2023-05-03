@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Wrapper } from './Header.styled';
 import { ROUTE_PATH } from '@/constants/route-path';
 import { LogoIcon } from '@/components/icons';
+import { HEADER_ID } from '@/pages/layout';
 
 const Header = () => {
   const refMenu = useRef<HTMLDivElement | null>(null);
@@ -24,9 +25,9 @@ const Header = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper id={HEADER_ID}>
       <Link className="logo" to={ROUTE_PATH.HOME}>
-        <LogoIcon />
+        <LogoIcon className="ic-logo" />
       </Link>
     </Wrapper>
   );

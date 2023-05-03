@@ -10,7 +10,7 @@ const AuthWallet = React.memo(() => {
 
   const Component = React.useMemo(() => {
     if (step === 'import') {
-      return <Import />;
+      return <Import setStep={setStep} />;
     }
     if (step === 'create') {
       return <Create setStep={setStep} />;

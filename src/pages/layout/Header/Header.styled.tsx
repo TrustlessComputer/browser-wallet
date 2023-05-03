@@ -11,6 +11,11 @@ const Wrapper = styled(LayoutPadding)`
   background-color: ${({ theme }) => theme.bg.secondary};
   padding-top: ${px2rem(24)};
   padding-bottom: ${px2rem(24)};
+
+  .ic-logo {
+    width: ${px2rem(60)};
+    height: ${px2rem(60)};
+  }
 `;
 
 export { Wrapper };

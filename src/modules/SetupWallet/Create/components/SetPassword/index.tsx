@@ -14,7 +14,9 @@ interface SetPasswordProps {
   onConfirmPassword: (password: string) => void;
 }
 
-const MOCKUP_PASSWORD = isLocalhost ? '11111111' : '';
+export const REQUIRE_PASSWORD_LENGTH = 8;
+
+export const MOCKUP_PASSWORD = isLocalhost ? '11111111' : '';
 
 const SetPassword = (props: SetPasswordProps) => {
   const [password, setPassword] = React.useState(MOCKUP_PASSWORD);
@@ -56,7 +58,7 @@ const SetPassword = (props: SetPasswordProps) => {
         This password will unlock your wallet only on this device.
       </Text>
       <Text color="text-secondary" size="h6" className="mt-60">
-        Must be at least 8 characters.
+        Must be at least {REQUIRE_PASSWORD_LENGTH} characters.
       </Text>
       <Input
         title="Password"
@@ -66,7 +68,7 @@ const SetPassword = (props: SetPasswordProps) => {
         value={password}
         onChange={onChangePassword}
       />
-      <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} />
+      <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} requireLength={REQUIRE_PASSWORD_LENGTH} />
       <Input
         title="Confirm password"
         classContainer="mt-24"

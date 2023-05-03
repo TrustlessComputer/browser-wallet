@@ -23,6 +23,7 @@ const App: React.FC = (): React.ReactElement => {
           <ThemedGlobalStyle />
           <WalletProvider>
             <InitialProvider>{element}</InitialProvider>
+            <Toaster position="top-center" reverseOrder={false} />
           </WalletProvider>
           <Toaster position="top-center" reverseOrder={false} />
         </ThemeProvider>

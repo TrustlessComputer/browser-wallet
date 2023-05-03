@@ -1,10 +1,10 @@
 import React, { PropsWithChildren, useMemo } from 'react';
 import { SDK, TC_SDK } from '@/lib';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { setShowSetupWallet } from '@/state/user/reducer';
+import { setShowSetupWallet } from '@/state/wallet/reducer';
 import useAsyncEffect from 'use-async-effect';
-import { isShowSetupSelector } from '@/state/user/selector';
-import { useCurrentUser } from '@/state/user/hooks';
+import { isShowSetupSelector } from '@/state/wallet/selector';
+import { useCurrentUser } from '@/state/wallet/hooks';
 import AuthWallet from '@/modules/AuthWallet';
 import sleep from '@/utils/sleep';
 import LoadingContainer from '@/components/Loader';

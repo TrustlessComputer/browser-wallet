@@ -3,19 +3,21 @@ import { Outlet } from 'react-router-dom';
 import Meta from './Meta';
 import Footer from './Footer';
 import Header from './Header';
-import { FO0TER_HEIGHT, Container, ContentWrapper } from '@/pages/layout';
+import { Container, ContentWrapper } from '@/pages/layout';
+import { useContentSize } from '@/hooks/useContentSize';
 
 const LayoutOutlet = () => {
+  const { height } = useContentSize();
   return (
     <>
       <Meta />
       <Header />
       <Container>
-        <ContentWrapper>
+        <ContentWrapper style={{ minHeight: height }}>
           <Outlet />
         </ContentWrapper>
       </Container>
-      <Footer height={FO0TER_HEIGHT} />
+      <Footer />
     </>
   );
 };

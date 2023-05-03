@@ -1,7 +1,7 @@
 export const ERROR_CODE = {
-  CONNECT_WALLET: '1000',
-  EMPTY_USER: '-1001',
-  FIND_CURRENT_ACCOUNT: '-1002',
+  CONNECT_WALLET: '3000',
+  EMPTY_USER: '-3001',
+  FIND_CURRENT_ACCOUNT: '-3002',
 };
 
 export const ERROR_MESSAGE = {
@@ -34,5 +34,24 @@ class WError extends Error {
     return this.message;
   }
 }
+
+export const getErrorMessage = (error: unknown, name: string) => {
+  let message = 'Something went wrong. Please try again later.';
+  let desc = '';
+  if (error instanceof WError) {
+    message = error.getMessage();
+    desc = error.desc;
+  } else if (error instanceof Error && error.message) {
+    message = error.message;
+    desc = error.message;
+  }
+
+  console.error('TC error: ', desc, name);
+
+  return {
+    message: `${message} [${name}]`,
+    desc,
+  };
+};
 
 export default WError;

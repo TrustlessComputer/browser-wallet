@@ -22,7 +22,6 @@ const LayoutPadding = styled.div`
 `;
 
 const Container = styled(LayoutPadding)`
-  min-height: 100vh;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -32,7 +31,6 @@ const Container = styled(LayoutPadding)`
 `;
 
 const ContentWrapper = styled.div`
-  min-height: calc(100vh - 140px);
   display: flex;
   align-self: center;
   width: 100%;
