@@ -1,8 +1,8 @@
-import Wallet from '@/modules/Wallet';
 import React from 'react';
+import Home from '@/modules/Home';
 
-const Home = React.memo(() => {
-  return <Wallet />;
+const HomePage = React.memo(() => {
+  return <Home />;
 });
 
-export default Home;
+export default HomePage;

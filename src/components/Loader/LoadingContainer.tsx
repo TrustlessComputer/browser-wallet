@@ -11,10 +11,10 @@ const Container = styled.div<{ opacity: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => opacify(50, theme.bg.primary)};
+  background-color: ${({ theme, opacity }) => opacify(opacity, theme.bg.primary)};
 `;
 
-const LoadingContainer = ({ loaded, opacity = 0 }: { loaded: boolean; opacity?: number }) => {
+const LoadingContainer = ({ loaded, opacity = 60 }: { loaded: boolean; opacity?: number }) => {
   if (loaded) return null;
 
   return (

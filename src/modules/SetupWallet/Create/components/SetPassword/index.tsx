@@ -1,12 +1,12 @@
 import { Content } from '@/modules/SetupWallet/Create/components/SetPassword/styled';
 import React from 'react';
-import { isLocalhost } from '@/utils/services';
 import { Input } from '@/components/Inputs';
 import Text from '@/components/Text';
 import Button from '@/components/Button';
 import AlertMessage from '@/components/AlertMessage';
 import { AlertMessageType } from '@/components/AlertMessage/AlertMessage';
 import PasswordStatus from '@/components/PasswordStatus';
+import { MOCKUP_PASSWORD } from '@/configs';
 
 interface SetPasswordProps {
   loading: boolean;
@@ -15,8 +15,6 @@ interface SetPasswordProps {
 }
 
 export const REQUIRE_PASSWORD_LENGTH = 8;
-
-export const MOCKUP_PASSWORD = isLocalhost ? '11111111' : '';
 
 const SetPassword = (props: SetPasswordProps) => {
   const [password, setPassword] = React.useState(MOCKUP_PASSWORD);

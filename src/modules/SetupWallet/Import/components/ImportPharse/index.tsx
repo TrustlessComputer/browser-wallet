@@ -6,18 +6,14 @@ import AlertMessage from '@/components/AlertMessage';
 import { AlertMessageType } from '@/components/AlertMessage/AlertMessage';
 import Button from '@/components/Button';
 import { TC_SDK } from '@/lib';
-import { isLocalhost } from '@/utils/services';
+import { MOCKUP_MNEMONIC } from '@/configs';
 
 interface ImportPhraseProps {
   onImportPhrase: (phrase: string) => void;
 }
 
-const MOCKUP_PHRASE = isLocalhost
-  ? 'silent copper cradle modify spend knock task order gadget myself another ripple'
-  : '';
-
 const ImportPhrase = (props: ImportPhraseProps) => {
-  const [phrase, setPhrase] = React.useState(MOCKUP_PHRASE);
+  const [phrase, setPhrase] = React.useState(MOCKUP_MNEMONIC || '');
   const [isInValidPhrase, setInValidPhrase] = React.useState(false);
 
   const ableClick = phrase.split(' ').length === 12;
