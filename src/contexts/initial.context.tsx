@@ -1,13 +1,15 @@
 import React, { PropsWithChildren, useMemo } from 'react';
-import { SDK, TC_SDK } from '@/lib';
+import { TC_SDK } from '@/lib';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { setShowSetupWallet } from '@/state/wallet/reducer';
+import { setCurrentTCAccount, setIsLockedWallet, setShowSetupWallet } from '@/state/wallet/reducer';
 import useAsyncEffect from 'use-async-effect';
-import { isShowSetupSelector } from '@/state/wallet/selector';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { isLockedSelector, isShowSetupSelector } from '@/state/wallet/selector';
+import { useUserSecretKey } from '@/state/wallet/hooks';
 import Welcome from '@/modules/Welcome';
 import sleep from '@/utils/sleep';
 import LoadingContainer from '@/components/Loader';
+import { setupProject } from '@/lib/SDK/configs';
+import WalletStorage from '@/lib/wallet/wallet.storage';
 
 export interface IInitialContext {
   onPreloader: () => void;
@@ -22,17 +24,18 @@ export const InitialContext = React.createContext<IInitialContext>(initialValue)
 export const InitialProvider: React.FC<PropsWithChildren> = ({ children }: PropsWithChildren): React.ReactElement => {
   const [initing, setIniting] = React.useState(true);
   const isShowSetup = useAppSelector(isShowSetupSelector);
-  const currentUser = useCurrentUser();
+  const isLocked = useAppSelector(isLockedSelector);
   const dispatch = useAppDispatch();
 
   // preloader
   const setupConfigs = () => {
-    SDK.setup();
+    setupProject();
   };
 
   const preload = async () => {
     const cipher = await TC_SDK.getStorageHDWalletCipherText();
     dispatch(setShowSetupWallet(Boolean(!cipher)));
+    // dispatch(setIsLockedWallet(Boolean(true)));
   };
 
   const onPreloader = async () => {
@@ -41,6 +44,17 @@ export const InitialProvider: React.FC<PropsWithChildren> = ({ children }: Props
       setupConfigs();
       await preload();
       await sleep(0.5);
+      const currentTCAccount = WalletStorage.getCurrentTCAccount();
+      if (currentTCAccount) {
+        dispatch(
+          setCurrentTCAccount({
+            tcAccount: {
+              name: currentTCAccount.name,
+              address: currentTCAccount.address,
+            },
+          }),
+        );
+      }
     } catch (e) {
       // handle error
     } finally {
@@ -51,7 +65,7 @@ export const InitialProvider: React.FC<PropsWithChildren> = ({ children }: Props
   const renderContent = () => {
     // empty
     if (initing) return <></>;
-    if (!currentUser || isShowSetup) {
+    if (isLocked || isShowSetup) {
       return <Welcome />;
     }
     return children;

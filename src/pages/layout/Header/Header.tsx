@@ -8,15 +8,20 @@ import { HEADER_ID } from '@/pages/layout';
 import { Row } from '@/components/Row';
 import AssetBox from '@/components/AssetBox';
 import BitcoinIcon from '@/components/icons/Bitcoin';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import Button from '@/components/Button';
 import Dropdown from '@/components/Popover';
 import Text from '@/components/Text';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { isLockedSelector } from '@/state/wallet/selector';
+import { setIsLockedWallet } from '@/state/wallet/reducer';
 
 const Header = () => {
   const refMenu = useRef<HTMLDivElement | null>(null);
   const [isOpenMenu] = useState<boolean>(false);
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
+  const isLocked = useAppSelector(isLockedSelector);
+  const dispatch = useAppDispatch();
 
   const MoreList = [
     {
@@ -24,12 +29,14 @@ const Header = () => {
       titleClass: 'text-normal',
       icon: <ExchangeIcon />,
       iconClass: 'icon-normal',
+      onClick: () => null,
     },
     {
       title: 'Disconnect',
       titleClass: 'text-disconnect',
       icon: <DisconnectIcon />,
       iconClass: 'icon-disconnect',
+      onClick: () => dispatch(setIsLockedWallet(true)),
     },
   ];
 
@@ -53,14 +60,14 @@ const Header = () => {
         <Link className="logo" to={ROUTE_PATH.HOME}>
           <LogoIcon className="ic-logo" />
         </Link>
-        {!!user && (
+        {!!user && !isLocked && (
           <Row gap="40px" className="balance-wrapper">
             <AssetBox icon={<PenguinIcon />} title="TRUSTLESS BALANCE" amount="0.001" address={user.address} />
             <AssetBox icon={<BitcoinIcon />} title="BITCOIN BALANCE" amount="0.001" address={user.btcAddress} />
             <Dropdown icon={<MoreVerticalIcon />}>
               <DropdownList>
                 {MoreList.map(item => (
-                  <DropdownItem>
+                  <DropdownItem key={item.title} onClick={item.onClick}>
                     <div className={item.iconClass}>{item.icon}</div>
                     <Text className={item.titleClass}>{item.title}</Text>
                   </DropdownItem>

@@ -1,13 +1,13 @@
 import Text from '@/components/Text';
-import { Container } from '@/modules/styled';
+import { MDContainer } from '@/modules/styled';
 
 const Home = () => {
   return (
-    <Container>
+    <MDContainer>
       <Text align="center" size="h3">
         HOME
       </Text>
-    </Container>
+    </MDContainer>
   );
 };
 

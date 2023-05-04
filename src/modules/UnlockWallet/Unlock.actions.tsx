@@ -2,7 +2,9 @@ import { TC_SDK } from '@/lib';
 import toast from 'react-hot-toast';
 import { getErrorMessage } from '@/utils/error';
 import { ISetMasterCreated } from '@/state/wallet/types';
-import { selectCurrentNode } from '@/lib/wallet.helpers';
+import { getUserSecretKey } from '@/lib/wallet';
+import { setCurrentBTCAddress, setCurrentTCAccount } from '@/state/wallet/reducer';
+import { batch } from 'react-redux';
 
 const { MasterWallet, getStorageHDWallet } = TC_SDK;
 
@@ -31,7 +33,18 @@ export class UnlockWalletAction implements IUnlockWalletAction {
       if (storedWallet) {
         const masterIns = new MasterWallet();
         await masterIns.load(password);
-        const account = await selectCurrentNode(masterIns);
+        const account = await getUserSecretKey(masterIns);
+        batch(() => {
+          this.dispatch(
+            setCurrentTCAccount({
+              tcAccount: {
+                name: account.name,
+                address: account.address,
+              },
+            }),
+          );
+          this.dispatch(setCurrentBTCAddress(account.btcAddress));
+        });
         return {
           master: masterIns,
           account,

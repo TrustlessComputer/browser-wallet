@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Container = styled.div<{
+const MDContainer = styled.div<{
   width?: string;
   align?: string;
   justify?: string;
@@ -20,4 +20,4 @@ const Container = styled.div<{
   gap: ${({ gap }) => gap};
 `;
 
-export { Container };
+export { MDContainer };
