@@ -4,7 +4,7 @@ import Spinner from '@/components/Spinner';
 import Table from '@/components/Table';
 import Text from '@/components/Text';
 import { ITCTxDetail } from '@/interfaces/transaction';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { formatLongAddress } from '@/utils';
 import { formatUnixDateTime } from '@/utils/time';
 import copy from 'copy-to-clipboard';
@@ -24,7 +24,7 @@ export enum TransactionStatus {
 }
 
 const Transactions = React.memo(() => {
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
   const [transactions] = useState<ITCTxDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isProcessing, setProcessing] = useState(false);

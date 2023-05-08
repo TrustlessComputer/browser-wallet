@@ -10,12 +10,12 @@ import Empty from '@/components/Empty';
 import { IInscription } from '@/interfaces/api/inscription';
 import { Grid } from '@/components/Grid/Grid.styled';
 import NFTCard from '@/components/NFTCard';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 
 const LIMIT_PAGE = 32;
 
 const ArtifactsProfile = () => {
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
   const profileWallet = user?.address || '';
 
   const [pageSize] = useState(LIMIT_PAGE);

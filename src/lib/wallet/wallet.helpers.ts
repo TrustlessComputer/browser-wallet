@@ -1,8 +1,9 @@
 import * as TC_SDK from 'trustless-computer-sdk';
-import storageLocal from '@/lib/storage.local';
-import { LocalStorageKey } from '@/enums/storage.keys';
-import { ISelectedUser } from '@/state/wallet/types';
+import { IUserSecretKey } from '@/state/wallet/types';
 import WError, { ERROR_CODE } from '@/utils/error';
+import WalletStorage from '@/lib/wallet/wallet.storage';
+import { compareString } from '@/utils';
+import isArray from 'lodash/isArray';
 
 const randomMnemonic = async (): Promise<TC_SDK.IHDWallet> => {
   return TC_SDK.randomMnemonic();
@@ -18,27 +19,23 @@ const restoreMasterWallet = async (password: string): Promise<TC_SDK.MasterWalle
   return masterWallet;
 };
 
-const setStoredCurrentAddress = (address: string) => {
-  storageLocal.set(LocalStorageKey.CURRENT_ACCOUNT_ADDRESS, address);
-};
-
-const getStoredCurrentAddress = () => {
-  return storageLocal.get(LocalStorageKey.CURRENT_ACCOUNT_ADDRESS);
-};
-
-const clearStoredCurrentAddress = () => {
-  return storageLocal.remove(LocalStorageKey.CURRENT_ACCOUNT_ADDRESS);
-};
-
-const selectCurrentNode = (masterIns: TC_SDK.MasterWallet): ISelectedUser => {
+const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
   const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
   const nodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
-  const address: string = getStoredCurrentAddress();
 
+  // check storage current TC account
+  let { address } = WalletStorage.getCurrentTCAccount() || {};
+  if (!address && isArray(nodes)) {
+    const node0 = nodes[0];
+    WalletStorage.setCurrentTCAddress({
+      name: node0.name,
+      address: node0.address,
+    });
+    address = node0.address;
+  }
   const btcPrivateKey = hdWallet.btcPrivateKey;
-
   if (address && nodes && nodes.length && btcPrivateKey) {
-    const account = nodes.find(node => node.address === address);
+    const account = nodes.find(node => compareString({ str1: node.address, str2: address, method: 'equal' }));
     if (account) {
       const btcPrivateKeyBuffer = TC_SDK.convertPrivateKeyFromStr(btcPrivateKey);
       const btcAddress = TC_SDK.generateTaprootAddress(btcPrivateKeyBuffer);
@@ -53,12 +50,4 @@ const selectCurrentNode = (masterIns: TC_SDK.MasterWallet): ISelectedUser => {
   throw new WError(ERROR_CODE.FIND_CURRENT_ACCOUNT);
 };
 
-export {
-  randomMnemonic,
-  saveNewHDWallet,
-  restoreMasterWallet,
-  setStoredCurrentAddress,
-  getStoredCurrentAddress,
-  clearStoredCurrentAddress,
-  selectCurrentNode,
-};
+export { randomMnemonic, saveNewHDWallet, restoreMasterWallet, getUserSecretKey };

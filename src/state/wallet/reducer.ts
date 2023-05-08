@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ISetMasterCreated, WalletState } from '@/state/wallet/types';
+import { ISetMasterCreated, ITCAccount, WalletState } from '@/state/wallet/types';
 
 export const initialState: WalletState = {
   master: undefined,
-  selectedUser: undefined,
+  userSecretKey: undefined,
   password: undefined,
+
+  // never change by 1 mnemonic
+  // change by network mainnet | testnet | regtest
+  btcAddress: undefined,
+  tcAccount: undefined,
+
   showSetup: false,
+  isLocked: false,
 };
 
 const walletSlice = createSlice({
@@ -15,24 +22,37 @@ const walletSlice = createSlice({
     setShowSetupWallet(state, action: PayloadAction<boolean>) {
       state.showSetup = action.payload;
     },
-    resetUser(state) {
-      delete state.master;
-      delete state.selectedUser;
-      delete state.password;
+    setIsLockedWallet(state, action: PayloadAction<boolean>) {
+      console.log('SANG TEST: ', action);
+      state.isLocked = action.payload;
+    },
+    resetSecretStore(state) {
       state.master = undefined;
-      state.selectedUser = undefined;
+      state.userSecretKey = undefined;
       state.password = undefined;
     },
+    setCurrentTCAccount(state, action: PayloadAction<{ tcAccount: ITCAccount }>) {
+      state.tcAccount = action.payload.tcAccount;
+    },
+    setCurrentBTCAddress(state, action: PayloadAction<string>) {
+      state.btcAddress = action.payload;
+    },
     setMasterCreated(state, action: PayloadAction<ISetMasterCreated>) {
-      delete state.master;
-      delete state.selectedUser;
       state.master = action.payload.master;
-      state.selectedUser = action.payload.account;
+      state.userSecretKey = action.payload.account;
       state.password = action.payload.password;
       state.showSetup = false;
+      state.isLocked = false;
     },
   },
 });
 
-export const { resetUser, setShowSetupWallet, setMasterCreated } = walletSlice.actions;
+export const {
+  resetSecretStore,
+  setShowSetupWallet,
+  setMasterCreated,
+  setIsLockedWallet,
+  setCurrentTCAccount,
+  setCurrentBTCAddress,
+} = walletSlice.actions;
 export default walletSlice.reducer;

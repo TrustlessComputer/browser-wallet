@@ -6,4 +6,13 @@ export const getWalletSelector = (state: RootState): WalletState | undefined => 
 
 export const isShowSetupSelector = createSelector(getWalletSelector, wallet => wallet?.showSetup);
 
-export const selectedUserSelector = createSelector(getWalletSelector, wallet => wallet?.selectedUser);
+export const isLockedSelector = createSelector(getWalletSelector, wallet => wallet?.isLocked);
+
+export const userSecretKeySelector = createSelector(getWalletSelector, wallet => wallet?.userSecretKey);
+
+export const userAccountInfo = createSelector(getWalletSelector, wallet => {
+  const tcAccount = wallet?.tcAccount;
+  const btcAddress = wallet?.btcAddress;
+  if (!tcAccount || !btcAddress) return undefined;
+  return { ...tcAccount, btcAddress };
+});

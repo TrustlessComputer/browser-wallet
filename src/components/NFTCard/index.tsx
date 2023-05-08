@@ -3,7 +3,7 @@ import { IMAGE_TYPE } from '../NFTDisplayBox/constant';
 import { Styled } from './NFTCard.styled';
 import React, { useMemo, useState } from 'react';
 import TransferModal from './TransferModal';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 
 export interface INFTCard {
   image?: string;
@@ -30,7 +30,7 @@ const NFTCard = ({
   owner,
   onClickItem,
 }: INFTCard) => {
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
   const [showTransferModal, setShowTransferModal] = useState(false);
 
   const handleOpenTransferModal = (e: React.MouseEvent<HTMLButtonElement>) => {

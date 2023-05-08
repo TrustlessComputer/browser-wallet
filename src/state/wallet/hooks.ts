@@ -1,14 +1,17 @@
-import { getWalletSelector, selectedUserSelector } from './selector';
-import { useSelector } from 'react-redux';
-import { ISelectedUser } from '@/state/wallet/types';
+import { getWalletSelector, userAccountInfo, userSecretKeySelector } from './selector';
+import { IUserSecretKey } from '@/state/wallet/types';
+import { useAppSelector } from '@/state/hooks';
 
-const useCurrentUser = (): ISelectedUser | undefined => {
-  // selected user
-  return useSelector(selectedUserSelector);
+const useCurrentUserInfo = () => {
+  return useAppSelector(userAccountInfo);
+};
+
+const useUserSecretKey = (): IUserSecretKey | undefined => {
+  return useAppSelector(userSecretKeySelector);
 };
 
 const useCurrentWallet = () => {
-  return useSelector(getWalletSelector);
+  return useAppSelector(getWalletSelector);
 };
 
-export { useCurrentUser, useCurrentWallet };
+export { useUserSecretKey, useCurrentWallet, useCurrentUserInfo };

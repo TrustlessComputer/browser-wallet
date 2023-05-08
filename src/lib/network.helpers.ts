@@ -1,7 +1,7 @@
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
 
-type IBTCNetwork = 'mainnet' | 'testnet' | 'regtest';
+export type IBTCNetwork = 'mainnet' | 'testnet' | 'regtest';
 
 export interface INetwork {
   Name: string;

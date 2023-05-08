@@ -9,12 +9,12 @@ import { Container } from './Names.styled';
 import Empty from '@/components/Empty';
 import { IBNS } from '@/interfaces/bns';
 import BNSCard from './BNS/Card';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 
 const LIMIT_PAGE = 12;
 
 const Names = () => {
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
   const account = user?.address || '';
 
   const profileWallet = account;

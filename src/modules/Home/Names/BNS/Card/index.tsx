@@ -1,5 +1,5 @@
 import Button from '@/components/Button';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { shortenAddress } from '@/utils';
 import { useMemo, useState } from 'react';
 import BNSTransferModal from '../TransferModal';
@@ -14,7 +14,7 @@ type Props = {
 };
 
 const BNSCard = ({ item }: Props) => {
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
   const [showModal, setShowModal] = useState(false);
 
   const isAllowTransfer = useMemo(() => item.owner === user?.address, [item.owner, user?.address]);

@@ -60,6 +60,7 @@
     "react-share": "^4.4.1",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
+    "redux-persist-transform-filter": "^0.0.22",
     "redux-thunk": "^2.4.2",
     "sats-connect": "^0.1.11",
     "serve-static": "^1.15.0",

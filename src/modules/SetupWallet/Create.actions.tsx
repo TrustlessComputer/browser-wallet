@@ -1,14 +1,11 @@
 import { TC_SDK } from '@/lib';
-import {
-  clearStoredCurrentAddress,
-  saveNewHDWallet,
-  selectCurrentNode,
-  setStoredCurrentAddress,
-} from '@/lib/wallet.helpers';
-import { resetUser, setMasterCreated } from '@/state/wallet/reducer';
+import { saveNewHDWallet, getUserSecretKey } from '@/lib/wallet';
+import { resetSecretStore, setCurrentBTCAddress, setCurrentTCAccount, setMasterCreated } from '@/state/wallet/reducer';
 import toast from 'react-hot-toast';
 import { getErrorMessage } from '@/utils/error';
 import sleep from '@/utils/sleep';
+import WalletStorage from '@/lib/wallet/wallet.storage';
+import { batch } from 'react-redux';
 
 const { MasterWallet } = TC_SDK;
 
@@ -40,20 +37,30 @@ export class CreateWalletAction implements ICreateWalletAction {
       const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
       const nodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
       if (nodes && nodes.length) {
-        setStoredCurrentAddress(nodes[0].address);
-        this.dispatch(resetUser());
+        this.dispatch(resetSecretStore());
         await sleep(0.5);
-        const account = await selectCurrentNode(masterIns);
-        this.dispatch(
-          setMasterCreated({
-            master: masterIns,
-            account: account,
-            password,
-          }),
-        );
+        const account = await getUserSecretKey(masterIns);
+        batch(() => {
+          this.dispatch(
+            setCurrentTCAccount({
+              tcAccount: {
+                name: account.name,
+                address: account.address,
+              },
+            }),
+          );
+          this.dispatch(setCurrentBTCAddress(account.btcAddress));
+          this.dispatch(
+            setMasterCreated({
+              master: masterIns,
+              account: account,
+              password,
+            }),
+          );
+        });
       }
     } catch (e) {
-      clearStoredCurrentAddress();
+      WalletStorage.removeCurrentTCAccount();
       const { message } = getErrorMessage(e, 'createWallet');
       toast.error(message);
       if (this.component.setErrMess) {

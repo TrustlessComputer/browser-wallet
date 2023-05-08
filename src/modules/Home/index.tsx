@@ -12,6 +12,7 @@ import Tokens from './Tokens';
 import Transactions from './Transactions';
 import { StyledProfile, TabContainer } from './Home.styled';
 import { CDN_URL } from '@/configs';
+import { MDContainer } from '@/modules/styled';
 
 const Home = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
@@ -37,52 +38,54 @@ const Home = () => {
   };
 
   return (
-    <StyledProfile className="row">
-      <TabContainer className="wrapper">
-        <Tabs
-          defaultActiveKey={activeTab}
-          id="uncontrolled-tab"
-          onSelect={key => setActiveTab(key || DappsTabs.NFT)}
-          activeKey={activeTab}
-        >
-          <Tab
-            mountOnEnter
-            eventKey={DappsTabs.NFT}
-            title={renderTitleTab(DappsTabs.NFT, `${CDN_URL}/icons/ic-hexagon.svg`, 'NFTs')}
+    <MDContainer>
+      <StyledProfile className="row">
+        <TabContainer className="wrapper">
+          <Tabs
+            defaultActiveKey={activeTab}
+            id="uncontrolled-tab"
+            onSelect={key => setActiveTab(key || DappsTabs.NFT)}
+            activeKey={activeTab}
           >
-            <Nfts />
-          </Tab>
-          <Tab
-            mountOnEnter
-            eventKey={DappsTabs.TOKEN}
-            title={renderTitleTab(DappsTabs.TOKEN, `${CDN_URL}/icons/ic-coin-unbroken.svg`, 'Tokens')}
-          >
-            <Tokens />
-          </Tab>
-          <Tab
-            mountOnEnter
-            eventKey={DappsTabs.ARTIFACT}
-            title={renderTitleTab(DappsTabs.ARTIFACT, `${CDN_URL}/icons/ic-folder-open.svg`, 'Artifacts')}
-          >
-            <Artifacts />
-          </Tab>
-          <Tab
-            mountOnEnter
-            eventKey={DappsTabs.NAMES}
-            title={renderTitleTab(DappsTabs.NAMES, `${CDN_URL}/icons/ic-names.svg`, 'Names')}
-          >
-            <Names />
-          </Tab>
-          <Tab
-            mountOnEnter
-            eventKey={DappsTabs.TRANSACTION}
-            title={renderTitleTab(DappsTabs.TRANSACTION, `${CDN_URL}/icons/ic-arrow-switch.svg`, 'Transactions')}
-          >
-            <Transactions />
-          </Tab>
-        </Tabs>
-      </TabContainer>
-    </StyledProfile>
+            <Tab
+              mountOnEnter
+              eventKey={DappsTabs.NFT}
+              title={renderTitleTab(DappsTabs.NFT, `${CDN_URL}/icons/ic-hexagon.svg`, 'NFTs')}
+            >
+              <Nfts />
+            </Tab>
+            <Tab
+              mountOnEnter
+              eventKey={DappsTabs.TOKEN}
+              title={renderTitleTab(DappsTabs.TOKEN, `${CDN_URL}/icons/ic-coin-unbroken.svg`, 'Tokens')}
+            >
+              <Tokens />
+            </Tab>
+            <Tab
+              mountOnEnter
+              eventKey={DappsTabs.ARTIFACT}
+              title={renderTitleTab(DappsTabs.ARTIFACT, `${CDN_URL}/icons/ic-folder-open.svg`, 'Artifacts')}
+            >
+              <Artifacts />
+            </Tab>
+            <Tab
+              mountOnEnter
+              eventKey={DappsTabs.NAMES}
+              title={renderTitleTab(DappsTabs.NAMES, `${CDN_URL}/icons/ic-names.svg`, 'Names')}
+            >
+              <Names />
+            </Tab>
+            <Tab
+              mountOnEnter
+              eventKey={DappsTabs.TRANSACTION}
+              title={renderTitleTab(DappsTabs.TRANSACTION, `${CDN_URL}/icons/ic-arrow-switch.svg`, 'Transactions')}
+            >
+              <Transactions />
+            </Tab>
+          </Tabs>
+        </TabContainer>
+      </StyledProfile>
+    </MDContainer>
   );
 };
 

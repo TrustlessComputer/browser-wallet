@@ -25,3 +25,21 @@ export const capitalizeFirstLetter = (string: string) => {
 export const stringToBuffer = (str: string): Buffer => {
   return Buffer.from(str);
 };
+
+type CompareType = 'equal' | 'diff';
+export const compareString = ({
+  str1,
+  str2,
+  method,
+}: {
+  str1: string | undefined;
+  str2: string | undefined;
+  method: CompareType;
+}) => {
+  if (!str1 || !str2) return false;
+  if (method === 'equal') {
+    return str1.toLowerCase() === str2.toLowerCase();
+  } else {
+    return str1.toLowerCase() !== str2.toLowerCase();
+  }
+};

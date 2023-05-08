@@ -9,14 +9,14 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { Container } from './NftsProfile.styled';
 import NFTCard from '@/components/NFTCard';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { BNS_CONTRACT, ARTIFACT_CONTRACT } from '@/configs';
 import CollectionModal from './CollectionModal';
 
 const LIMIT_PAGE = 64;
 
 const NftsProfile = () => {
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
 
   const profileWallet = user?.address || '';
   const pageSize = LIMIT_PAGE;

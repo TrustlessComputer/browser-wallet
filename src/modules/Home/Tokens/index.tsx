@@ -12,7 +12,7 @@ import { IToken } from '@/interfaces/token';
 import format from '@/utils/amount';
 import convert from '@/utils/convert';
 import BigNumber from 'bignumber.js';
-import { useCurrentUser } from '@/state/wallet/hooks';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import Button from '@/components/Button';
 
 const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
@@ -20,7 +20,7 @@ const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 const LIMIT_PAGE = 50;
 
 const Tokens = () => {
-  const user = useCurrentUser();
+  const user = useCurrentUserInfo();
 
   const profileWallet = user?.address || '';
 
