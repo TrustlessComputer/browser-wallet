@@ -38,6 +38,7 @@ function getSettings() {
       xl: '32px',
     },
     fonts,
+    breakpoint: BREAKPOINTS,
     fontSizes,
   };
 }

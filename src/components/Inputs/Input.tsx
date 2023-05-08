@@ -1,5 +1,5 @@
 import React, { HTMLInputTypeAttribute, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { DefaultTheme } from 'styled-components/macro';
 import { PasswordIcon } from '@/components/icons';
 import Text from '@/components/Text';
 
@@ -7,6 +7,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  .error {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: ${({ theme }: { theme: DefaultTheme }) => theme.red.A};
+    margin-top: 4px;
+  }
 `;
 
 const InputWrapper = styled.div`
@@ -54,7 +62,7 @@ const InputWrapper = styled.div`
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string;
-  type: 'text' | 'password';
+  type: HTMLInputTypeAttribute;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
@@ -63,6 +71,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   classInputWrapper?: string | undefined;
   classInput?: string | undefined;
   title?: string | undefined;
+  errorMsg?: string;
 }
 
 const Input = (props: InputProps) => {
@@ -77,6 +86,7 @@ const Input = (props: InputProps) => {
     classInputWrapper,
     classInput,
     title,
+    errorMsg,
     ...rest
   } = props;
 
@@ -96,7 +106,13 @@ const Input = (props: InputProps) => {
   return (
     <Container className={classContainer}>
       {!!title && (
-        <Text style={{ textTransform: 'uppercase' }} fontWeight="medium" color="text-secondary" className="mb-8">
+        <Text
+          style={{ textTransform: 'uppercase' }}
+          size="tini"
+          fontWeight="medium"
+          color="text-secondary"
+          className="mb-8"
+        >
           {title}
         </Text>
       )}
@@ -117,6 +133,7 @@ const Input = (props: InputProps) => {
           </div>
         )}
       </InputWrapper>
+      {!!errorMsg && <Text className="error">{errorMsg}</Text>}
     </Container>
   );
 };

@@ -4,6 +4,8 @@ export interface IInscriptionByOutput {
   [key: string]: TC_SDK.Inscription[];
 }
 
+export interface IBlockStreamTxs extends IPendingUTXO {}
+
 export interface ICollectedUTXOResp {
   address: string;
   inscription_id: string;
@@ -53,4 +55,47 @@ export type BINANCE_PAIR = 'ETHBTC';
 export interface ITokenPriceResp {
   symbol: string;
   price: string;
+}
+
+export enum HistoryStatusType {
+  pending = 'Pending',
+  failed = 'Failed',
+  success = 'Success',
+  cancelling = 'cancelling',
+  listing = 'listing',
+  matched = 'matched',
+  cancelled = 'cancelled',
+
+  waitingPayment = 'Waiting for payment',
+  receivedPayment = 'Payment received',
+  buying = 'Buying',
+  bought = 'Bought',
+  refunding = 'Refunding',
+  refunded = 'Refunded',
+  expired = 'Expired',
+}
+
+export type HistoryStatusColor = '#ff7e21' | '#24c087' | '#ff4747' | '#5b5b5b';
+
+export enum TrackTxType {
+  normal = 'normal',
+  inscription = 'inscription',
+  buyInscription = 'buy-inscription',
+  buySplit = 'buy-split-inscription',
+  listSplit = 'list-split-inscription',
+  list = 'list-inscription',
+  cancel = 'cancel-list-inscription',
+}
+export interface ITxHistory {
+  txhash: string;
+  status: HistoryStatusType;
+  statusColor: HistoryStatusColor;
+  type: TrackTxType;
+  inscription_id: string;
+  inscription_number: number;
+  send_amount: number;
+  created_at: string;
+  isExpired: boolean;
+  inscription_list: string[];
+  inscription_number_list: number[];
 }

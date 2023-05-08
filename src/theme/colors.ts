@@ -26,6 +26,17 @@ export const colors = {
     '5': '#E5E5E5',
   },
 
+  primary: {
+    '333': '#333333',
+    brand: '#1C1C1C',
+    secondary: '#1C1C1C',
+    '2e': '#2e2e2e',
+    '5b': '#5b5b5b',
+    d9: '#d9d9d9',
+    light: '#F7F9FB',
+    f2: '#f2f2f2',
+  },
+
   blue: {
     A: '#A8C5DA',
     B: '#B1E3FF',
@@ -66,6 +77,8 @@ export const darkTheme = {
   'text-secondary': colors.dark['10'],
   'text-highlight': colors.yellow['A'],
   'text-parallel': colors.dark['100'],
+  'text-third': colors.dark['5'],
+  'text-four': colors.dark['40'],
 
   // button
   'button-primary': colors.yellow['A'],
@@ -73,11 +86,14 @@ export const darkTheme = {
   // border
   'border-primary': colors.dark['60'],
   'border-secondary': colors.yellow['A'],
+  'border-third': colors.primary.d9,
+  'border-four': colors.dark['5'],
 
   bg: {
     primary: colors.dark['110'],
     secondary: colors.dark['80'],
     third: colors.dark['100'],
+    four: colors.primary['f2'],
   },
 
   card: {
@@ -94,6 +110,8 @@ export const lightTheme = {
   'text-secondary': colors.dark['60'],
   'text-highlight': colors.yellow['A'],
   'text-parallel': colors.dark['100'],
+  'text-third': colors.dark['5'],
+  'text-four': colors.dark['40'],
 
   // button
   'button-primary': colors.yellow['C'],
@@ -101,11 +119,14 @@ export const lightTheme = {
   // border
   'border-primary': colors.dark['10'],
   'border-secondary': colors.yellow['C'],
+  'border-third': colors.primary.d9,
+  'border-four': colors.dark['5'],
 
   bg: {
     primary: colors.white,
     secondary: colors.light['80'],
     third: colors.light['100'],
+    four: colors.primary['f2'],
   },
 
   card: {
