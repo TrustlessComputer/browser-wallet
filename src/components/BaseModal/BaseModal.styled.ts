@@ -6,6 +6,7 @@ export const StyledModal = styled(Modal)<{ width?: number }>`
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg.third};
     --bs-modal-width: ${({ width }: { width?: number }) => px2rem(width || 500)};
+    overflow-y: hidden;
   }
 
   .modal-content {
@@ -24,8 +25,23 @@ export const StyledModal = styled(Modal)<{ width?: number }>`
     padding-top: ${px2rem(18)};
   }
 
+  .modal {
+    display: block !important;
+  }
+
+  /* Important part */
+  .modal-dialog {
+    overflow-y: initial !important;
+  }
+
   .modal-body {
     padding-top: ${px2rem(0)};
+    max-height: 80vh;
+    overflow-y: auto;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .modal-footer {

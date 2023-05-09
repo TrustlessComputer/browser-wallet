@@ -73,7 +73,8 @@ const TransferModal = (props: Props) => {
           />
         </ImageContainer>
         <TransferContainer md="6">
-          <Title>Transfer Artifact</Title>
+          <Title>{`Artifact #${artifact.tokenId}`}</Title>
+          <p className="name-detail">Transfer Artifact</p>
           <Formik
             key="create"
             initialValues={{

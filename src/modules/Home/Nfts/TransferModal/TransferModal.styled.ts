@@ -51,3 +51,23 @@ export const Title = styled.p`
   line-height: ${px2rem(38)};
   color: ${({ theme }) => theme['text-primary']};
 `;
+
+export const BackHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${px2rem(6)};
+  cursor: pointer;
+  width: fit-content;
+
+  p {
+    font-weight: 400;
+    font-size: ${px2rem(16)};
+    line-height: 150%;
+    color: ${({ theme }) => theme['text-primary']};
+  }
+
+  :hover {
+    opacity: 0.8;
+  }
+`;
