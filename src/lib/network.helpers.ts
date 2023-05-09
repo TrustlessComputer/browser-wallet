@@ -9,22 +9,25 @@ export interface INetwork {
   TCNode: string;
   BTCNetwork: IBTCNetwork;
   Explorer: string;
+  BE_API: string;
 }
 
 const NETWORKS: Array<INetwork> = [
-  {
-    Name: 'Mainnet',
-    BTCNetwork: 'mainnet',
-    ChainID: 22213,
-    TCNode: 'https://tc-node.trustless.computer',
-    Explorer: 'https://explorer.regtest.trustless.computer',
-  },
   {
     Name: 'Regtest manual',
     ChainID: 22213,
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
+    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
+  },
+  {
+    Name: 'Mainnet',
+    BTCNetwork: 'mainnet',
+    ChainID: 22213,
+    TCNode: 'https://tc-node.trustless.computer',
+    Explorer: 'https://explorer.regtest.trustless.computer',
+    BE_API: 'https://dapp.trustless.computer/dapp/api',
   },
   {
     Name: 'Regtest auto',
@@ -32,13 +35,14 @@ const NETWORKS: Array<INetwork> = [
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
+    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
   },
 ];
 
 class Network {
-  network: INetwork;
+  current: INetwork;
   constructor() {
-    this.network = this.getSelectedNetwork();
+    this.current = this.getSelectedNetwork();
   }
 
   getSelectedNetwork(): INetwork {

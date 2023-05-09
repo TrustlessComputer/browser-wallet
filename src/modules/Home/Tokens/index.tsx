@@ -1,6 +1,5 @@
 import Empty from '@/components/Empty';
 import Table from '@/components/Table';
-import { TRUSTLESS_COMPUTER_CHAIN_INFO } from '@/constants/chains';
 import { getTokensWallet } from '@/services/profile';
 import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -14,8 +13,7 @@ import convert from '@/utils/convert';
 import BigNumber from 'bignumber.js';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import Button from '@/components/Button';
-
-const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
+import network from '@/lib/network.helpers';
 
 const LIMIT_PAGE = 50;
 
@@ -72,7 +70,7 @@ const Tokens = () => {
       maxDigits: 9,
     });
 
-    const linkTokenExplorer = `${EXPLORER_URL}/token/${token?.address}`;
+    const linkTokenExplorer = `${network.current.Explorer}/token/${token?.address}`;
 
     const balanceNumb = convert.toNumber({ text: balance || '0', autoCorrect: true });
 

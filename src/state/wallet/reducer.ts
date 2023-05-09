@@ -23,7 +23,6 @@ const walletSlice = createSlice({
       state.showSetup = action.payload;
     },
     setIsLockedWallet(state, action: PayloadAction<boolean>) {
-      console.log('SANG TEST: ', action);
       state.isLocked = action.payload;
     },
     resetSecretStore(state) {

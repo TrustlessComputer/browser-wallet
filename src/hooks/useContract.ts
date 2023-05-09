@@ -1,22 +1,32 @@
 import { getContract } from '@/utils';
 import { Contract } from '@ethersproject/contracts';
-import { useWeb3React } from '@web3-react/core';
 import { useMemo } from 'react';
+import { ethers } from 'ethers';
+import network from '@/lib/network.helpers';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 
-export function useContract<T extends Contract = Contract>(
+function useContract<T extends Contract = Contract>(
   contractAddress: string | undefined,
   ABI: any,
   withSignerIfPossible = true,
 ): T | null {
-  const { provider, account, chainId } = useWeb3React();
-
+  const userInfo = useCurrentUserInfo();
   return useMemo(() => {
-    if (!contractAddress || !ABI || !provider || !chainId) return null;
+    if (!contractAddress || !ABI) return null;
     try {
-      return getContract(contractAddress, ABI, provider, withSignerIfPossible && account ? account : undefined);
+      const rpc: string = network.current.TCNode;
+      const customProvider = new ethers.providers.JsonRpcProvider(rpc);
+      return getContract(
+        contractAddress,
+        ABI,
+        customProvider,
+        withSignerIfPossible && userInfo ? userInfo.address : undefined,
+      );
     } catch (error) {
       console.error('Failed to get contract', error);
       return null;
     }
-  }, [contractAddress, ABI, provider, chainId, withSignerIfPossible, account]) as T;
+  }, [contractAddress, ABI, withSignerIfPossible, network.current.TCNode, userInfo?.address]) as T;
 }
+
+export default useContract;
