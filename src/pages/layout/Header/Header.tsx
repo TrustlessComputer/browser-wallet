@@ -1,5 +1,5 @@
 import { gsap, Power3 } from 'gsap';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DropdownItem, DropdownList, Wrapper } from './Header.styled';
 import { ROUTE_PATH } from '@/constants/route-path';
@@ -15,6 +15,9 @@ import Text from '@/components/Text';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { isLockedSelector } from '@/state/wallet/selector';
 import { setIsLockedWallet } from '@/state/wallet/reducer';
+import { AssetsContext } from '@/contexts/assets.context';
+import format from '@/utils/amount';
+import Token from '@/constants/token';
 
 const Header = () => {
   const refMenu = useRef<HTMLDivElement | null>(null);
@@ -22,6 +25,7 @@ const Header = () => {
   const user = useCurrentUserInfo();
   const isLocked = useAppSelector(isLockedSelector);
   const dispatch = useAppDispatch();
+  const { tcBalance } = useContext(AssetsContext);
 
   const MoreList = [
     {
@@ -62,8 +66,18 @@ const Header = () => {
         </Link>
         {!!user && !isLocked && (
           <Row gap="40px" className="balance-wrapper">
-            <AssetBox icon={<PenguinIcon />} title="TRUSTLESS BALANCE" amount="0.001" address={user.address} />
-            <AssetBox icon={<BitcoinIcon />} title="BITCOIN BALANCE" amount="0.001" address={user.btcAddress} />
+            <AssetBox
+              icon={<PenguinIcon />}
+              title="TRUSTLESS BALANCE"
+              amount={format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal })}
+              address={user.address}
+            />
+            <AssetBox
+              icon={<BitcoinIcon />}
+              title="BITCOIN BALANCE"
+              amount={format.shorterAmount({ originalAmount: tcBalance, decimals: Token.BITCOIN.decimal })}
+              address={user.btcAddress}
+            />
             <Dropdown icon={<MoreVerticalIcon />}>
               <DropdownList>
                 {MoreList.map(item => (

@@ -1,5 +1,4 @@
 export * from './address';
-export * from './chain';
 export * from './contract';
 export * from './dimensions';
 export * from './helpers';

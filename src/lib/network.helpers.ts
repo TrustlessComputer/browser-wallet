@@ -1,5 +1,7 @@
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
+import { DEFAULT_NETWORK_NAME } from '@/configs';
+import { compareString } from '@/utils';
 
 export type IBTCNetwork = 'mainnet' | 'testnet' | 'regtest';
 
@@ -36,9 +38,9 @@ const NETWORKS: Array<INetwork> = [
 ];
 
 class Network {
-  network: INetwork;
+  current: INetwork;
   constructor() {
-    this.network = this.getSelectedNetwork();
+    this.current = this.getSelectedNetwork();
   }
 
   getSelectedNetwork(): INetwork {
@@ -46,6 +48,15 @@ class Network {
     let network = storageLocal.get(key);
     if (!network) {
       network = NETWORKS[0];
+      if (DEFAULT_NETWORK_NAME) {
+        network = NETWORKS.find(network =>
+          compareString({
+            method: 'equal',
+            str1: network.Name,
+            str2: DEFAULT_NETWORK_NAME,
+          }),
+        );
+      }
       storageLocal.set(key, network);
     }
     return network;

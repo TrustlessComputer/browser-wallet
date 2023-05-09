@@ -9,6 +9,7 @@ export const CDN_URL: string = ENVS.VITE_CDN_URL;
 export const MOCKUP_PASSWORD: string = ENVS.VITE_MOCKUP_PASSWORD || '';
 export const MOCKUP_MNEMONIC: string = ENVS.VITE_MOCKUP_MNEMONIC || '';
 export const isKeepSign: boolean = ENVS.VITE_KEEP_SIGNIN === 'true';
+export const DEFAULT_NETWORK_NAME: string = ENVS.VITE_NETWORK_NAME;
 
 export const CDN_URL_ICONS: string = CDN_URL + '/wallet-icons';
 
