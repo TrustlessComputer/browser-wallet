@@ -24,6 +24,7 @@ export const ImageContainer = styled(Col)`
     gap: ${px2rem(6)};
     cursor: pointer;
     margin-top: ${px2rem(16)};
+    width: fit-content;
 
     :hover {
       opacity: 0.8;

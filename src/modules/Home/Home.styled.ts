@@ -80,7 +80,6 @@ export const TabContainer = styled.div`
   }
 
   .tab-text {
-    font-family: 'IBMPlexMono' !important;
     font-size: ${px2rem(16)};
     font-weight: 500;
   }

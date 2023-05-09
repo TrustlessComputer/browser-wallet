@@ -3,11 +3,13 @@ import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import { IInscription } from '@/interfaces/api/inscription';
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Container, ImageContainer, TransferContainer, Title, BackHeader } from './TransferModal.styled';
 import NFTDisplayBox from '@/components/NFTDisplayBox';
 import { ArrowLeftIcon } from '@/components/icons';
+import useFeeRate from '@/components/FeeRate/useFeeRate';
+import { FeeRate } from '@/components/FeeRate';
 
 type Props = {
   show: boolean;
@@ -27,6 +29,23 @@ const TransferModal = (props: Props) => {
   const tokenId = artifact.tokenId;
 
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const {
+    feeRate,
+    onChangeFee,
+    onChangeCustomFee,
+    currentRateType,
+    currentRate,
+    customRate,
+    isLoading: isLoadingRate,
+    onFetchFee,
+  } = useFeeRate({ minFeeRate: undefined });
+
+  useEffect(() => {
+    if (show) {
+      onFetchFee();
+    }
+  }, [show]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -70,7 +89,7 @@ const TransferModal = (props: Props) => {
           <p>Back to collection</p>
         </BackHeader>
         <Container>
-          <ImageContainer md="6">
+          <ImageContainer md="5">
             <NFTDisplayBox
               collectionID={contractAddress}
               contentClass="image"
@@ -79,7 +98,7 @@ const TransferModal = (props: Props) => {
               type={artifact.contentType}
             />
           </ImageContainer>
-          <TransferContainer md="6">
+          <TransferContainer md="7">
             <Title>{`${artifact.name || ''}${artifact.name.includes('#') ? '' : `#${artifact.tokenId}`}`}</Title>
             <p className="name-detail">Transfer NFT</p>
             <Formik
@@ -104,6 +123,17 @@ const TransferModal = (props: Props) => {
                     className="input"
                     placeholder={`Paste TC wallet address here`}
                     errorMsg={errors.toAddress && touched.toAddress ? errors.toAddress : undefined}
+                  />
+
+                  <FeeRate
+                    allRate={feeRate}
+                    isCustom={true}
+                    onChangeFee={onChangeFee}
+                    onChangeCustomFee={onChangeCustomFee}
+                    currentRateType={currentRateType}
+                    currentRate={currentRate}
+                    customRate={customRate}
+                    isLoading={isLoadingRate}
                   />
 
                   <Button disabled={isProcessing} type="submit" className="confirm-btn">

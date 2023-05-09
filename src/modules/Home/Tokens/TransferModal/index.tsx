@@ -3,9 +3,11 @@ import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import { Formik } from 'formik';
 import isNumber from 'lodash/isNumber';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Container } from './TransferModal.styled';
+import useFeeRate from '@/components/FeeRate/useFeeRate';
+import { FeeRate } from '@/components/FeeRate';
 
 type Props = {
   show: boolean;
@@ -22,6 +24,23 @@ const TransferModal = (props: Props) => {
   const { show = false, handleClose, erc20TokenAddress } = props;
 
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const {
+    feeRate,
+    onChangeFee,
+    onChangeCustomFee,
+    currentRateType,
+    currentRate,
+    customRate,
+    isLoading: isLoadingRate,
+    onFetchFee,
+  } = useFeeRate({ minFeeRate: undefined });
+
+  useEffect(() => {
+    if (show) {
+      onFetchFee();
+    }
+  }, [show]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -67,7 +86,7 @@ const TransferModal = (props: Props) => {
   };
 
   return (
-    <BaseModal show={show} handleClose={handleClose} title="Transfer Token" width={776}>
+    <BaseModal show={show} handleClose={handleClose} title="Transfer Token" width={680}>
       <Container>
         <Formik
           key="create"
@@ -104,6 +123,17 @@ const TransferModal = (props: Props) => {
                 className="input"
                 placeholder={`Enter the amount`}
                 errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
+              />
+
+              <FeeRate
+                allRate={feeRate}
+                isCustom={true}
+                onChangeFee={onChangeFee}
+                onChangeCustomFee={onChangeCustomFee}
+                currentRateType={currentRateType}
+                currentRate={currentRate}
+                customRate={customRate}
+                isLoading={isLoadingRate}
               />
 
               <Button disabled={isProcessing} type="submit" className="confirm-btn">
