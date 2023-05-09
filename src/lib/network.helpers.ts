@@ -1,7 +1,5 @@
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
-import { DEFAULT_NETWORK_NAME } from '@/configs';
-import { compareString } from '@/utils';
 
 export type IBTCNetwork = 'mainnet' | 'testnet' | 'regtest';
 
@@ -11,22 +9,25 @@ export interface INetwork {
   TCNode: string;
   BTCNetwork: IBTCNetwork;
   Explorer: string;
+  BE_API: string;
 }
 
 const NETWORKS: Array<INetwork> = [
-  {
-    Name: 'Mainnet',
-    BTCNetwork: 'mainnet',
-    ChainID: 22213,
-    TCNode: 'https://tc-node.trustless.computer',
-    Explorer: 'https://explorer.regtest.trustless.computer',
-  },
   {
     Name: 'Regtest manual',
     ChainID: 22213,
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
+    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
+  },
+  {
+    Name: 'Mainnet',
+    BTCNetwork: 'mainnet',
+    ChainID: 22213,
+    TCNode: 'https://tc-node.trustless.computer',
+    Explorer: 'https://explorer.regtest.trustless.computer',
+    BE_API: 'https://dapp.trustless.computer/dapp/api',
   },
   {
     Name: 'Regtest auto',
@@ -34,6 +35,7 @@ const NETWORKS: Array<INetwork> = [
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
+    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
   },
 ];
 
@@ -48,15 +50,6 @@ class Network {
     let network = storageLocal.get(key);
     if (!network) {
       network = NETWORKS[0];
-      if (DEFAULT_NETWORK_NAME) {
-        network = NETWORKS.find(network =>
-          compareString({
-            method: 'equal',
-            str1: network.Name,
-            str2: DEFAULT_NETWORK_NAME,
-          }),
-        );
-      }
       storageLocal.set(key, network);
     }
     return network;

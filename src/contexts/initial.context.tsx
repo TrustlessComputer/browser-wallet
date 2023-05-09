@@ -42,7 +42,7 @@ export const InitialProvider: React.FC<PropsWithChildren> = ({ children }: Props
       setIniting(true);
       setupConfigs();
       await preload();
-      await sleep(0.5);
+      await sleep(0.2);
       const currentTCAccount = WalletStorage.getCurrentTCAccount();
       if (currentTCAccount) {
         dispatch(

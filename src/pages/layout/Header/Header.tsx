@@ -25,7 +25,7 @@ const Header = () => {
   const user = useCurrentUserInfo();
   const isLocked = useAppSelector(isLockedSelector);
   const dispatch = useAppDispatch();
-  const { tcBalance } = useContext(AssetsContext);
+  const { tcBalance, btcBalance } = useContext(AssetsContext);
 
   const MoreList = [
     {
@@ -75,7 +75,7 @@ const Header = () => {
             <AssetBox
               icon={<BitcoinIcon />}
               title="BITCOIN BALANCE"
-              amount={format.shorterAmount({ originalAmount: tcBalance, decimals: Token.BITCOIN.decimal })}
+              amount={format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal })}
               address={user.btcAddress}
             />
             <Dropdown icon={<MoreVerticalIcon />}>

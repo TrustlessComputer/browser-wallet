@@ -16,6 +16,8 @@ const setupProject = () => {
   const { BTCNetwork, TCNode } = network.getSelectedNetwork();
   const networkNumber = BTCNetworkNumber[BTCNetwork];
 
+  TC_SDK.setBTCNetwork(networkNumber);
+
   // setup storage
   const storage = new TC_SDK.StorageService();
   storage.implement({

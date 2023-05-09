@@ -21,10 +21,10 @@ const App: React.FC = (): React.ReactElement => {
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
           <ThemedGlobalStyle />
-          <AssetsProvider>
-            <InitialProvider>{element}</InitialProvider>
-            <Toaster position="top-center" reverseOrder={false} />
-          </AssetsProvider>
+          <InitialProvider>
+            <AssetsProvider>{element}</AssetsProvider>
+          </InitialProvider>
+          <Toaster position="top-center" reverseOrder={false} />
           <Toaster position="top-center" reverseOrder={false} />
         </ThemeProvider>
       </PersistGate>
