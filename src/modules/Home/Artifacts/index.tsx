@@ -11,12 +11,18 @@ import { IInscription } from '@/interfaces/api/inscription';
 import { Grid } from '@/components/Grid/Grid.styled';
 import NFTCard from '@/components/NFTCard';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
+import ArtifactInfoModal from './InfoModal';
+import ArtifactTransferModal from './TransferModal';
 
 const LIMIT_PAGE = 32;
 
 const ArtifactsProfile = () => {
   const user = useCurrentUserInfo();
   const profileWallet = user?.address || '';
+
+  const [selectArtifact, setSelectArtifact] = useState<IInscription | undefined>();
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showTransferModal, setShowTransferModal] = useState(false);
 
   const [pageSize] = useState(LIMIT_PAGE);
   const [isFetching, setIsFetching] = useState(false);
@@ -62,6 +68,16 @@ const ArtifactsProfile = () => {
 
   if (!inscriptions || inscriptions.length === 0) return <Empty />;
 
+  const onClickArtifact = (item: IInscription) => {
+    setSelectArtifact(item);
+    setShowInfoModal(true);
+  };
+
+  const onClickTransfer = () => {
+    setShowInfoModal(false);
+    setShowTransferModal(true);
+  };
+
   return (
     <Container>
       <div className="content">
@@ -92,13 +108,29 @@ const ArtifactsProfile = () => {
                     title1={formatItemName(item.name, item.contentType)}
                     title2={shortenAddress(item.owner, 4)}
                     title3={`Artifact #${item.tokenId}`}
-                    owner={item.owner}
+                    onClickItem={() => onClickArtifact(item)}
                   />
                 );
               })}
           </Grid>
         </InfiniteScroll>
       </div>
+      {selectArtifact && (
+        <ArtifactInfoModal
+          artifact={selectArtifact}
+          show={showInfoModal}
+          handleClose={() => setShowInfoModal(false)}
+          onClickTransfer={onClickTransfer}
+        />
+      )}
+      {selectArtifact && (
+        <ArtifactTransferModal
+          show={showTransferModal}
+          handleClose={() => setShowTransferModal(false)}
+          contractAddress={ARTIFACT_CONTRACT}
+          artifact={selectArtifact}
+        />
+      )}
     </Container>
   );
 };

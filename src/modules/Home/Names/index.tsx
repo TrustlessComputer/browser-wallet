@@ -8,8 +8,10 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { Container } from './Names.styled';
 import Empty from '@/components/Empty';
 import { IBNS } from '@/interfaces/bns';
-import BNSCard from './BNS/Card';
+import BNSCard from './Card';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
+import BNSTransferModal from './TransferModal';
+import BNSInfoModal from './InfoModal';
 
 const LIMIT_PAGE = 12;
 
@@ -18,6 +20,10 @@ const Names = () => {
   const account = user?.address || '';
 
   const profileWallet = account;
+
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [selectBNS, setSelectBNS] = useState<IBNS | undefined>();
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   const pageSize = LIMIT_PAGE;
   const [isFetching, setIsFetching] = useState(false);
@@ -56,6 +62,16 @@ const Names = () => {
 
   if (!collections || collections.length === 0) return <Empty />;
 
+  const onClickBNS = (bns: IBNS) => {
+    setSelectBNS(bns);
+    setShowInfoModal(true);
+  };
+
+  const onClickTransfer = () => {
+    setShowInfoModal(false);
+    setShowTransferModal(true);
+  };
+
   return (
     <Container>
       <div className="content">
@@ -86,11 +102,26 @@ const Names = () => {
               {collections &&
                 collections.length > 0 &&
                 collections.map((item: any) => {
-                  return <BNSCard key={`name-${item.id}`} item={item} />;
+                  return <BNSCard key={`name-${item.id}`} item={item} onClick={onClickBNS} />;
                 })}
             </Masonry>
           </ResponsiveMasonry>
         </InfiniteScroll>
+        {selectBNS && (
+          <BNSInfoModal
+            bns={selectBNS}
+            show={showInfoModal}
+            handleClose={() => setShowInfoModal(false)}
+            onClickTransfer={onClickTransfer}
+          />
+        )}
+        {selectBNS && (
+          <BNSTransferModal
+            name={selectBNS.name}
+            show={showTransferModal}
+            handleClose={() => setShowTransferModal(false)}
+          />
+        )}
       </div>
     </Container>
   );

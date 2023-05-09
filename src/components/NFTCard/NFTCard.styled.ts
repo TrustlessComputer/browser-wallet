@@ -51,7 +51,7 @@ export const Styled = styled.div`
       font-weight: 500;
       font-size: ${px2rem(22)};
       line-height: ${px2rem(30)};
-      color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
+      color: ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
