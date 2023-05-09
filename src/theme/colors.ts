@@ -79,6 +79,7 @@ export const darkTheme = {
   'text-parallel': colors.dark['100'],
   'text-third': colors.dark['5'],
   'text-four': colors.dark['40'],
+  'text-five': colors.dark['20'],
 
   // button
   'button-primary': colors.yellow['A'],
@@ -99,6 +100,7 @@ export const darkTheme = {
   card: {
     primary: colors.dark['120'],
     secondary: colors.dark['110'],
+    bns: '#17171a',
   },
 };
 
@@ -112,6 +114,7 @@ export const lightTheme = {
   'text-parallel': colors.dark['100'],
   'text-third': colors.dark['5'],
   'text-four': colors.dark['40'],
+  'text-five': colors.dark['20'],
 
   // button
   'button-primary': colors.yellow['C'],
@@ -132,5 +135,6 @@ export const lightTheme = {
   card: {
     primary: colors.dark['120'],
     secondary: colors.light['80'],
+    bns: '#17171a',
   },
 };

@@ -22,11 +22,10 @@ export const StyledModal = styled(Modal)<{ width?: number }>`
     display: flex;
     justify-content: flex-end;
     padding-top: ${px2rem(18)};
-    padding-right: ${px2rem(18)};
   }
 
   .modal-body {
-    padding-top: ${px2rem(7)};
+    padding-top: ${px2rem(0)};
   }
 
   .modal-footer {
@@ -34,10 +33,18 @@ export const StyledModal = styled(Modal)<{ width?: number }>`
   }
 `;
 
-export const Title = styled.h5`
-  margin-bottom: ${px2rem(24)};
+export const Title = styled.p`
   font-weight: 600;
-  font-size: ${px2rem(24)};
-  line-height: ${px2rem(34)};
-  color: ${({ theme }) => theme.white};
+  font-size: ${px2rem(28)};
+  line-height: ${px2rem(38)};
+  color: ${({ theme }) => theme['text-primary']};
+`;
+
+export const SubTitle = styled.p`
+  font-weight: 400;
+  font-size: ${px2rem(18)};
+  line-height: ${px2rem(28)};
+  letter-spacing: -0.03em;
+
+  color: ${({ theme }) => theme['text-four']};
 `;

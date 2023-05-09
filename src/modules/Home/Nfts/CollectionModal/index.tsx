@@ -1,9 +1,11 @@
 import BaseModal from '@/components/BaseModal';
+import { ICollection } from '@/interfaces/api/collection';
 import { Container } from './CollectionModal.styled';
 
 type Props = {
   show: boolean;
   handleClose: () => void;
+  collection: ICollection;
 };
 
 const CollectionModal = (props: Props) => {

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { Container } from './NftsProfile.styled';
+import { Container } from './Nfts.styled';
 import NFTCard from '@/components/NFTCard';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { BNS_CONTRACT, ARTIFACT_CONTRACT } from '@/configs';
@@ -22,6 +22,7 @@ const NftsProfile = () => {
   const pageSize = LIMIT_PAGE;
 
   const [showCollectionModal, setShowCollectionModal] = useState(false);
+  const [selectCollection, setSelectCollection] = useState<ICollection | undefined>();
 
   const [isFetching, setIsFetching] = useState(false);
   const [collections, setCollections] = useState<ICollection[]>([]);
@@ -55,12 +56,14 @@ const NftsProfile = () => {
 
   const debounceLoadMore = debounce(onLoadMoreCollections, 300);
 
-  const handleOpenCollectionModal = () => {
+  const handleOpenCollectionModal = (item: ICollection) => {
     setShowCollectionModal(true);
+    setSelectCollection(item);
   };
 
   const handleCloseCollectionModal = () => {
     setShowCollectionModal(false);
+    setSelectCollection(undefined);
   };
 
   useEffect(() => {
@@ -109,18 +112,24 @@ const NftsProfile = () => {
                 return (
                   <NFTCard
                     key={index.toString()}
-                    image={item.thumbnail}
+                    thumbnail={item.thumbnail}
                     title1={item.name || shortenAddress(item.contract, 6)}
                     title2={shortenAddress(item.creator, 4)}
                     title3={`Collection #${item.index}`}
-                    onClickItem={handleOpenCollectionModal}
+                    onClickItem={() => handleOpenCollectionModal(item)}
                   />
                 );
               })}
           </Masonry>
         </ResponsiveMasonry>
       </InfiniteScroll>
-      <CollectionModal show={showCollectionModal} handleClose={handleCloseCollectionModal} />
+      {selectCollection && (
+        <CollectionModal
+          collection={selectCollection}
+          show={showCollectionModal}
+          handleClose={handleCloseCollectionModal}
+        />
+      )}
     </Container>
   );
 };
