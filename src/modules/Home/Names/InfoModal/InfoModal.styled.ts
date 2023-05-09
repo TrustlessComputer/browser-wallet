@@ -17,6 +17,7 @@ export const Container = styled.div`
     gap: ${px2rem(6)};
     cursor: pointer;
     margin-top: ${px2rem(24)};
+    width: fit-content;
 
     :hover {
       opacity: 0.8;

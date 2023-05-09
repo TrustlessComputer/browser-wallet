@@ -11,10 +11,11 @@ type Props = {
   show: boolean;
   handleClose: () => void;
   width?: number;
+  onScrollBody?: (event: React.UIEvent<HTMLDivElement>) => void;
 };
 
 const BaseModal = (props: Props) => {
-  const { title, subTitle, children, show = false, handleClose, width } = props;
+  const { title, subTitle, children, show = false, handleClose, width, onScrollBody } = props;
 
   return (
     <StyledModal show={show} onHide={handleClose} centered width={width}>
@@ -26,7 +27,7 @@ const BaseModal = (props: Props) => {
           maxWidth={'22px'}
         />
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body onScroll={onScrollBody}>
         {title && <Title>{title}</Title>}
         {subTitle && <SubTitle>{subTitle}</SubTitle>}
         {children}
