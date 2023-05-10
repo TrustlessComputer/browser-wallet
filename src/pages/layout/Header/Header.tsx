@@ -1,19 +1,17 @@
 import Button from '@/components/Button';
-import { DisconnectIcon, ExchangeIcon, LogoIcon, MoreVerticalIcon } from '@/components/icons';
-import Dropdown from '@/components/Popover';
+import { LogoIcon } from '@/components/icons';
 import { Row } from '@/components/Row';
-import Text from '@/components/Text';
 import { ROUTE_PATH } from '@/constants/route-path';
 import { HEADER_ID } from '@/pages/layout';
-import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { useAppSelector } from '@/state/hooks';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
-import { setIsLockedWallet } from '@/state/wallet/reducer';
 import { isLockedSelector } from '@/state/wallet/selector';
 import { gsap, Power3 } from 'gsap';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import AccountDropdown from './AccountDropdown';
 import AssetDropdown from './AssetDropdown';
-import { Container, DropdownItem, DropdownList, Wrapper } from './Header.styled';
+import { Container, Wrapper } from './Header.styled';
 import NetworkDropdown from './NetworkDropdown';
 
 const Header = () => {
@@ -21,24 +19,6 @@ const Header = () => {
   const [isOpenMenu] = useState<boolean>(false);
   const user = useCurrentUserInfo();
   const isLocked = useAppSelector(isLockedSelector);
-  const dispatch = useAppDispatch();
-
-  const MoreList = [
-    {
-      title: 'Send BTC',
-      titleClass: 'text-normal',
-      icon: <ExchangeIcon />,
-      iconClass: 'icon-normal',
-      onClick: () => null,
-    },
-    {
-      title: 'Disconnect',
-      titleClass: 'text-disconnect',
-      icon: <DisconnectIcon />,
-      iconClass: 'icon-disconnect',
-      onClick: () => dispatch(setIsLockedWallet(true)),
-    },
-  ];
 
   useEffect(() => {
     if (refMenu.current) {
@@ -62,19 +42,10 @@ const Header = () => {
             <LogoIcon className="ic-logo" />
           </Link>
           {!!user && !isLocked && (
-            <Row gap="40px" className="balance-wrapper">
+            <Row gap="36px" className="balance-wrapper">
               <NetworkDropdown />
+              <AccountDropdown />
               <AssetDropdown />
-              <Dropdown icon={<MoreVerticalIcon />}>
-                <DropdownList>
-                  {MoreList.map(item => (
-                    <DropdownItem key={item.title} onClick={item.onClick}>
-                      <div className={item.iconClass}>{item.icon}</div>
-                      <Text className={item.titleClass}>{item.title}</Text>
-                    </DropdownItem>
-                  ))}
-                </DropdownList>
-              </Dropdown>
             </Row>
           )}
         </Row>

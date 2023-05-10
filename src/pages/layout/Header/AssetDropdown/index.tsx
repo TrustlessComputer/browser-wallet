@@ -34,7 +34,7 @@ const AssetDropdown = React.memo(() => {
           <p>{formatBtcBalacne} BTC</p>
         </Element>
       }
-      width={324}
+      width={384}
     >
       {user && (
         <DropdownList>

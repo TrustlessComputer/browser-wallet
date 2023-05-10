@@ -5,9 +5,10 @@ interface IProps extends PropsWithChildren {
   icon?: React.ReactNode;
   width?: number;
   element?: React.ReactNode;
+  unwrapElement?: React.ReactNode;
 }
 
-const Dropdown = React.memo(({ icon, element, width, children }: IProps) => {
+const Dropdown = React.memo(({ icon, element, width, children, unwrapElement }: IProps) => {
   const [show, setShow] = React.useState(false);
   const ref = React.useRef(null);
 
@@ -30,10 +31,16 @@ const Dropdown = React.memo(({ icon, element, width, children }: IProps) => {
       container={ref}
       show={show}
     >
-      <Wrapper ref={ref} show={show} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
-        {icon && icon}
-        {element && element}
-      </Wrapper>
+      {unwrapElement ? (
+        <div ref={ref} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+          {unwrapElement}
+        </div>
+      ) : (
+        <Wrapper ref={ref} show={show} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+          {icon && icon}
+          {element && element}
+        </Wrapper>
+      )}
     </OverlayWrapper>
   );
 });
