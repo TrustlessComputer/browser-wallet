@@ -30,13 +30,13 @@ const Wrapper = styled(LayoutPadding)`
   position: relative;
   padding-top: ${px2rem(24)};
   padding-bottom: ${px2rem(24)};
-  height: ${px2rem(110)};
+  /* height: ${px2rem(110)}; */
   max-width: ${px2rem(2268)};
   width: 100%;
 
   .ic-logo {
-    width: ${px2rem(60)};
-    height: ${px2rem(60)};
+    width: ${px2rem(48)};
+    height: ${px2rem(48)};
   }
 
   .external-wrapper {

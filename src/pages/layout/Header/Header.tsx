@@ -1,23 +1,20 @@
-import { gsap, Power3 } from 'gsap';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { DropdownItem, DropdownList, Wrapper, Container } from './Header.styled';
-import { ROUTE_PATH } from '@/constants/route-path';
-import { DisconnectIcon, ExchangeIcon, LogoIcon, MoreVerticalIcon, PenguinIcon } from '@/components/icons';
-import { HEADER_ID } from '@/pages/layout';
-import { Row } from '@/components/Row';
-import AssetBox from '@/components/AssetBox';
-import BitcoinIcon from '@/components/icons/Bitcoin';
-import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import Button from '@/components/Button';
+import { DisconnectIcon, ExchangeIcon, LogoIcon, MoreVerticalIcon } from '@/components/icons';
 import Dropdown from '@/components/Popover';
+import { Row } from '@/components/Row';
 import Text from '@/components/Text';
+import { ROUTE_PATH } from '@/constants/route-path';
+import { HEADER_ID } from '@/pages/layout';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { isLockedSelector } from '@/state/wallet/selector';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { setIsLockedWallet } from '@/state/wallet/reducer';
-import { AssetsContext } from '@/contexts/assets.context';
-import format from '@/utils/amount';
-import Token from '@/constants/token';
+import { isLockedSelector } from '@/state/wallet/selector';
+import { gsap, Power3 } from 'gsap';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import AssetDropdown from './AssetDropdown';
+import { Container, DropdownItem, DropdownList, Wrapper } from './Header.styled';
+import NetworkDropdown from './NetworkDropdown';
 
 const Header = () => {
   const refMenu = useRef<HTMLDivElement | null>(null);
@@ -25,7 +22,6 @@ const Header = () => {
   const user = useCurrentUserInfo();
   const isLocked = useAppSelector(isLockedSelector);
   const dispatch = useAppDispatch();
-  const { tcBalance, btcBalance } = useContext(AssetsContext);
 
   const MoreList = [
     {
@@ -61,24 +57,14 @@ const Header = () => {
   return (
     <Container>
       <Wrapper id={HEADER_ID}>
-        <Row gap="60px">
+        <Row gap="80px">
           <Link className="logo" to={ROUTE_PATH.HOME}>
             <LogoIcon className="ic-logo" />
           </Link>
           {!!user && !isLocked && (
             <Row gap="40px" className="balance-wrapper">
-              <AssetBox
-                icon={<PenguinIcon />}
-                title="TRUSTLESS BALANCE"
-                amount={format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal })}
-                address={user.address}
-              />
-              <AssetBox
-                icon={<BitcoinIcon />}
-                title="BITCOIN BALANCE"
-                amount={format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal })}
-                address={user.btcAddress}
-              />
+              <NetworkDropdown />
+              <AssetDropdown />
               <Dropdown icon={<MoreVerticalIcon />}>
                 <DropdownList>
                   {MoreList.map(item => (

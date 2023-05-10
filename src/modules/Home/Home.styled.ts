@@ -8,6 +8,7 @@ export const StyledProfile = styled.div`
 `;
 
 export const TabContainer = styled.div`
+  padding: 0;
   .nav-tabs {
     border: none;
     display: flex;
