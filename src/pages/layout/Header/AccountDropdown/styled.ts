@@ -6,18 +6,6 @@ export const Element = styled.div`
   flex-direction: row;
   align-items: center;
   gap: ${px2rem(12)};
-
-  p {
-    font-weight: 500;
-    font-size: ${px2rem(18)};
-    color: ${({ theme }) => theme.yellow.A};
-  }
-
-  .indicator {
-    height: ${px2rem(24)};
-    width: ${px2rem(1)};
-    background-color: ${({ theme }) => theme['border-primary']};
-  }
 `;
 
 export const DropdownList = styled.div`
@@ -37,6 +25,16 @@ export const DropdownItem = styled.div`
     flex-direction: row;
     align-items: center;
     gap: ${px2rem(12)};
+
+    .icon {
+      width: ${px2rem(24)};
+    }
+
+    span {
+      font-weight: 400;
+      color: ${({ theme }) => theme['text-secondary']};
+      font-size: ${px2rem(14)};
+    }
   }
 
   .item-actions {
@@ -65,4 +63,42 @@ export const DropdownItem = styled.div`
       background-color: transparent;
     }
   }
+`;
+
+export const MoreDropdownItem = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${px2rem(12)};
+
+  :hover {
+    opacity: 0.8;
+    * {
+      text-decoration: underline;
+    }
+  }
+
+  .icon-disconnect {
+    padding: ${px2rem(4)};
+    background-color: ${({ theme }) => theme.red.C};
+    border-radius: ${px2rem(4)};
+  }
+
+  .text-disconnect {
+    color: ${({ theme }) => theme.red.C};
+  }
+
+  .icon-normal {
+    padding: ${px2rem(4)};
+    background-color: ${({ theme }) => theme.bg.third};
+    border-radius: ${px2rem(4)};
+  }
+
+  .text-normal {
+  }
+`;
+
+export const MoreDropdownList = styled.div`
+  display: grid;
+  gap: ${px2rem(12)} !important;
 `;
