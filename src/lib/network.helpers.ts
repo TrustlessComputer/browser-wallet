@@ -10,6 +10,7 @@ export interface INetwork {
   BTCNetwork: IBTCNetwork;
   Explorer: string;
   BE_API: string;
+  Icon: string;
 }
 
 const NETWORKS: Array<INetwork> = [
@@ -20,6 +21,7 @@ const NETWORKS: Array<INetwork> = [
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
     BE_API: 'https://dapp.trustless.computer/dapp/api',
+    Icon: 'ic-penguin-regtest-dark.svg',
   },
   {
     Name: 'Mainnet',
@@ -28,6 +30,7 @@ const NETWORKS: Array<INetwork> = [
     TCNode: 'https://tc-node.trustless.computer',
     Explorer: 'https://explorer.regtest.trustless.computer',
     BE_API: 'https://dapp.trustless.computer/dapp/api',
+    Icon: 'ic-penguin-currency-dark.svg',
   },
   {
     Name: 'Regtest auto',
@@ -36,6 +39,7 @@ const NETWORKS: Array<INetwork> = [
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
     BE_API: 'https://dapp.trustless.computer/dapp/api',
+    Icon: 'ic-penguin-regtest-dark.svg',
   },
 ];
 
