@@ -32,7 +32,7 @@ const NETWORKS: Array<INetwork> = [
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
-    BE_API: 'https://dapp.trustless.computer/dapp/api',
+    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
     Icon: 'ic-penguin-regtest-dark.svg',
   },
   {
@@ -73,6 +73,11 @@ class Network {
       return NETWORKS;
     }
     return networks;
+  }
+
+  switchNetwork(network: INetwork) {
+    const key = LocalStorageKey.SELECTED_NETWORK;
+    storageLocal.set(key, network);
   }
 }
 

@@ -2,13 +2,29 @@ import IconSVG from '@/components/IconSVG';
 import Dropdown from '@/components/Popover';
 import Text from '@/components/Text';
 import { CDN_URL_ICONS } from '@/configs';
-import React from 'react';
+import React, { useContext } from 'react';
 import { DropdownItem, DropdownList, Element } from './styled';
-import network from '@/lib/network.helpers';
+import network, { INetwork } from '@/lib/network.helpers';
+import { SwitchNetworkAction } from '@/pages/layout/Header/NetworkDropdown/SwitchNetwork.actions';
+import { useAppDispatch } from '@/state/hooks';
+import { InitialContext } from '@/contexts/initial.context';
 
 const NetworkDropdown = React.memo(() => {
   const networks = network.getListNetworks();
   const selectNetwork = network.getSelectedNetwork();
+  const dispatch = useAppDispatch();
+  const { onPreloader } = useContext(InitialContext);
+
+  const switchNetworkActions = new SwitchNetworkAction({
+    component: {
+      onPreloader,
+    },
+    dispatch,
+  });
+
+  const onSwitchNetwork = async (network: INetwork) => {
+    await switchNetworkActions.switchNetwork(network);
+  };
 
   return (
     <Dropdown
@@ -27,7 +43,7 @@ const NetworkDropdown = React.memo(() => {
           networks.length > 0 &&
           networks.map((item, index) => (
             <DropdownItem key={index.toString()}>
-              <div className="item">
+              <div className="item" onClick={() => onSwitchNetwork(item)}>
                 <IconSVG src={`${CDN_URL_ICONS}/${item.Icon}`} maxWidth="32" />
                 <div>
                   <Text color="text-primary" fontWeight="medium" size="note">
