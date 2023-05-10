@@ -12,6 +12,9 @@ import NFTCard from '@/components/NFTCard';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { BNS_CONTRACT, ARTIFACT_CONTRACT } from '@/configs';
 import CollectionModal from './CollectionModal';
+import { IInscription } from '@/interfaces/api/inscription';
+import NFTInfoModal from './NFTInfoModal';
+import NFTTransferModal from './TransferModal';
 
 const LIMIT_PAGE = 64;
 
@@ -19,10 +22,14 @@ const NftsProfile = () => {
   const user = useCurrentUserInfo();
 
   const profileWallet = user?.address || '';
+
   const pageSize = LIMIT_PAGE;
 
   const [showCollectionModal, setShowCollectionModal] = useState(false);
   const [selectCollection, setSelectCollection] = useState<ICollection | undefined>();
+  const [selectNFT, setSelectNFT] = useState<IInscription | undefined>();
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showTransferModal, setShowTransferModal] = useState(false);
 
   const [isFetching, setIsFetching] = useState(false);
   const [collections, setCollections] = useState<ICollection[]>([]);
@@ -63,7 +70,23 @@ const NftsProfile = () => {
 
   const handleCloseCollectionModal = () => {
     setShowCollectionModal(false);
-    setSelectCollection(undefined);
+  };
+
+  const onClickNFT = (item: IInscription) => {
+    setSelectNFT(item);
+    setShowInfoModal(true);
+    setShowCollectionModal(false);
+  };
+
+  const onClickTransfer = () => {
+    setShowInfoModal(false);
+    setShowTransferModal(true);
+  };
+
+  const onClickBackToCollection = () => {
+    setShowInfoModal(false);
+    setShowTransferModal(false);
+    setShowCollectionModal(true);
   };
 
   useEffect(() => {
@@ -128,6 +151,25 @@ const NftsProfile = () => {
           collection={selectCollection}
           show={showCollectionModal}
           handleClose={handleCloseCollectionModal}
+          onClickNFT={onClickNFT}
+        />
+      )}
+      {selectNFT && (
+        <NFTInfoModal
+          artifact={selectNFT}
+          show={showInfoModal}
+          handleClose={() => setShowInfoModal(false)}
+          onClickTransfer={onClickTransfer}
+          onClickBack={onClickBackToCollection}
+        />
+      )}
+      {selectNFT && (
+        <NFTTransferModal
+          show={showTransferModal}
+          handleClose={() => setShowTransferModal(false)}
+          contractAddress={selectNFT.collectionAddress}
+          artifact={selectNFT}
+          onClickBack={onClickBackToCollection}
         />
       )}
     </Container>

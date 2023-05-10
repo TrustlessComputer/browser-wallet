@@ -29,8 +29,14 @@ const Home = () => {
     const isActive = tab === activeTab;
     return (
       <div className="tab-item">
-        <IconSVG maxWidth="28" maxHeight="28" src={src} color={isActive ? 'text-highlight' : 'white'} type="stroke" />
-        <Text className="tab-text" color={isActive ? 'text-highlight' : 'white'}>
+        <IconSVG
+          maxWidth="20"
+          maxHeight="20"
+          src={src}
+          color={isActive ? 'text-highlight' : 'text-primary'}
+          type="stroke"
+        />
+        <Text className="tab-text" color={isActive ? 'text-highlight' : 'text-primary'}>
           {text}
         </Text>
       </div>

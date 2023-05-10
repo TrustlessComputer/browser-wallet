@@ -2,7 +2,7 @@ import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import { Formik } from 'formik';
 import isNumber from 'lodash/isNumber';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Container } from './TransferModal.styled';
 import SignerModal from '@/components/SignerModal';
@@ -10,6 +10,8 @@ import useContractOperation from '@/hooks/useContractOperation';
 import useTransferERC20, { ITransferERC20 } from '@/hooks/contracts-operation.ts/useTransferERC20';
 import { validateEVMAddress } from '@/utils';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
+import useFeeRate from '@/components/FeeRate/useFeeRate';
+import { FeeRate } from '@/components/FeeRate';
 
 type Props = {
   show: boolean;
@@ -30,6 +32,23 @@ const TransferModal = (props: Props) => {
     operation: useTransferERC20,
     inscribeable: true,
   });
+
+  const {
+    feeRate,
+    onChangeFee,
+    onChangeCustomFee,
+    currentRateType,
+    currentRate,
+    customRate,
+    isLoading: isLoadingRate,
+    onFetchFee,
+  } = useFeeRate({ minFeeRate: undefined });
+
+  useEffect(() => {
+    if (show) {
+      onFetchFee();
+    }
+  }, [show]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -114,6 +133,16 @@ const TransferModal = (props: Props) => {
                 className="input"
                 placeholder={`Enter the amount`}
                 errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
+              />
+              <FeeRate
+                allRate={feeRate}
+                isCustom={true}
+                onChangeFee={onChangeFee}
+                onChangeCustomFee={onChangeCustomFee}
+                currentRateType={currentRateType}
+                currentRate={currentRate}
+                customRate={customRate}
+                isLoading={isLoadingRate}
               />
               <Button disabled={submitting} type="submit" className="confirm-btn" isLoading={submitting}>
                 {submitting ? 'Processing...' : 'Transfer'}

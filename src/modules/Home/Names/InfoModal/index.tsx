@@ -16,7 +16,7 @@ const BNSInfoModal = (props: Props) => {
   const { show = false, handleClose, bns, onClickTransfer } = props;
 
   return (
-    <BaseModal show={show} handleClose={handleClose} title={bns.name} subTitle={`Name #${bns.id}`} width={600}>
+    <BaseModal show={show} handleClose={handleClose} title={bns.name} subTitle={`Name #${bns.id}`} width={620}>
       <Container>
         <p className="name-detail">Name details</p>
 

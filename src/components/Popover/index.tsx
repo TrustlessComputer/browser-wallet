@@ -1,10 +1,14 @@
 import React, { PropsWithChildren } from 'react';
-import { PopoverWrapper, OverlayWrapper, IconWrapper } from './styled';
+import { PopoverWrapper, OverlayWrapper, Wrapper } from './styled';
 
 interface IProps extends PropsWithChildren {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  width?: number;
+  element?: React.ReactNode;
+  unwrapElement?: React.ReactNode;
 }
-const Dropdown = React.memo(({ icon, children }: IProps) => {
+
+const Dropdown = React.memo(({ icon, element, width, children, unwrapElement }: IProps) => {
   const [show, setShow] = React.useState(false);
   const ref = React.useRef(null);
 
@@ -20,16 +24,23 @@ const Dropdown = React.memo(({ icon, children }: IProps) => {
       trigger={['hover', 'focus']}
       placement="bottom-start"
       overlay={
-        <PopoverWrapper onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+        <PopoverWrapper width={width} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
           {children}
         </PopoverWrapper>
       }
       container={ref}
       show={show}
     >
-      <IconWrapper ref={ref} onClick={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
-        {icon}
-      </IconWrapper>
+      {unwrapElement ? (
+        <div ref={ref} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+          {unwrapElement}
+        </div>
+      ) : (
+        <Wrapper ref={ref} show={show} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+          {icon && icon}
+          {element && element}
+        </Wrapper>
+      )}
     </OverlayWrapper>
   );
 });
