@@ -6,7 +6,7 @@ export const initialState: WalletState = {
   userSecretKey: undefined,
   password: undefined,
 
-  // never change by 1 mnemonic
+  // never change
   // change by network mainnet | testnet | regtest
   btcAddress: undefined,
   tcAccount: undefined,

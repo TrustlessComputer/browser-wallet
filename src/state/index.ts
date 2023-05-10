@@ -11,7 +11,7 @@ const saveIsLockedWallet = createFilter('wallet', ['isLocked', 'btcAddress']);
 const reducers = combineReducers(reducer);
 
 const persistConfig = {
-  key: 'root',
+  key: 'browser-wallet',
   storage,
   whitelist: ['wallet'],
   transforms: [saveIsLockedWallet],

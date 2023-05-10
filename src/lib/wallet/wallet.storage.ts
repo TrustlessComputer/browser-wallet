@@ -21,6 +21,21 @@ class WalletStorage {
   static setBTCAddress = () => {
     return storageLocal.remove(LocalStorageKey.CURRENT_TC_ACCOUNT);
   };
+
+  private static getKeyTransactionCount = (address: string) => {
+    return `${LocalStorageKey.TRANSACTION_COUNT}-${address.toLowerCase()}`;
+  };
+
+  static getTransactionCount = (address: string): number | undefined => {
+    const key = this.getKeyTransactionCount(address);
+    const nonce = storageLocal.get(key);
+    return nonce ? Number(nonce) : undefined;
+  };
+
+  static setTransactionCount = (address: string, nonce: number | string) => {
+    const key = this.getKeyTransactionCount(address);
+    storageLocal.set(key, nonce);
+  };
 }
 
 export default WalletStorage;

@@ -22,6 +22,7 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
     const tx: R = await call({
       ...params,
     });
+
     return tx;
   };
 

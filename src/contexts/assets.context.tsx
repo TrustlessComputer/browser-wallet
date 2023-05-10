@@ -42,7 +42,6 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     if (!userInfo?.address || !userInfo.btcAddress) return setAssets(undefined);
     try {
       const _assets = await getCollectedUTXO(userInfo.btcAddress, userInfo.address);
-      console.log('SANG TEST: ', _assets);
       setAssets(_assets);
     } catch (e) {
       setAssets(undefined);

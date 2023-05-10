@@ -13,7 +13,7 @@ const CollectionModal = (props: Props) => {
 
   return (
     <BaseModal show={show} handleClose={handleClose} width={1000}>
-      <Container></Container>
+      <Container />
     </BaseModal>
   );
 };
