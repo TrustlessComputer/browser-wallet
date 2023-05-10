@@ -21,7 +21,7 @@ const LayoutPadding = styled.div`
   }
 `;
 
-const Container = styled(LayoutPadding)`
+const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -30,10 +30,11 @@ const Container = styled(LayoutPadding)`
   padding-bottom: ${px2rem(32)};
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled(LayoutPadding)`
   display: flex;
   align-self: center;
   width: 100%;
+  max-width: ${px2rem(2268)};
 `;
 
 export { Container, ContentWrapper, LayoutPadding };

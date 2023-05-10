@@ -4,10 +4,17 @@ import styled from 'styled-components';
 export const Container = styled.div`
   margin-top: ${px2rem(24)};
 
+  .name-detail {
+    font-size: ${px2rem(20)};
+    letter-spacing: -0.03em;
+    color: ${({ theme }) => theme['text-primary']};
+  }
+
   .form {
     display: flex;
     flex-direction: column;
     gap: ${px2rem(16)};
+    margin-top: ${px2rem(12)};
   }
 
   .confirm-btn {

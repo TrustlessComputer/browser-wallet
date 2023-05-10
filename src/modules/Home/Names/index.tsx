@@ -116,11 +116,7 @@ const Names = () => {
           />
         )}
         {selectBNS && (
-          <BNSTransferModal
-            name={selectBNS.name}
-            show={showTransferModal}
-            handleClose={() => setShowTransferModal(false)}
-          />
+          <BNSTransferModal bns={selectBNS} show={showTransferModal} handleClose={() => setShowTransferModal(false)} />
         )}
       </div>
     </Container>

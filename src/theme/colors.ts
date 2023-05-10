@@ -95,6 +95,7 @@ export const darkTheme = {
     secondary: colors.dark['80'],
     third: colors.dark['100'],
     four: colors.primary['f2'],
+    modal: colors.dark['100'],
   },
 
   card: {
@@ -114,7 +115,7 @@ export const lightTheme = {
   'text-parallel': colors.dark['100'],
   'text-third': colors.dark['5'],
   'text-four': colors.dark['40'],
-  'text-five': colors.dark['20'],
+  'text-five': colors.dark['60'],
 
   // button
   'button-primary': colors.yellow['C'],
@@ -130,6 +131,7 @@ export const lightTheme = {
     secondary: colors.light['80'],
     third: colors.light['100'],
     four: colors.primary['f2'],
+    modal: colors.white,
   },
 
   card: {

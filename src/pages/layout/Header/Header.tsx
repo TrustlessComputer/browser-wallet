@@ -1,7 +1,7 @@
 import { gsap, Power3 } from 'gsap';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DropdownItem, DropdownList, Wrapper } from './Header.styled';
+import { DropdownItem, DropdownList, Wrapper, Container } from './Header.styled';
 import { ROUTE_PATH } from '@/constants/route-path';
 import { DisconnectIcon, ExchangeIcon, LogoIcon, MoreVerticalIcon, PenguinIcon } from '@/components/icons';
 import { HEADER_ID } from '@/pages/layout';
@@ -59,51 +59,53 @@ const Header = () => {
   }, []);
 
   return (
-    <Wrapper id={HEADER_ID}>
-      <Row gap="60px">
-        <Link className="logo" to={ROUTE_PATH.HOME}>
-          <LogoIcon className="ic-logo" />
-        </Link>
-        {!!user && !isLocked && (
-          <Row gap="40px" className="balance-wrapper">
-            <AssetBox
-              icon={<PenguinIcon />}
-              title="TRUSTLESS BALANCE"
-              amount={format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal })}
-              address={user.address}
-            />
-            <AssetBox
-              icon={<BitcoinIcon />}
-              title="BITCOIN BALANCE"
-              amount={format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal })}
-              address={user.btcAddress}
-            />
-            <Dropdown icon={<MoreVerticalIcon />}>
-              <DropdownList>
-                {MoreList.map(item => (
-                  <DropdownItem key={item.title} onClick={item.onClick}>
-                    <div className={item.iconClass}>{item.icon}</div>
-                    <Text className={item.titleClass}>{item.title}</Text>
-                  </DropdownItem>
-                ))}
-              </DropdownList>
-            </Dropdown>
-          </Row>
-        )}
-      </Row>
-      <Row gap="32px" className="external-wrapper">
-        <Button variants="outline">
-          <a href="https://trustlessfaucet.io/" target="_blank">
-            Faucet
-          </a>
-        </Button>
-        <Button>
-          <a href="https://trustless.computer/" target="_blank">
-            Explore Dapp Store
-          </a>
-        </Button>
-      </Row>
-    </Wrapper>
+    <Container>
+      <Wrapper id={HEADER_ID}>
+        <Row gap="60px">
+          <Link className="logo" to={ROUTE_PATH.HOME}>
+            <LogoIcon className="ic-logo" />
+          </Link>
+          {!!user && !isLocked && (
+            <Row gap="40px" className="balance-wrapper">
+              <AssetBox
+                icon={<PenguinIcon />}
+                title="TRUSTLESS BALANCE"
+                amount={format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal })}
+                address={user.address}
+              />
+              <AssetBox
+                icon={<BitcoinIcon />}
+                title="BITCOIN BALANCE"
+                amount={format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal })}
+                address={user.btcAddress}
+              />
+              <Dropdown icon={<MoreVerticalIcon />}>
+                <DropdownList>
+                  {MoreList.map(item => (
+                    <DropdownItem key={item.title} onClick={item.onClick}>
+                      <div className={item.iconClass}>{item.icon}</div>
+                      <Text className={item.titleClass}>{item.title}</Text>
+                    </DropdownItem>
+                  ))}
+                </DropdownList>
+              </Dropdown>
+            </Row>
+          )}
+        </Row>
+        <Row gap="32px" className="external-wrapper">
+          <Button variants="outline">
+            <a href="https://trustlessfaucet.io/" target="_blank">
+              Faucet
+            </a>
+          </Button>
+          <Button>
+            <a href="https://trustless.computer/" target="_blank">
+              Explore Dapp Store
+            </a>
+          </Button>
+        </Row>
+      </Wrapper>
+    </Container>
   );
 };
 
