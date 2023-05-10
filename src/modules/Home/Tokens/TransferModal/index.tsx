@@ -28,11 +28,6 @@ const TransferModal = (props: Props) => {
   const { show = false, handleClose, erc20TokenAddress } = props;
   const [submitting, setSubmitting] = useState(false);
 
-  const { run: onTransferERC20 } = useContractOperation<ITransferERC20, TransactionResponse>({
-    operation: useTransferERC20,
-    inscribeable: true,
-  });
-
   const {
     feeRate,
     onChangeFee,
@@ -43,6 +38,12 @@ const TransferModal = (props: Props) => {
     isLoading: isLoadingRate,
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
+
+  const { run: onTransferERC20 } = useContractOperation<ITransferERC20, TransactionResponse>({
+    operation: useTransferERC20,
+    inscribeable: true,
+    feeRate: currentRate,
+  });
 
   useEffect(() => {
     if (show) {
@@ -82,6 +83,7 @@ const TransferModal = (props: Props) => {
         receiver: payload.toAddress,
         amount: payload.amount,
         tokenAddress: erc20TokenAddress,
+        feeRate: currentRate,
       });
       if (tx.hash) {
         toast.success('Transaction has been created. Please wait for few minutes.');

@@ -3,6 +3,7 @@ export const ERROR_CODE = {
   EMPTY_USER: '-3001',
   FIND_CURRENT_ACCOUNT: '-3002',
   ACCOUNT_EMPTY: '-3003',
+  HAVE_UN_INSCRIBE_TX: '-3004',
 };
 
 export const ERROR_MESSAGE = {
@@ -21,6 +22,10 @@ export const ERROR_MESSAGE = {
   [ERROR_CODE.ACCOUNT_EMPTY]: {
     message: 'Please connect wallet.',
     desc: 'Please connect wallet.',
+  },
+  [ERROR_CODE.HAVE_UN_INSCRIBE_TX]: {
+    message: 'You have some pending transactions. Please complete all of them before moving on.',
+    desc: 'You have some pending transactions. Please complete all of them before moving on.',
   },
 };
 
