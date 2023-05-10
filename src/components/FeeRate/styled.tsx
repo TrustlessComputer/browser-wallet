@@ -51,7 +51,7 @@ const ItemWrapper = styled(Col)<{ isActive: boolean }>`
     margin-right: ${px2rem(16)};
     margin-bottom: ${px2rem(8)};
 
-    max-width: ${px2rem(80)};
+    max-width: ${px2rem(68)};
 
     border: 1px solid ${({ theme }) => theme['border-primary']};
   }

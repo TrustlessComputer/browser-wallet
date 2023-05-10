@@ -19,7 +19,7 @@ const NETWORKS: Array<INetwork> = [
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
-    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
+    BE_API: 'https://dapp.trustless.computer/dapp/api',
   },
   {
     Name: 'Mainnet',
@@ -35,7 +35,7 @@ const NETWORKS: Array<INetwork> = [
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
-    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
+    BE_API: 'https://dapp.trustless.computer/dapp/api',
   },
 ];
 

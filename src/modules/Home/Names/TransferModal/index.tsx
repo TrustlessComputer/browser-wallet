@@ -7,11 +7,12 @@ import { toast } from 'react-hot-toast';
 import { Container } from './TransferModal.styled';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
 import { FeeRate } from '@/components/FeeRate';
+import { IBNS } from '@/interfaces/bns';
 
 type Props = {
   show: boolean;
   handleClose: () => void;
-  name: string;
+  bns: IBNS;
 };
 
 type IFormValue = {
@@ -19,7 +20,7 @@ type IFormValue = {
 };
 
 const BNSTransferModal = (props: Props) => {
-  const { show, handleClose } = props;
+  const { show, handleClose, bns } = props;
   const [isProcessing, setIsProcessing] = useState(false);
 
   const {
@@ -68,8 +69,9 @@ const BNSTransferModal = (props: Props) => {
   };
 
   return (
-    <BaseModal show={show} handleClose={handleClose} title="Transfer Token" width={620}>
+    <BaseModal show={show} handleClose={handleClose} title={bns.name} subTitle={`Name #${bns.id}`} width={620}>
       <Container>
+        <p className="name-detail">Name details</p>
         <Formik
           key="transfer"
           initialValues={{

@@ -15,16 +15,24 @@ const MediaXl = css`
   }
 `;
 
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: ${({ theme }) => theme.bg.secondary};
+`;
+
 const Wrapper = styled(LayoutPadding)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   position: relative;
-  background-color: ${({ theme }) => theme.bg.secondary};
   padding-top: ${px2rem(24)};
   padding-bottom: ${px2rem(24)};
   height: ${px2rem(110)};
+  max-width: ${px2rem(2268)};
+  width: 100%;
 
   .ic-logo {
     width: ${px2rem(60)};
@@ -79,4 +87,4 @@ const DropdownList = styled.div`
   gap: 12px !important;
 `;
 
-export { Wrapper, DropdownItem, DropdownList };
+export { Wrapper, DropdownItem, DropdownList, Container };

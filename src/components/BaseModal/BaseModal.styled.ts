@@ -4,14 +4,14 @@ import styled from 'styled-components';
 
 export const StyledModal = styled(Modal)<{ width?: number }>`
   &.modal {
-    --bs-modal-color: ${({ theme }) => theme.bg.third};
+    --bs-modal-color: ${({ theme }) => theme.bg.modal};
     --bs-modal-width: ${({ width }: { width?: number }) => px2rem(width || 500)};
     overflow-y: hidden;
   }
 
   .modal-content {
     border-radius: 2px;
-    background: #1c1c1c;
+    background: ${({ theme }) => theme.bg.modal};
     border-radius: ${px2rem(8)};
     padding: ${px2rem(32)};
     padding-top: ${px2rem(8)};

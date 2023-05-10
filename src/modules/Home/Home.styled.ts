@@ -16,7 +16,7 @@ export const TabContainer = styled.div`
     margin-bottom: ${px2rem(40)};
     gap: ${px2rem(0)};
     flex-wrap: nowrap;
-    min-height: ${px2rem(60)};
+    min-height: ${px2rem(54)};
     overflow-x: scroll;
 
     -ms-overflow-style: none;
@@ -24,7 +24,7 @@ export const TabContainer = styled.div`
     width: fit-content;
 
     border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme.primary['5b']};
-    border-radius: ${px2rem(100)};
+    border-radius: ${px2rem(40)};
     padding: ${px2rem(4)} ${px2rem(8)};
 
     &::-webkit-scrollbar {
@@ -36,7 +36,6 @@ export const TabContainer = styled.div`
       border: none;
       transition: 0.2s ease;
 
-      padding-top: ${px2rem(10)};
       padding-bottom: 0px;
       padding-left: ${px2rem(32)};
       padding-right: ${px2rem(32)};
@@ -52,9 +51,9 @@ export const TabContainer = styled.div`
     .nav-link.active {
       background-color: transparent;
       border: none;
-      color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
+      color: ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
       opacity: 1;
-      background: ${({ theme }: { theme: DefaultTheme }) => theme.primary['2e']};
+      background: ${({ theme }: { theme: DefaultTheme }) => theme.bg.secondary};
       border-radius: ${px2rem(100)};
 
       /* .tab-item::after {
@@ -75,7 +74,7 @@ export const TabContainer = styled.div`
     align-items: center;
     gap: 8px;
     position: relative;
-    padding-bottom: ${px2rem(12)};
+    padding-bottom: ${px2rem(8)};
     /* max-height: ${px2rem(30)}; */
   }
 
