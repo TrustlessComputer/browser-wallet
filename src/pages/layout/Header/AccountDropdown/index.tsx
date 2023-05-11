@@ -9,25 +9,31 @@ import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { setIsLockedWallet } from '@/state/wallet/reducer';
 import { listAccountsSelector } from '@/state/wallet/selector';
-import { ellipsisCenter } from '@/utils';
+import { compareString, ellipsisCenter } from '@/utils';
 import format from '@/utils/amount';
 import copy from 'copy-to-clipboard';
 import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import CreateModal from './CreateModal';
 import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem, DropDownContainer } from './styled';
+import { SwitchAccountAction } from '@/pages/layout/Header/AccountDropdown/SwitchAccount.actions';
 
 const AccountDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
   const accounts = useAppSelector(listAccountsSelector);
+  const dispatch = useAppDispatch();
+  const switchAccountActions = new SwitchAccountAction({
+    component: {
+      accounts: accounts,
+    },
+    dispatch: dispatch,
+  });
 
   const { tcBalance } = useContext(AssetsContext);
 
   const [showModal, setShowModal] = useState(false);
 
   const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });
-
-  const dispatch = useAppDispatch();
 
   const MoreList = [
     {
@@ -57,15 +63,15 @@ const AccountDropdown = React.memo(() => {
 
   const renderItem = (isChecked: boolean, name: string, formatAddress: string, balance: string, address: string) => {
     return (
-      <DropdownItem>
+      <DropdownItem key={address} onClick={() => switchAccountActions.switchAccount(address)}>
         <div className="item">
           <IconSVG className="icon" src={isChecked ? `${CDN_URL_ICONS}/ic-check-dark.svg` : ''} maxWidth="24" />
           <div>
             <Text color="text-primary" fontWeight="light" size="body">
-              {name} <span>{formatAddress}</span>
+              {name}
             </Text>
-            <Text color="button-primary" fontWeight="medium" size="note">
-              {balance}
+            <Text color="button-primary" fontWeight="medium" size="note" className="mt-8">
+              {formatAddress}
             </Text>
           </div>
         </div>
@@ -119,12 +125,16 @@ const AccountDropdown = React.memo(() => {
               accounts.length > 0 &&
               accounts.map(account =>
                 renderItem(
-                  true,
+                  compareString({
+                    str1: account.address,
+                    str2: user?.address,
+                    method: 'equal',
+                  }),
                   account.name,
-                  `(${ellipsisCenter({
+                  `${ellipsisCenter({
                     str: account.address,
                     limit: 4,
-                  })})`,
+                  })}`,
                   `${formatTcBalance} TC`,
                   account.address,
                 ),

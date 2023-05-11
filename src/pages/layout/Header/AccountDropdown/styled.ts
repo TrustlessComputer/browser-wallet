@@ -37,6 +37,14 @@ export const DropDownContainer = styled.div`
 export const DropdownList = styled.div`
   display: grid;
   gap: ${px2rem(24)} !important;
+  max-height: ${px2rem(400)};
+  overflow: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+
+  ::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
 `;
 
 export const DropdownItem = styled.div`
@@ -51,6 +59,9 @@ export const DropdownItem = styled.div`
     flex-direction: row;
     align-items: center;
     gap: ${px2rem(12)};
+    :hover {
+      opacity: 0.8;
+    }
 
     .icon {
       width: ${px2rem(24)};

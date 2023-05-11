@@ -2,9 +2,13 @@ import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import SignerModal from '@/components/SignerModal';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import toast from 'react-hot-toast';
 import Container from './styled';
+import { CreateAccountAction } from '@/pages/layout/Header/AccountDropdown/CreateAccount.actions';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { listAccountsSelector, masterWalletSelector, passwordSelector } from '@/state/wallet/selector';
+import { getErrorMessage } from '@/utils/error';
 
 type IFormValue = {
   name: string;
@@ -17,8 +21,20 @@ interface Props {
 
 const CreateAccount = React.memo((props: Props) => {
   const { show, handleClose } = props;
+  const [loading, setLoading] = React.useState(false);
+  const dispatch = useAppDispatch();
+  const masterIns = useAppSelector(masterWalletSelector);
+  const password = useAppSelector(passwordSelector);
+  const accounts = useAppSelector(listAccountsSelector);
 
-  const [isProcessing, setIsProcessing] = useState(false);
+  const createAccountActions = new CreateAccountAction({
+    component: {
+      setLoading,
+      password,
+      masterIns,
+    },
+    dispatch: dispatch,
+  });
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -30,16 +46,14 @@ const CreateAccount = React.memo((props: Props) => {
     return errors;
   };
 
-  const handleSubmit = async (): Promise<void> => {
+  const handleSubmit = async (params: IFormValue): Promise<void> => {
     try {
-      setIsProcessing(true);
-
-      toast.success('');
+      await createAccountActions.createAccount(params.name);
+      toast.success('Create account successfully');
+      handleClose();
     } catch (err) {
-      toast.error((err as Error).message);
-      console.log(err);
-    } finally {
-      setIsProcessing(false);
+      const { message } = getErrorMessage(err, 'submitCreateAccount');
+      toast.error(message);
     }
   };
 
@@ -50,7 +64,7 @@ const CreateAccount = React.memo((props: Props) => {
           <Formik
             key="transfer"
             initialValues={{
-              name: '',
+              name: `Account ${accounts.length + 1}`,
             }}
             validate={validateForm}
             onSubmit={handleSubmit}
@@ -70,8 +84,8 @@ const CreateAccount = React.memo((props: Props) => {
                   errorMsg={errors.name && touched.name ? errors.name : undefined}
                 />
                 <div className="actions">
-                  <Button disabled={isProcessing} sizes="stretch" type="submit" className="confirm-btn">
-                    {isProcessing ? 'Creating...' : 'Create'}
+                  <Button disabled={loading} sizes="stretch" type="submit" className="confirm-btn">
+                    {loading ? 'Creating...' : 'Create'}
                   </Button>
                 </div>
               </form>
