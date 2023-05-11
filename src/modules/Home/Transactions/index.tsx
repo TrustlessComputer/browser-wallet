@@ -1,4 +1,3 @@
-import IcCopy from '@/assets/icons/ic-copy.svg';
 import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import Table from '@/components/Table';
@@ -7,14 +6,13 @@ import { ITCTxDetail } from '@/interfaces/transaction';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { formatLongAddress } from '@/utils';
 import { formatUnixDateTime } from '@/utils/time';
-import copy from 'copy-to-clipboard';
 import { debounce } from 'lodash';
 import React, { useContext, useState } from 'react';
-import { toast } from 'react-hot-toast';
 import { StyledTransaction } from './Transactions.styled';
 import useBitcoin from '@/hooks/useBitcoin';
 import network from '@/lib/network.helpers';
 import { TransactorContext } from '@/contexts/transactor.context';
+import CopyIcon from '@/components/icons/Copy';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -102,14 +100,8 @@ const Transactions = React.memo(() => {
           <div className="id-wrapper">
             <div className="tx-wrapper">
               <div className={`tx-id`}>{formatLongAddress(trans.Hash)}</div>
-              <div
-                className="icCopy"
-                onClick={() => {
-                  copy(trans.Hash);
-                  toast.success('Copied');
-                }}
-              >
-                <img alt="ic-copy" src={IcCopy} />
+              <div className="icCopy">
+                <CopyIcon className="ic-copy" content={trans.Hash} />
               </div>
             </div>
             <Text>
