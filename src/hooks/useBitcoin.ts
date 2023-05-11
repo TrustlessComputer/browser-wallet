@@ -8,6 +8,7 @@ import { ITCTxDetail } from '@/interfaces/transaction';
 import WError, { ERROR_CODE } from '@/utils/error';
 import Token from '@/constants/token';
 import BigNumber from 'bignumber.js';
+import convert from '@/utils/convert';
 
 const tcClient = window.tcClient;
 
@@ -58,10 +59,16 @@ const useBitcoin = () => {
       assets.inscriptions_by_outputs,
       '',
       receiver,
-      new BigNumber(amount).multipliedBy(Token.BITCOIN.decimal),
+      new BigNumber(
+        convert.toOriginalAmount({
+          humanAmount: amount,
+          decimals: Token.BITCOIN.decimal,
+        }),
+      ),
       feeRate,
       true,
     );
+
     // broadcast tx
     await TC_SDK.broadcastTx(txHex);
   };
