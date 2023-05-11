@@ -1,4 +1,4 @@
-import { DisconnectIcon } from '@/components/icons';
+import { DisconnectIcon, ExportIcon } from '@/components/icons';
 import IconSVG from '@/components/IconSVG';
 import Dropdown from '@/components/Popover';
 import Text from '@/components/Text';
@@ -26,6 +26,13 @@ const AccountDropdown = React.memo(() => {
   const dispatch = useAppDispatch();
 
   const MoreList = [
+    {
+      title: 'Export Key',
+      titleClass: 'text-normal',
+      icon: <ExportIcon />,
+      iconClass: 'icon-normal',
+      onClick: () => {},
+    },
     {
       title: 'Disconnect',
       titleClass: 'text-disconnect',
