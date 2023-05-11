@@ -2,6 +2,7 @@ import { apiClient } from '@/services';
 import { FeeRateName, IBlockStreamTxs, ICollectedUTXOResp, IFeeRate, IPendingUTXO } from '@/interfaces/api/bitcoin';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { API_BLOCKSTREAM } from '@/configs';
+import { formatUTXOs, formatInscriptions } from '@/lib/assets.helpers';
 
 const WALLETS_API_PATH = '/wallets';
 
@@ -12,8 +13,8 @@ export const getCollectedUTXO = async (
 ): Promise<ICollectedUTXOResp | undefined> => {
   try {
     const collected: any = await apiClient.get<ICollectedUTXOResp>(`${WALLETS_API_PATH}/${btcAddress}`);
-    const incomingUTXOs: TC_SDK.UTXO[] = [];
-    const tempUTXOs = [...(collected?.txrefs || []), ...incomingUTXOs];
+    const tempUTXOs = formatUTXOs([...(collected?.txrefs || [])]);
+    const inscriptions = formatInscriptions(collected?.inscriptions_by_outputs || {});
     let utxos;
     try {
       utxos = await TC_SDK.aggregateUTXOs({
@@ -27,7 +28,8 @@ export const getCollectedUTXO = async (
     return {
       ...collected,
       txrefs: utxos || [],
-    } as any;
+      inscriptions_by_outputs: inscriptions,
+    } as ICollectedUTXOResp;
   } catch (err) {
     console.log(err);
   }

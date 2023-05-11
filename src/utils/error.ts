@@ -2,6 +2,8 @@ export const ERROR_CODE = {
   CONNECT_WALLET: '3000',
   EMPTY_USER: '-3001',
   FIND_CURRENT_ACCOUNT: '-3002',
+  ACCOUNT_EMPTY: '-3003',
+  HAVE_UN_INSCRIBE_TX: '-3004',
 };
 
 export const ERROR_MESSAGE = {
@@ -16,6 +18,14 @@ export const ERROR_MESSAGE = {
   [ERROR_CODE.FIND_CURRENT_ACCOUNT]: {
     message: 'Can not find current account by storage.',
     desc: 'Can not find current account by storage.',
+  },
+  [ERROR_CODE.ACCOUNT_EMPTY]: {
+    message: 'Please connect wallet.',
+    desc: 'Please connect wallet.',
+  },
+  [ERROR_CODE.HAVE_UN_INSCRIBE_TX]: {
+    message: 'You have some pending transactions. Please complete all of them before moving on.',
+    desc: 'You have some pending transactions. Please complete all of them before moving on.',
   },
 };
 

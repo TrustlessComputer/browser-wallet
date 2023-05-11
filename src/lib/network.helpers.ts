@@ -1,6 +1,9 @@
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
 
+const ENVS = import.meta.env;
+const DEFAULT_NETWORK_NAME: string = ENVS.VITE_DEFAULT_NETWORK_NAME;
+
 export type IBTCNetwork = 'mainnet' | 'testnet' | 'regtest';
 
 export interface INetwork {
@@ -15,15 +18,6 @@ export interface INetwork {
 
 const NETWORKS: Array<INetwork> = [
   {
-    Name: 'Regtest manual',
-    ChainID: 22213,
-    TCNode: 'https://tc-node-manual.regtest.trustless.computer',
-    BTCNetwork: 'regtest',
-    Explorer: 'https://explorer.regtest.trustless.computer',
-    BE_API: 'https://dapp.trustless.computer/dapp/api',
-    Icon: 'ic-penguin-regtest-dark.svg',
-  },
-  {
     Name: 'Mainnet',
     BTCNetwork: 'mainnet',
     ChainID: 22213,
@@ -33,12 +27,21 @@ const NETWORKS: Array<INetwork> = [
     Icon: 'ic-penguin-currency-dark.svg',
   },
   {
-    Name: 'Regtest auto',
+    Name: 'Regtest manual',
     ChainID: 22213,
     TCNode: 'https://tc-node-manual.regtest.trustless.computer',
     BTCNetwork: 'regtest',
     Explorer: 'https://explorer.regtest.trustless.computer',
-    BE_API: 'https://dapp.trustless.computer/dapp/api',
+    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
+    Icon: 'ic-penguin-regtest-dark.svg',
+  },
+  {
+    Name: 'Regtest auto',
+    ChainID: 22213,
+    TCNode: 'https://tc-node-auto.regtest.trustless.computer',
+    BTCNetwork: 'regtest',
+    Explorer: 'https://explorer.regtest.trustless.computer',
+    BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
     Icon: 'ic-penguin-regtest-dark.svg',
   },
 ];
@@ -53,9 +56,12 @@ class Network {
     const key = LocalStorageKey.SELECTED_NETWORK;
     let network = storageLocal.get(key);
     if (!network) {
-      network = NETWORKS[0];
+      const networks = this.getListNetworks();
+      const dfNetwork = networks.find(item => item.Name.toLowerCase() === (DEFAULT_NETWORK_NAME || '').toLowerCase());
+      network = dfNetwork ? dfNetwork : networks[0];
       storageLocal.set(key, network);
     }
+    this.current = network;
     return network;
   }
 
@@ -67,6 +73,11 @@ class Network {
       return NETWORKS;
     }
     return networks;
+  }
+
+  switchNetwork(network: INetwork) {
+    const key = LocalStorageKey.SELECTED_NETWORK;
+    storageLocal.set(key, network);
   }
 }
 

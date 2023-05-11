@@ -11,11 +11,13 @@ import { TC_SDK } from '@/lib';
 export interface IAssetsContext {
   tcBalance: string;
   btcBalance: string;
+  getAssetsCreateTx: () => Promise<ICollectedUTXOResp | undefined>;
 }
 
 const initialValue: IAssetsContext = {
   tcBalance: '0',
   btcBalance: '0',
+  getAssetsCreateTx: () => new Promise<ICollectedUTXOResp | undefined>(() => null),
 };
 
 export const AssetsContext = React.createContext<IAssetsContext>(initialValue);
@@ -38,21 +40,25 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     }
   };
 
-  const _onGetBTCBalance = async () => {
-    if (!userInfo?.address || !userInfo.btcAddress) return setAssets(undefined);
+  const _onGetCollectedUTXO = async (): Promise<ICollectedUTXOResp | undefined> => {
+    if (!userInfo?.address || !userInfo.btcAddress) {
+      setAssets(undefined);
+      return undefined;
+    }
     try {
       const _assets = await getCollectedUTXO(userInfo.btcAddress, userInfo.address);
-      console.log('SANG TEST: ', _assets);
       setAssets(_assets);
+      return _assets;
     } catch (e) {
       setAssets(undefined);
+      return undefined;
     }
   };
 
   const debounceFetchAssets = React.useCallback(
     debounce(() => {
       _onGetTCBalance().then().catch();
-      _onGetBTCBalance().then().catch();
+      _onGetCollectedUTXO().then().catch();
     }, 300),
     [userInfo?.address, userInfo?.btcAddress],
   );
@@ -78,8 +84,9 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     return {
       tcBalance,
       btcBalance,
+      getAssetsCreateTx: _onGetCollectedUTXO,
     };
-  }, [tcBalance, btcBalance]);
+  }, [tcBalance, btcBalance, _onGetCollectedUTXO]);
 
   return <AssetsContext.Provider value={contextValues}>{children}</AssetsContext.Provider>;
 };

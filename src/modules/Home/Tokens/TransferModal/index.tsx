@@ -1,4 +1,3 @@
-import BaseModal from '@/components/BaseModal';
 import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import { Formik } from 'formik';
@@ -6,6 +5,11 @@ import isNumber from 'lodash/isNumber';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Container } from './TransferModal.styled';
+import SignerModal from '@/components/SignerModal';
+import useContractOperation from '@/hooks/useContractOperation';
+import useTransferERC20, { ITransferERC20 } from '@/hooks/contracts-operation.ts/useTransferERC20';
+import { validateEVMAddress } from '@/utils';
+import { TransactionResponse } from '@ethersproject/abstract-provider';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
 import { FeeRate } from '@/components/FeeRate';
 
@@ -22,8 +26,7 @@ interface IFormValue {
 
 const TransferModal = (props: Props) => {
   const { show = false, handleClose, erc20TokenAddress } = props;
-
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const {
     feeRate,
@@ -36,6 +39,12 @@ const TransferModal = (props: Props) => {
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
 
+  const { run: onTransferERC20 } = useContractOperation<ITransferERC20, TransactionResponse>({
+    operation: useTransferERC20,
+    inscribeable: true,
+    feeRate: currentRate,
+  });
+
   useEffect(() => {
     if (show) {
       onFetchFee();
@@ -47,6 +56,8 @@ const TransferModal = (props: Props) => {
 
     if (!values.toAddress) {
       errors.toAddress = 'Receiver wallet address is required.';
+    } else if (!validateEVMAddress(values.toAddress)) {
+      errors.toAddress = 'Invalid receiver wallet address.';
     }
 
     if (!values.amount) {
@@ -60,38 +71,39 @@ const TransferModal = (props: Props) => {
     return errors;
   };
 
-  const handleSubmit = async (): Promise<void> => {
+  const handleSubmit = async (payload: IFormValue): Promise<void> => {
     if (!erc20TokenAddress) {
       toast.error('Token information not found');
-      setIsProcessing(false);
+      setSubmitting(false);
       return;
     }
-
-    // const { toAddress, amount } = values;
     try {
-      setIsProcessing(true);
-      // await run({
-      //   amount: amount.toString(),
-      //   to: toAddress,
-      //   erc20TokenAddress: erc20TokenAddress,
-      // });
-      toast.success('Transaction has been created. Please wait for few minutes.');
+      setSubmitting(true);
+      const tx = await onTransferERC20({
+        receiver: payload.toAddress,
+        amount: payload.amount,
+        tokenAddress: erc20TokenAddress,
+        feeRate: currentRate,
+      });
+      if (tx.hash) {
+        toast.success('Transaction has been created. Please wait for few minutes.');
+      }
       handleClose();
     } catch (err) {
       toast.error((err as Error).message);
       console.log(err);
     } finally {
-      setIsProcessing(false);
+      setSubmitting(false);
     }
   };
 
   return (
-    <BaseModal show={show} handleClose={handleClose} title="Transfer Token" width={680}>
+    <SignerModal show={show} onClose={handleClose} title="Transfer Token">
       <Container>
         <Formik
           key="create"
           initialValues={{
-            toAddress: '',
+            toAddress: '0x2699ff693FA45234595b6a1CaB6650c849380893',
             amount: '',
           }}
           validate={validateForm}
@@ -124,7 +136,6 @@ const TransferModal = (props: Props) => {
                 placeholder={`Enter the amount`}
                 errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
               />
-
               <FeeRate
                 allRate={feeRate}
                 isCustom={true}
@@ -135,15 +146,14 @@ const TransferModal = (props: Props) => {
                 customRate={customRate}
                 isLoading={isLoadingRate}
               />
-
-              <Button disabled={isProcessing} type="submit" className="confirm-btn">
-                {isProcessing ? 'Processing...' : 'Transfer'}
+              <Button disabled={submitting} type="submit" className="confirm-btn" isLoading={submitting}>
+                {submitting ? 'Processing...' : 'Transfer'}
               </Button>
             </form>
           )}
         </Formik>
       </Container>
-    </BaseModal>
+    </SignerModal>
   );
 };
 

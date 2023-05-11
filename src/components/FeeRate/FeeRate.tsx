@@ -134,7 +134,7 @@ const FeeRate = React.memo((props: IProps) => {
         color="text-secondary"
         className="mb-8"
       >
-        Select the network
+        Select the BTC network fee
       </Text>
       <Content>
         {renderItem(FeeRateName.hourFee)}
