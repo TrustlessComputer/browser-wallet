@@ -20,7 +20,7 @@ export class SwitchAccountAction implements ISwitchAccountAction {
     this.dispatch = props.dispatch;
   }
 
-  switchAccount = async (address: string) => {
+  switchAccount = (address: string) => {
     const accounts = this.component.accounts;
     const switchedAccount = accounts.find(account =>
       compareString({ str1: account.address, str2: address, method: 'equal' }),

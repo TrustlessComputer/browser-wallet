@@ -17,6 +17,8 @@ import toast from 'react-hot-toast';
 import CreateModal from './CreateModal';
 import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem, DropDownContainer } from './styled';
 import { SwitchAccountAction } from '@/pages/layout/Header/AccountDropdown/SwitchAccount.actions';
+import throttle from 'lodash/throttle';
+import { getErrorMessage } from '@/utils/error';
 
 const AccountDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
@@ -32,6 +34,18 @@ const AccountDropdown = React.memo(() => {
   const { tcBalance } = useContext(AssetsContext);
 
   const [showModal, setShowModal] = useState(false);
+
+  const onSwitchAccount = React.useCallback(
+    throttle((address: string) => {
+      try {
+        switchAccountActions.switchAccount(address);
+      } catch (error) {
+        const { message } = getErrorMessage(error, 'switchAccount');
+        toast.error(message);
+      }
+    }, 500),
+    [],
+  );
 
   const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });
 
@@ -63,8 +77,8 @@ const AccountDropdown = React.memo(() => {
 
   const renderItem = (isChecked: boolean, name: string, formatAddress: string, balance: string, address: string) => {
     return (
-      <DropdownItem key={address} onClick={() => switchAccountActions.switchAccount(address)}>
-        <div className="item">
+      <DropdownItem key={address}>
+        <div className="item" onClick={() => onSwitchAccount(address)}>
           <IconSVG className="icon" src={isChecked ? `${CDN_URL_ICONS}/ic-check-dark.svg` : ''} maxWidth="24" />
           <div>
             <Text color="text-primary" fontWeight="light" size="body">
