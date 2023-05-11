@@ -4,6 +4,10 @@ import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets.context';
 import { ICollectedUTXOResp } from '@/interfaces/api/bitcoin';
 import { useUserSecretKey } from '@/state/wallet/hooks';
+import { ITCTxDetail } from '@/interfaces/transaction';
+import WError, { ERROR_CODE } from '@/utils/error';
+
+const tcClient = window.tcClient;
 
 const useBitcoin = () => {
   const { getAssetsCreateTx } = useContext(AssetsContext);
@@ -17,8 +21,6 @@ const useBitcoin = () => {
     }
     return _assets;
   };
-
-  const tcClient = window.tcClient;
 
   const createInscribeTx = async (payload: ICreateInscribeParams) => {
     const assets = await _getAssetsCreateTx(payload.assets);
@@ -34,15 +36,22 @@ const useBitcoin = () => {
   };
 
   const getUnInscribedTransactions = async (tcAddress: string): Promise<Array<string>> => {
-    if (!tcAddress) throw Error('Address not found');
+    if (!tcAddress) throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
     const { unInscribedTxIDs } = await tcClient.getUnInscribedTransactionByAddress(tcAddress);
     return unInscribedTxIDs;
+  };
+
+  const getUnInscribedTransactionDetails = async (tcAddress: string): Promise<ITCTxDetail[]> => {
+    if (!tcAddress) throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
+    const { unInscribedTxDetails: unInscribeTxs } = await tcClient.getUnInscribedTransactionDetailByAddress(tcAddress);
+    return unInscribeTxs;
   };
 
   return {
     getAssetsCreateTx: _getAssetsCreateTx,
     createInscribeTx,
     getUnInscribedTransactions,
+    getUnInscribedTransactionDetails,
   };
 };
 

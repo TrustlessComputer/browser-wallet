@@ -34,13 +34,13 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
     new TC_SDK.Validator('contract-operation', feeRate).number().required();
     const unInscribedTxIDs = await getUnInscribedTransactions(userSecretKey.address);
 
-    if (unInscribedTxIDs.length > 0) {
-      throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
-    }
-
     const tx: R = await call({
       ...params,
     });
+
+    if (unInscribedTxIDs.length > 0) {
+      throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
+    }
 
     const btcTx = await createInscribeTx({
       assets: undefined,
