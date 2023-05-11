@@ -12,6 +12,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { AssetsProvider } from '@/contexts/assets.context';
 import { InitialProvider } from '@/contexts/initial.context';
+import { TransactorProvider } from '@/contexts/transactor.context';
 
 let persistor = persistStore(store);
 const App: React.FC = (): React.ReactElement => {
@@ -22,7 +23,9 @@ const App: React.FC = (): React.ReactElement => {
         <ThemeProvider>
           <ThemedGlobalStyle />
           <InitialProvider>
-            <AssetsProvider>{element}</AssetsProvider>
+            <AssetsProvider>
+              <TransactorProvider>{element}</TransactorProvider>
+            </AssetsProvider>
           </InitialProvider>
           <Toaster position="top-center" reverseOrder={false} />
           <Toaster position="top-center" reverseOrder={false} />

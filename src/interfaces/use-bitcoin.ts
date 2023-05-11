@@ -5,3 +5,9 @@ export interface ICreateInscribeParams {
   feeRate: number;
   assets?: ICollectedUTXOResp;
 }
+
+export interface ISendBTCParams {
+  receiver: string;
+  feeRate: number;
+  amount: string;
+}

@@ -1,11 +1,13 @@
 import { TC_SDK } from '@/lib';
-import { ICreateInscribeParams } from '@/interfaces/use-bitcoin';
+import { ICreateInscribeParams, ISendBTCParams } from '@/interfaces/use-bitcoin';
 import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets.context';
 import { ICollectedUTXOResp } from '@/interfaces/api/bitcoin';
 import { useUserSecretKey } from '@/state/wallet/hooks';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import WError, { ERROR_CODE } from '@/utils/error';
+import Token from '@/constants/token';
+import BigNumber from 'bignumber.js';
 
 const tcClient = window.tcClient;
 
@@ -47,11 +49,29 @@ const useBitcoin = () => {
     return unInscribeTxs;
   };
 
+  const onSendBTC = async ({ receiver, amount, feeRate }: ISendBTCParams) => {
+    const assets = await _getAssetsCreateTx();
+    if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
+    const { txHex } = await TC_SDK.createTx(
+      userSecretKey.btcPrivateKeyBuffer,
+      assets.txrefs,
+      assets.inscriptions_by_outputs,
+      '',
+      receiver,
+      new BigNumber(amount).multipliedBy(Token.BITCOIN.decimal),
+      feeRate,
+      true,
+    );
+    // broadcast tx
+    await TC_SDK.broadcastTx(txHex);
+  };
+
   return {
     getAssetsCreateTx: _getAssetsCreateTx,
     createInscribeTx,
     getUnInscribedTransactions,
     getUnInscribedTransactionDetails,
+    onSendBTC,
   };
 };
 

@@ -12,15 +12,17 @@ import React, { useContext } from 'react';
 import toast from 'react-hot-toast';
 import network from '@/lib/network.helpers';
 import { DropdownItem, DropdownList, Element } from './styled';
+import { TransactorContext } from '@/contexts/transactor.context';
 
 const AssetDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
   const selectNetwork = network.getSelectedNetwork();
 
   const { tcBalance, btcBalance } = useContext(AssetsContext);
+  const { onOpenBTCModal } = useContext(TransactorContext);
 
   const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });
-  const formatBtcBalacne = format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal });
+  const formatBtcBalance = format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal });
 
   const onCopy = (address: string) => {
     copy(address);
@@ -33,7 +35,7 @@ const AssetDropdown = React.memo(() => {
         <Element>
           <p>{formatTcBalance} TC</p>
           <div className="indicator" />
-          <p>{formatBtcBalacne} BTC</p>
+          <p>{formatBtcBalance} BTC</p>
         </Element>
       }
       width={384}
@@ -78,7 +80,7 @@ const AssetDropdown = React.memo(() => {
                   )
                 </Text>
                 <Text color="button-primary" fontWeight="medium" size="body">
-                  {formatBtcBalacne} BTC
+                  {formatBtcBalance} BTC
                 </Text>
               </div>
             </div>
@@ -86,7 +88,7 @@ const AssetDropdown = React.memo(() => {
               <div className="action" onClick={() => onCopy(user.btcAddress)}>
                 <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
               </div>
-              <div className="action">
+              <div className="action" onClick={onOpenBTCModal}>
                 <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="20" />
               </div>
             </div>
