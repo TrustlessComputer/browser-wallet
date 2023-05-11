@@ -13,6 +13,7 @@ import format from '@/utils/amount';
 import copy from 'copy-to-clipboard';
 import React, { useContext } from 'react';
 import toast from 'react-hot-toast';
+import CreateAccount from './CreateAccount';
 import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem } from './styled';
 
 const AccountDropdown = React.memo(() => {
@@ -112,6 +113,7 @@ const AccountDropdown = React.memo(() => {
             user.address,
           )}
         </DropdownList>
+        <CreateAccount />
       </div>
     </Dropdown>
   );

@@ -8,6 +8,14 @@ export const StyledButton = styled.button`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
+  &.underline {
+    background-color: transparent;
+    text-decoration: underline;
+    border: none;
+    color: ${({ theme }) => theme['button-primary']};
+  }
+
   &.primary {
     background-color: ${({ theme }) => theme['button-primary']};
     color: ${({ theme }) => theme['text-parallel']};
@@ -19,13 +27,18 @@ export const StyledButton = styled.button`
     border: 1px solid ${({ theme }) => theme['button-primary']};
   }
 
+  &.small {
+    padding: ${px2rem(11)} ${px2rem(16)};
+    font-size: ${px2rem(16)};
+  }
+
   &.normal {
-    padding: 11px 34px;
+    padding: ${px2rem(11)} ${px2rem(34)};
     font-size: ${px2rem(16)};
   }
 
   &.stretch {
-    padding: 15px 20px;
+    padding: ${px2rem(11)} ${px2rem(20)};
     width: 100%;
     font-size: ${px2rem(16)};
   }
