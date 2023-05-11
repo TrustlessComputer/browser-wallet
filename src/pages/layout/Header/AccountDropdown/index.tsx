@@ -5,9 +5,10 @@ import Text from '@/components/Text';
 import { CDN_URL_ICONS } from '@/configs';
 import Token from '@/constants/token';
 import { AssetsContext } from '@/contexts/assets.context';
-import { useAppDispatch } from '@/state/hooks';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { setIsLockedWallet } from '@/state/wallet/reducer';
+import { listAccountsSelector } from '@/state/wallet/selector';
 import { ellipsisCenter } from '@/utils';
 import format from '@/utils/amount';
 import copy from 'copy-to-clipboard';
@@ -18,6 +19,7 @@ import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem
 
 const AccountDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
+  const accounts = useAppSelector(listAccountsSelector);
 
   const { tcBalance } = useContext(AssetsContext);
 
@@ -109,16 +111,20 @@ const AccountDropdown = React.memo(() => {
     >
       <div>
         <DropdownList>
-          {renderItem(
-            true,
-            user.name,
-            `(${ellipsisCenter({
-              str: user.address,
-              limit: 4,
-            })})`,
-            `${formatTcBalance} TC`,
-            user.address,
-          )}
+          {accounts &&
+            accounts.length > 0 &&
+            accounts.map(account =>
+              renderItem(
+                true,
+                account.name,
+                `(${ellipsisCenter({
+                  str: account.address,
+                  limit: 4,
+                })})`,
+                `${formatTcBalance} TC`,
+                account.address,
+              ),
+            )}
         </DropdownList>
         <CreateAccount />
       </div>
