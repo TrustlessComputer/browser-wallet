@@ -1,9 +1,9 @@
-import { getWalletSelector, userAccountInfo, userSecretKeySelector } from './selector';
+import { getWalletSelector, userAccountInfoSelector, userSecretKeySelector } from './selector';
 import { IUserSecretKey } from '@/state/wallet/types';
 import { useAppSelector } from '@/state/hooks';
 
 const useCurrentUserInfo = () => {
-  return useAppSelector(userAccountInfo);
+  return useAppSelector(userAccountInfoSelector);
 };
 
 const useUserSecretKey = (): IUserSecretKey | undefined => {
