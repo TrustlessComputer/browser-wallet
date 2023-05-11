@@ -2,8 +2,8 @@ import { TC_SDK } from '@/lib';
 import toast from 'react-hot-toast';
 import { getErrorMessage } from '@/utils/error';
 import { ISetMasterCreated } from '@/state/wallet/types';
-import { getUserSecretKey } from '@/lib/wallet';
-import { setCurrentBTCAddress, setCurrentTCAccount } from '@/state/wallet/reducer';
+import { getListAccounts, getUserSecretKey } from '@/lib/wallet';
+import { setCurrentBTCAddress, setCurrentTCAccount, setListAccounts } from '@/state/wallet/reducer';
 import { batch } from 'react-redux';
 
 const { MasterWallet, getStorageHDWallet } = TC_SDK;
@@ -34,6 +34,7 @@ export class UnlockWalletAction implements IUnlockWalletAction {
         const masterIns = new MasterWallet();
         await masterIns.load(password);
         const account = await getUserSecretKey(masterIns);
+        const accounts = getListAccounts(masterIns);
         batch(() => {
           this.dispatch(
             setCurrentTCAccount({
@@ -44,6 +45,7 @@ export class UnlockWalletAction implements IUnlockWalletAction {
             }),
           );
           this.dispatch(setCurrentBTCAddress(account.btcAddress));
+          this.dispatch(setListAccounts(accounts));
         });
         return {
           master: masterIns,

@@ -1,18 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ISetMasterCreated, ITCAccount, WalletState } from '@/state/wallet/types';
+import { IListAccounts, ISetMasterCreated, ITCAccount, WalletState } from '@/state/wallet/types';
 
 export const initialState: WalletState = {
   master: undefined,
   userSecretKey: undefined,
   password: undefined,
 
+  showSetup: false,
+  isLocked: false,
+
   // never change
   // change by network mainnet | testnet | regtest
   btcAddress: undefined,
   tcAccount: undefined,
-
-  showSetup: false,
-  isLocked: false,
+  accounts: [],
 };
 
 const walletSlice = createSlice({
@@ -36,6 +37,9 @@ const walletSlice = createSlice({
     setCurrentBTCAddress(state, action: PayloadAction<string>) {
       state.btcAddress = action.payload;
     },
+    setListAccounts(state, action: PayloadAction<IListAccounts[]>) {
+      state.accounts = action.payload;
+    },
     setMasterCreated(state, action: PayloadAction<ISetMasterCreated>) {
       state.master = action.payload.master;
       state.userSecretKey = action.payload.account;
@@ -53,5 +57,6 @@ export const {
   setIsLockedWallet,
   setCurrentTCAccount,
   setCurrentBTCAddress,
+  setListAccounts,
 } = walletSlice.actions;
 export default walletSlice.reducer;

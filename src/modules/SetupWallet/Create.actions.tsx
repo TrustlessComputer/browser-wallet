@@ -1,6 +1,12 @@
 import { TC_SDK } from '@/lib';
-import { saveNewHDWallet, getUserSecretKey } from '@/lib/wallet';
-import { resetSecretStore, setCurrentBTCAddress, setCurrentTCAccount, setMasterCreated } from '@/state/wallet/reducer';
+import { saveNewHDWallet, getUserSecretKey, getListAccounts } from '@/lib/wallet';
+import {
+  resetSecretStore,
+  setCurrentBTCAddress,
+  setCurrentTCAccount,
+  setListAccounts,
+  setMasterCreated,
+} from '@/state/wallet/reducer';
 import toast from 'react-hot-toast';
 import { getErrorMessage } from '@/utils/error';
 import sleep from '@/utils/sleep';
@@ -40,6 +46,7 @@ export class CreateWalletAction implements ICreateWalletAction {
         this.dispatch(resetSecretStore());
         await sleep(0.5);
         const account = await getUserSecretKey(masterIns);
+        const accounts = getListAccounts(masterIns);
         batch(() => {
           this.dispatch(
             setCurrentTCAccount({
@@ -57,6 +64,7 @@ export class CreateWalletAction implements ICreateWalletAction {
               password,
             }),
           );
+          this.dispatch(setListAccounts(accounts));
         });
       }
     } catch (e) {

@@ -10,9 +10,11 @@ export const isLockedSelector = createSelector(getWalletSelector, wallet => wall
 
 export const userSecretKeySelector = createSelector(getWalletSelector, wallet => wallet?.userSecretKey);
 
-export const userAccountInfo = createSelector(getWalletSelector, wallet => {
+export const userAccountInfoSelector = createSelector(getWalletSelector, wallet => {
   const tcAccount = wallet?.tcAccount;
   const btcAddress = wallet?.btcAddress;
   if (!tcAccount || !btcAddress) return undefined;
   return { ...tcAccount, btcAddress };
 });
+
+export const listAccountsSelector = createSelector(getWalletSelector, wallet => wallet?.accounts || []);

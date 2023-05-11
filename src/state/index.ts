@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 import reducer from './reducer';
 import { createFilter } from 'redux-persist-transform-filter';
 
-const saveIsLockedWallet = createFilter('wallet', ['isLocked', 'btcAddress']);
+const saveIsLockedWallet = createFilter('wallet', ['isLocked', 'btcAddress', 'accounts']);
 
 const reducers = combineReducers(reducer);
 

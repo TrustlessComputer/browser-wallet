@@ -1,5 +1,5 @@
 import * as TC_SDK from 'trustless-computer-sdk';
-import { IUserSecretKey } from '@/state/wallet/types';
+import { IListAccounts, IUserSecretKey } from '@/state/wallet/types';
 import WError, { ERROR_CODE } from '@/utils/error';
 import WalletStorage from '@/lib/wallet/wallet.storage';
 import { compareString } from '@/utils';
@@ -50,4 +50,16 @@ const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
   throw new WError(ERROR_CODE.FIND_CURRENT_ACCOUNT);
 };
 
-export { randomMnemonic, saveNewHDWallet, restoreMasterWallet, getUserSecretKey };
+const getListAccounts = (masterIns: TC_SDK.MasterWallet): IListAccounts[] => {
+  const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
+  const nodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
+  if (!nodes) return [];
+  return nodes.map(node => ({
+    name: node.name,
+    index: node.index,
+    address: node.address,
+    isImport: false,
+  }));
+};
+
+export { randomMnemonic, saveNewHDWallet, restoreMasterWallet, getUserSecretKey, getListAccounts };
