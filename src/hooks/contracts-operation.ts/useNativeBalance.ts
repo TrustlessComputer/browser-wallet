@@ -12,7 +12,6 @@ const useNativeBalance: ContractOperationHook<unknown, string> = () => {
   const call = useCallback(async (): Promise<string> => {
     let balance = '0';
     try {
-      console.log('SANG TEST: 222', userInfo?.address);
       if (userInfo?.address) {
         const resp = await provider?.getBalance(userInfo.address);
         if (resp) {
