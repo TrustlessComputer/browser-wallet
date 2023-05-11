@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { PopoverWrapper, OverlayWrapper, Wrapper } from './styled';
 
 interface IProps extends PropsWithChildren {
@@ -6,9 +6,10 @@ interface IProps extends PropsWithChildren {
   width?: number;
   element?: React.ReactNode;
   unwrapElement?: React.ReactNode;
+  closeDropdown?: boolean;
 }
 
-const Dropdown = React.memo(({ icon, element, width, children, unwrapElement }: IProps) => {
+const Dropdown = React.memo(({ icon, element, width, children, unwrapElement, closeDropdown }: IProps) => {
   const [show, setShow] = React.useState(false);
   const ref = React.useRef(null);
 
@@ -18,6 +19,12 @@ const Dropdown = React.memo(({ icon, element, width, children, unwrapElement }: 
   const handleOnMouseLeave = () => {
     setShow(false);
   };
+
+  useEffect(() => {
+    if (closeDropdown) {
+      setShow(false);
+    }
+  }, [closeDropdown]);
 
   return (
     <OverlayWrapper
