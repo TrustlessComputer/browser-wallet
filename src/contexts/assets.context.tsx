@@ -1,9 +1,8 @@
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, useEffect, useMemo } from 'react';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import useContractOperation from '@/hooks/useContractOperation';
 import useNativeBalance from '@/hooks/contracts-operation.ts/useNativeBalance';
 import { debounce } from 'lodash';
-import useAsyncEffect from 'use-async-effect';
 import { getCollectedUTXO } from '@/services/bitcoin';
 import { ICollectedUTXOResp } from '@/interfaces/api/bitcoin';
 import { TC_SDK } from '@/lib';
@@ -71,9 +70,9 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     return balance.toString();
   }, [assets]);
 
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (!userInfo?.address || !userInfo?.btcAddress) return;
-    await debounceFetchAssets();
+    debounceFetchAssets();
     const interval = setInterval(() => {
       debounceFetchAssets();
     }, 10000);
