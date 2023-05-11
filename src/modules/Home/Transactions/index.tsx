@@ -9,9 +9,12 @@ import { formatLongAddress } from '@/utils';
 import { formatUnixDateTime } from '@/utils/time';
 import copy from 'copy-to-clipboard';
 import { debounce } from 'lodash';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { StyledTransaction } from './Transactions.styled';
+import useBitcoin from '@/hooks/useBitcoin';
+import network from '@/lib/network.helpers';
+import { TransactorContext } from '@/contexts/transactor.context';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -25,30 +28,22 @@ export enum TransactionStatus {
 
 const Transactions = React.memo(() => {
   const user = useCurrentUserInfo();
-  const [transactions] = useState<ITCTxDetail[]>([]);
+  const [transactions, setTransactions] = useState<ITCTxDetail[]>([]);
+  const { onOpenResumeModal } = useContext(TransactorContext);
+  const { getUnInscribedTransactionDetails } = useBitcoin();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isProcessing, setProcessing] = useState(false);
+  const [isProcessing] = useState(false);
 
   const numbPending = React.useMemo(() => {
     return transactions.filter(item => item.statusCode === 0).length;
   }, [transactions]);
 
-  const handleResumeTransactions = async () => {
-    try {
-      setProcessing(true);
-      // await run();
-    } catch (err: any) {
-      toast.error(err.message);
-    } finally {
-      setProcessing(false);
-      debounceGetTransactions();
-    }
-  };
-
   const getTransactions = async () => {
     try {
       if (!user) return;
       setIsLoading(true);
+      const uninscribedTransactions = await getUnInscribedTransactionDetails(user.address);
+      setTransactions(uninscribedTransactions);
     } catch (e) {
       // handle error
     } finally {
@@ -84,7 +79,7 @@ const Transactions = React.memo(() => {
           target="_blank"
           href={
             statusCode === 2
-              ? `https://explorer.trustless.computer/tx/${trans.Hash}`
+              ? `${network.current.Explorer}/tx/${trans.Hash}`
               : `https://mempool.space/tx/${trans.btcHash}`
           }
         >
@@ -139,7 +134,7 @@ const Transactions = React.memo(() => {
         ),
         status:
           statusCode === 0 ? (
-            <Button className="resume-btn" type="button" onClick={handleResumeTransactions} disabled={isProcessing}>
+            <Button className="resume-btn" type="button" onClick={onOpenResumeModal} disabled={isProcessing}>
               Process
             </Button>
           ) : (
@@ -166,7 +161,7 @@ const Transactions = React.memo(() => {
           <Text size="h5">{`You have ${numbPending} incomplete ${
             numbPending === 1 ? 'transaction' : 'transactions'
           }`}</Text>
-          <Button disabled={isProcessing} className="process-btn" type="button" onClick={handleResumeTransactions}>
+          <Button disabled={isProcessing} className="process-btn" type="button" onClick={onOpenResumeModal}>
             {isProcessing ? 'Processing...' : 'Process them now'}
           </Button>
         </div>

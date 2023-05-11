@@ -1,6 +1,6 @@
 import { RootState } from '@/state';
 import { createSelector } from '@reduxjs/toolkit';
-import { WalletState } from '@/state/wallet/types';
+import { IUserInfo, WalletState } from '@/state/wallet/types';
 
 export const getWalletSelector = (state: RootState): WalletState | undefined => state.wallet;
 
@@ -14,7 +14,7 @@ export const userAccountInfoSelector = createSelector(getWalletSelector, wallet 
   const tcAccount = wallet?.tcAccount;
   const btcAddress = wallet?.btcAddress;
   if (!tcAccount || !btcAddress) return undefined;
-  return { ...tcAccount, btcAddress };
+  return { ...tcAccount, btcAddress } as IUserInfo;
 });
 
 export const listAccountsSelector = createSelector(getWalletSelector, wallet => wallet?.accounts || []);

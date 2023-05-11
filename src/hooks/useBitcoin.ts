@@ -1,5 +1,5 @@
 import { TC_SDK } from '@/lib';
-import { ICreateInscribeParams, ISendBTCParams } from '@/interfaces/use-bitcoin';
+import { ICreateBatchInscribeParams, ICreateInscribeParams, ISendBTCParams } from '@/interfaces/use-bitcoin';
 import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets.context';
 import { ICollectedUTXOResp } from '@/interfaces/api/bitcoin';
@@ -36,6 +36,19 @@ const useBitcoin = () => {
     return tx;
   };
 
+  const createBatchInscribeTxs = async ({ tcTxDetails, feeRate }: ICreateBatchInscribeParams) => {
+    const assets = await _getAssetsCreateTx();
+    if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
+    const res = await TC_SDK.createBatchInscribeTxs({
+      senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
+      utxos: assets.txrefs,
+      inscriptions: {},
+      tcTxDetails,
+      feeRatePerByte: feeRate,
+    });
+    return res;
+  };
+
   const getUnInscribedTransactions = async (tcAddress: string): Promise<Array<string>> => {
     if (!tcAddress) throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
     const { unInscribedTxIDs } = await window.tcClient.getUnInscribedTransactionByAddress(tcAddress);
@@ -47,7 +60,10 @@ const useBitcoin = () => {
     const { unInscribedTxDetails: unInscribeTxs } = await window.tcClient.getUnInscribedTransactionDetailByAddress(
       tcAddress,
     );
-    return unInscribeTxs;
+    return unInscribeTxs.map(item => ({
+      ...item,
+      statusCode: 0,
+    }));
   };
 
   const onSendBTC = async ({ receiver, amount, feeRate }: ISendBTCParams) => {
@@ -68,17 +84,26 @@ const useBitcoin = () => {
       feeRate,
       true,
     );
-
     // broadcast tx
     await TC_SDK.broadcastTx(txHex);
   };
 
+  const getTCTransactionByHash = async (tcTxID: string): Promise<string> => {
+    if (!tcTxID) throw Error('TC Hash not found');
+    const { Hex } = (await window.tcClient.getTCTxByHash(tcTxID)) as any;
+    return Hex;
+  };
+
   return {
     getAssetsCreateTx: _getAssetsCreateTx,
+
     createInscribeTx,
+    createBatchInscribeTxs,
+    onSendBTC,
+
     getUnInscribedTransactions,
     getUnInscribedTransactionDetails,
-    onSendBTC,
+    getTCTransactionByHash,
   };
 };
 

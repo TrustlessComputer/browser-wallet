@@ -42,4 +42,8 @@ interface ISetMasterCreated {
   password: string;
 }
 
-export type { IUserSecretKey, ICreateAccountPayload, ISetMasterCreated, ITCAccount, IListAccounts };
+interface IUserInfo extends ITCAccount {
+  btcAddress: string;
+}
+
+export type { IUserSecretKey, ICreateAccountPayload, ISetMasterCreated, ITCAccount, IListAccounts, IUserInfo };

@@ -22,7 +22,7 @@ const NETWORKS: Array<INetwork> = [
     BTCNetwork: 'mainnet',
     ChainID: 22213,
     TCNode: 'https://tc-node.trustless.computer',
-    Explorer: 'https://explorer.regtest.trustless.computer',
+    Explorer: 'https://explorer.trustless.computer',
     BE_API: 'https://dapp.trustless.computer/dapp/api',
     Icon: 'ic-penguin-currency-dark.svg',
   },
