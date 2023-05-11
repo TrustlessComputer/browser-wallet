@@ -12,16 +12,18 @@ import { listAccountsSelector } from '@/state/wallet/selector';
 import { ellipsisCenter } from '@/utils';
 import format from '@/utils/amount';
 import copy from 'copy-to-clipboard';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
-import CreateAccount from './CreateAccount';
-import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem } from './styled';
+import CreateModal from './CreateModal';
+import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem, DropDownContainer } from './styled';
 
 const AccountDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
   const accounts = useAppSelector(listAccountsSelector);
 
   const { tcBalance } = useContext(AssetsContext);
+
+  const [showModal, setShowModal] = useState(false);
 
   const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });
 
@@ -95,40 +97,51 @@ const AccountDropdown = React.memo(() => {
   };
 
   return (
-    <Dropdown
-      element={
-        <Element>
-          <Text color="text-primary" fontWeight="medium" size="body">
-            {ellipsisCenter({
-              str: user.address,
-              limit: 4,
-            })}
-          </Text>
-          <IconSVG src={`${CDN_URL_ICONS}/ic-arrow-down-dark.svg`} maxWidth="14" />
-        </Element>
-      }
-      width={384}
-    >
-      <div>
-        <DropdownList>
-          {accounts &&
-            accounts.length > 0 &&
-            accounts.map(account =>
-              renderItem(
-                true,
-                account.name,
-                `(${ellipsisCenter({
-                  str: account.address,
-                  limit: 4,
-                })})`,
-                `${formatTcBalance} TC`,
-                account.address,
-              ),
-            )}
-        </DropdownList>
-        <CreateAccount />
-      </div>
-    </Dropdown>
+    <>
+      <Dropdown
+        element={
+          <Element>
+            <Text color="text-primary" fontWeight="medium" size="body">
+              {ellipsisCenter({
+                str: user.address,
+                limit: 4,
+              })}
+            </Text>
+            <IconSVG src={`${CDN_URL_ICONS}/ic-arrow-down-dark.svg`} maxWidth="14" />
+          </Element>
+        }
+        width={384}
+        closeDropdown={showModal}
+      >
+        <DropDownContainer>
+          <DropdownList>
+            {accounts &&
+              accounts.length > 0 &&
+              accounts.map(account =>
+                renderItem(
+                  true,
+                  account.name,
+                  `(${ellipsisCenter({
+                    str: account.address,
+                    limit: 4,
+                  })})`,
+                  `${formatTcBalance} TC`,
+                  account.address,
+                ),
+              )}
+          </DropdownList>
+          <div className="actions">
+            <div className="create-btn" onClick={() => setShowModal(true)}>
+              <IconSVG src={`${CDN_URL_ICONS}/ic-plus-square-dark.svg`} maxWidth="20" />
+              <Text color="text-primary" fontWeight="medium" size="body" className="text">
+                Create new account
+              </Text>
+            </div>
+          </div>
+        </DropDownContainer>
+      </Dropdown>
+      <CreateModal show={showModal} handleClose={() => setShowModal(false)} />
+    </>
   );
 });
 

@@ -1,19 +1,23 @@
-import IconSVG from '@/components/IconSVG';
-import Text from '@/components/Text';
-import { CDN_URL_ICONS } from '@/configs';
+import Button from '@/components/Button';
+import { Input } from '@/components/Inputs';
+import SignerModal from '@/components/SignerModal';
+import { Formik } from 'formik';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import Container from './styled';
-import { Input } from '@/components/Inputs';
-import { Formik } from 'formik';
-import Button from '@/components/Button';
 
 type IFormValue = {
   name: string;
 };
 
-const CreateAccount = React.memo(() => {
-  const [showForm, setShowForm] = useState(false);
+interface Props {
+  show: boolean;
+  handleClose: () => void;
+}
+
+const CreateAccount = React.memo((props: Props) => {
+  const { show, handleClose } = props;
+
   const [isProcessing, setIsProcessing] = useState(false);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
@@ -40,8 +44,8 @@ const CreateAccount = React.memo(() => {
   };
 
   return (
-    <Container>
-      {showForm ? (
+    <SignerModal show={show} onClose={handleClose} title="Create Account">
+      <Container>
         <div className="form-container">
           <Formik
             key="transfer"
@@ -66,9 +70,6 @@ const CreateAccount = React.memo(() => {
                   errorMsg={errors.name && touched.name ? errors.name : undefined}
                 />
                 <div className="actions">
-                  <Button sizes="small" variants="underline" onClick={() => setShowForm(false)}>
-                    Cancel
-                  </Button>
                   <Button disabled={isProcessing} sizes="stretch" type="submit" className="confirm-btn">
                     {isProcessing ? 'Creating...' : 'Create'}
                   </Button>
@@ -77,15 +78,8 @@ const CreateAccount = React.memo(() => {
             )}
           </Formik>
         </div>
-      ) : (
-        <div className="create-btn" onClick={() => setShowForm(true)}>
-          <IconSVG src={`${CDN_URL_ICONS}/ic-plus-square-dark.svg`} maxWidth="20" />
-          <Text color="text-primary" fontWeight="medium" size="body" className="text">
-            Create new account
-          </Text>
-        </div>
-      )}
-    </Container>
+      </Container>
+    </SignerModal>
   );
 });
 
