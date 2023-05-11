@@ -29,12 +29,12 @@ const Tokens = () => {
 
   const TABLE_HEADINGS = ['Token Number', 'Name', 'Symbol', 'Balance', 'Max Supply', ''];
 
-  const hanldeOpenTransferModal = (selectedToken: any) => {
-    setShowTransferModal(true);
+  const handleOpenTransferModal = (selectedToken: any) => {
     setSelectedToken(selectedToken);
+    setShowTransferModal(true);
   };
 
-  const hanldeCloseTransferModal = () => {
+  const handleCloseTransferModal = () => {
     setShowTransferModal(false);
     setSelectedToken(null);
   };
@@ -91,7 +91,7 @@ const Tokens = () => {
           <>
             {balanceNumb > 0 && (
               <div className="owner-actions">
-                <Button onClick={() => hanldeOpenTransferModal(token)} variants="outline" className="transfer-button">
+                <Button onClick={() => handleOpenTransferModal(token)} variants="outline" className="transfer-button">
                   Transfer
                 </Button>
               </div>
@@ -141,11 +141,14 @@ const Tokens = () => {
           <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
         </InfiniteScroll>
       )}
-      <TransferModal
-        show={showTransferModal}
-        handleClose={hanldeCloseTransferModal}
-        erc20TokenAddress={selectedToken?.address}
-      />
+      {!!selectedToken && (
+        <TransferModal
+          show={showTransferModal}
+          handleClose={handleCloseTransferModal}
+          erc20TokenAddress={selectedToken.address}
+          decimals={selectedToken.decimal}
+        />
+      )}
     </StyledTokenProfile>
   );
 };

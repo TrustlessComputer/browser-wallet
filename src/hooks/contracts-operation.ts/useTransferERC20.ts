@@ -12,6 +12,7 @@ import { AssetsContext } from '@/contexts/assets.context';
 import BigNumber from 'bignumber.js';
 import format from '@/utils/amount';
 import Token from '@/constants/token';
+import { TRANSFER_TX_SIZE } from '@/configs';
 
 export interface ITransferERC20 {
   amount: string;
@@ -19,27 +20,38 @@ export interface ITransferERC20 {
   tokenAddress: string;
   nonce?: number;
   gas?: string;
-  decimals?: number;
+  decimals: number;
   feeRate: number;
 }
 
 const useTransferERC20: ContractOperationHook<ITransferERC20, TransactionResponse> = () => {
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
-
   const { btcBalance } = useContext(AssetsContext);
+
+  const estimateGas = useCallback(
+    async (params: ITransferERC20) => {
+      if (!userSecretKey?.privateKey || !provider) {
+        throw new WError(ERROR_CODE.ACCOUNT_EMPTY);
+      }
+      const transferAmount = convert.toOriginalAmount({ humanAmount: params.amount, decimals: params.decimals });
+      const contract = getContractSigner(params.tokenAddress, ERC20ABIJson.abi, provider, userSecretKey.privateKey);
+      const gasLimit = await contract.estimateGas.transfer(params.receiver, new BigNumber(transferAmount).toFixed());
+      return gasLimit.toNumber();
+    },
+    [userSecretKey?.privateKey, provider],
+  );
 
   const call = useCallback(
     async (params: ITransferERC20): Promise<TransactionResponse> => {
       if (!userSecretKey?.privateKey || !provider) {
         throw new WError(ERROR_CODE.ACCOUNT_EMPTY);
       }
-
       const privateKey = userSecretKey.privateKey;
-      const { amount, tokenAddress, receiver, decimals = 18, feeRate } = params;
+      const { amount, tokenAddress, receiver, decimals, feeRate } = params;
 
       const estimatedFee = TC_SDK.estimateInscribeFee({
-        tcTxSizeByte: 1000,
+        tcTxSizeByte: TRANSFER_TX_SIZE,
         feeRatePerByte: feeRate,
       });
 
@@ -55,7 +67,7 @@ const useTransferERC20: ContractOperationHook<ITransferERC20, TransactionRespons
 
       const transferAmount = convert.toOriginalAmount({ humanAmount: amount, decimals: decimals });
       const contract = getContractSigner(tokenAddress, ERC20ABIJson.abi, provider, privateKey);
-      const tx: TransactionResponse = await contract.transfer(receiver, transferAmount.toString());
+      const tx: TransactionResponse = await contract.transfer(receiver, new BigNumber(transferAmount).toFixed());
       return tx;
     },
     [userSecretKey?.privateKey, provider],
@@ -63,6 +75,7 @@ const useTransferERC20: ContractOperationHook<ITransferERC20, TransactionRespons
 
   return {
     call: call,
+    estimateGas,
     transactionType: TransactionType.ERC20,
     eventType: EventType.TRANSFER,
   };

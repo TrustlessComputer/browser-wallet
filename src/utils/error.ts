@@ -6,6 +6,7 @@ export const ERROR_CODE = {
   HAVE_UN_INSCRIBE_TX: '-3004',
   ADDRESS_NOT_FOUND: '-3005',
   FEE_RATE_INVALID: '-3006',
+  INVALID_PARAMS: '-3007',
 };
 
 export const ERROR_MESSAGE = {
@@ -37,6 +38,10 @@ export const ERROR_MESSAGE = {
     message: 'Fee rate invalid.',
     desc: 'Fee rate invalid.',
   },
+  [ERROR_CODE.INVALID_PARAMS]: {
+    message: 'Invalid params.',
+    desc: 'Invalid params.',
+  },
 };
 
 class WError extends Error {
@@ -64,6 +69,11 @@ export const getErrorMessage = (error: unknown, name: string) => {
   } else if (error instanceof Error && error.message) {
     message = error.message;
     desc = error.message;
+    if (Object(error).reason) {
+      const reason = Object(error).reason;
+      message = reason;
+      desc = reason;
+    }
   }
 
   console.error('TC error: ', desc, name);

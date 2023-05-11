@@ -15,6 +15,7 @@ export enum EventType {
 
 export type ContractOperationHook<P, R> = (arg?: any) => {
   call: (args: P) => Promise<R>;
+  estimateGas?: (args: P) => Promise<number>;
   transactionType: TransactionType;
   eventType: EventType;
 };

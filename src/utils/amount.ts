@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import floor from 'lodash/floor';
 import convert from '@/utils/convert';
 import { getDecimalSeparator, getGroupSeparator } from '@/utils/separator';
+import { ceil } from 'lodash';
 
 interface IAmount {
   originalAmount?: number;
@@ -10,6 +11,7 @@ interface IAmount {
   clipAmount?: boolean;
   decimalDigits?: boolean;
   maxDigits?: number;
+  isCeil?: boolean;
 }
 
 const removeTrailingZeroes = ({ amountString }: { amountString: string }) => {
@@ -76,7 +78,15 @@ const toFixed = (payload: IToFixed) => {
 };
 
 const formatAmount = (payload: IAmount) => {
-  const { originalAmount, humanAmount, decimals, clipAmount = true, decimalDigits = true } = payload;
+  const {
+    originalAmount,
+    humanAmount,
+    decimals,
+    clipAmount = true,
+    decimalDigits = true,
+    maxDigits,
+    isCeil = false,
+  } = payload;
   const decimalSeparator = getDecimalSeparator();
   const groupSeparator = getGroupSeparator();
   const fmt = {
@@ -92,23 +102,37 @@ const formatAmount = (payload: IAmount) => {
         originalAmount,
         decimals,
       });
-    const maxDigits = getMaxDecimalDigits({
-      clipAmount,
-      decimalDigits,
-      decimals,
-      humanAmount: convertHumanAmount,
-    });
+    const _maxDigits = maxDigits
+      ? maxDigits
+      : getMaxDecimalDigits({
+          clipAmount,
+          decimalDigits,
+          decimals,
+          humanAmount: convertHumanAmount,
+        });
     let fixedNumber = convertHumanAmount;
     if (decimals) {
-      fixedNumber = floor(convertHumanAmount, Math.min(decimals, maxDigits));
+      if (isCeil) {
+        fixedNumber = ceil(convertHumanAmount, Math.min(decimals, _maxDigits));
+      } else {
+        fixedNumber = floor(convertHumanAmount, Math.min(decimals, _maxDigits));
+      }
     } else {
-      fixedNumber = floor(convertHumanAmount, maxDigits);
+      if (isCeil) {
+        fixedNumber = ceil(convertHumanAmount, _maxDigits);
+      } else {
+        fixedNumber = floor(convertHumanAmount, _maxDigits);
+      }
     }
     const fixedString = toFixed({
       number: fixedNumber,
       decimals,
     });
-    const amountString = new BigNumber(fixedString).toFormat(maxDigits, BigNumber.ROUND_DOWN, fmt);
+    const amountString = new BigNumber(fixedString).toFormat(
+      _maxDigits,
+      isCeil ? BigNumber.ROUND_CEIL : BigNumber.ROUND_DOWN,
+      fmt,
+    );
     formatedAmount = removeTrailingZeroes({
       amountString,
     });

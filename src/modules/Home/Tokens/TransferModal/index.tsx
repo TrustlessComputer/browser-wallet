@@ -2,7 +2,7 @@ import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import { Formik } from 'formik';
 import isNumber from 'lodash/isNumber';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Container } from './TransferModal.styled';
 import SignerModal from '@/components/SignerModal';
@@ -12,11 +12,17 @@ import { validateEVMAddress } from '@/utils';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
 import { FeeRate } from '@/components/FeeRate';
+import { debounce } from 'lodash';
+import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
+import useGasFee from '@/components/GasFee/useGasFee';
+import { useUserSecretKey } from '@/state/wallet/hooks';
+import GasFee from '@/components/GasFee';
 
 type Props = {
   show: boolean;
   handleClose: () => void;
   erc20TokenAddress?: string;
+  decimals: number;
 };
 
 interface IFormValue {
@@ -25,8 +31,11 @@ interface IFormValue {
 }
 
 const TransferModal = (props: Props) => {
-  const { show = false, handleClose, erc20TokenAddress } = props;
+  const { show = false, handleClose, erc20TokenAddress, decimals } = props;
   const [submitting, setSubmitting] = useState(false);
+  const [estimating, setEstimating] = useState(false);
+  const userSecretKey = useUserSecretKey();
+  const { maxFee, setGasLimit, error, setError } = useGasFee();
 
   const {
     feeRate,
@@ -39,7 +48,7 @@ const TransferModal = (props: Props) => {
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
 
-  const { run: onTransferERC20 } = useContractOperation<ITransferERC20, TransactionResponse>({
+  const { run: onTransferERC20, estimateGas } = useContractOperation<ITransferERC20, TransactionResponse>({
     operation: useTransferERC20,
     inscribeable: true,
     feeRate: currentRate,
@@ -50,6 +59,35 @@ const TransferModal = (props: Props) => {
       onFetchFee();
     }
   }, [show]);
+
+  const onEstimateGas = async (payload: IFormValue) => {
+    try {
+      if (!erc20TokenAddress || !estimateGas) {
+        throw new WError(ERROR_CODE.INVALID_PARAMS);
+      }
+
+      if (!payload.amount || !payload.toAddress) {
+        setGasLimit(undefined);
+        return;
+      }
+      setEstimating(true);
+      const gasLimit = await estimateGas({
+        receiver: payload.toAddress,
+        amount: payload.amount,
+        tokenAddress: erc20TokenAddress,
+        feeRate: currentRate,
+        decimals: decimals,
+      });
+      setGasLimit(gasLimit);
+      setError('');
+    } catch (error) {
+      const { message } = getErrorMessage(error, 'estimateGas');
+      setError(message);
+    }
+    setEstimating(false);
+  };
+
+  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey?.privateKey]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -67,7 +105,7 @@ const TransferModal = (props: Props) => {
     } else if (parseFloat(values.amount) <= 0) {
       errors.amount = 'Invalid amount. Amount must be greater than 0.';
     }
-
+    debounceEstimateGas(values);
     return errors;
   };
 
@@ -84,6 +122,7 @@ const TransferModal = (props: Props) => {
         amount: payload.amount,
         tokenAddress: erc20TokenAddress,
         feeRate: currentRate,
+        decimals,
       });
       if (tx.hash) {
         toast.success('Transaction has been created. Please wait for few minutes.');
@@ -136,6 +175,7 @@ const TransferModal = (props: Props) => {
                 placeholder={`Enter the amount`}
                 errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
               />
+              <GasFee fee={maxFee.feeText} error={error} />
               <FeeRate
                 allRate={feeRate}
                 isCustom={true}
@@ -146,7 +186,12 @@ const TransferModal = (props: Props) => {
                 customRate={customRate}
                 isLoading={isLoadingRate}
               />
-              <Button disabled={submitting} type="submit" className="confirm-btn" isLoading={submitting}>
+              <Button
+                disabled={submitting || estimating}
+                type="submit"
+                className="confirm-btn"
+                isLoading={submitting || estimating}
+              >
                 {submitting ? 'Processing...' : 'Transfer'}
               </Button>
             </form>

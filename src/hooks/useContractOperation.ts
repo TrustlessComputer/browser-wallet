@@ -3,6 +3,7 @@ import useBitcoin from '@/hooks/useBitcoin';
 import { TC_SDK } from '@/lib';
 import { useUserSecretKey } from '@/state/wallet/hooks';
 import WError, { ERROR_CODE } from '@/utils/error';
+import BigNumber from 'bignumber.js';
 
 interface IParams<P, R> {
   operation: ContractOperationHook<P, R>;
@@ -12,13 +13,14 @@ interface IParams<P, R> {
 
 interface IContractOperationReturn<P, R> {
   run: (p: P) => Promise<R>;
+  estimateGas?: (p: P) => Promise<number>;
 }
 
 const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationReturn<P, R> => {
   const { inscribeable, operation, feeRate } = args;
   const userSecretKey = useUserSecretKey();
   const { createInscribeTx, getUnInscribedTransactions } = useBitcoin();
-  const { call } = operation();
+  const { call, estimateGas } = operation();
   const run = async (params: P): Promise<R> => {
     if (!inscribeable) {
       const tx: R = await call({
@@ -58,8 +60,19 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
     return tx;
   };
 
+  const onEstimateGas = async (params: P): Promise<number> => {
+    if (!estimateGas) {
+      throw new Error('estimateGas is not define.');
+    }
+    const gasLimit: number = await estimateGas({
+      ...params,
+    });
+    return new BigNumber(gasLimit).multipliedBy(1.05).toNumber();
+  };
+
   return {
     run,
+    estimateGas: onEstimateGas,
   };
 };
 
