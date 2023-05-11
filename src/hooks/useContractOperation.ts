@@ -32,23 +32,28 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
     }
 
     new TC_SDK.Validator('contract-operation', feeRate).number().required();
-    const unInscribedTxIDs = await getUnInscribedTransactions(userSecretKey.address);
 
-    const tx: R = await call({
-      ...params,
-    });
+    const [unInscribedTxIDs] = await Promise.all([await getUnInscribedTransactions(userSecretKey.address)]);
 
     if (unInscribedTxIDs.length > 0) {
       throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
     }
 
+    if (!feeRate) {
+      throw new WError(ERROR_CODE.FEE_RATE_INVALID);
+    }
+
+    const tx: R = await call({
+      ...params,
+    });
+
     const btcTx = await createInscribeTx({
       assets: undefined,
-      feeRate: 0,
+      feeRate: feeRate,
       tcTxIDs: [Object(tx).hash],
     });
 
-    console.log('BTC-TX: ', btcTx);
+    console.info('BTC transaction: ', btcTx);
 
     return tx;
   };

@@ -10,8 +10,6 @@ import Token from '@/constants/token';
 import BigNumber from 'bignumber.js';
 import convert from '@/utils/convert';
 
-const tcClient = window.tcClient;
-
 const useBitcoin = () => {
   const { getAssetsCreateTx } = useContext(AssetsContext);
   const userSecretKey = useUserSecretKey();
@@ -40,13 +38,15 @@ const useBitcoin = () => {
 
   const getUnInscribedTransactions = async (tcAddress: string): Promise<Array<string>> => {
     if (!tcAddress) throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
-    const { unInscribedTxIDs } = await tcClient.getUnInscribedTransactionByAddress(tcAddress);
+    const { unInscribedTxIDs } = await window.tcClient.getUnInscribedTransactionByAddress(tcAddress);
     return unInscribedTxIDs;
   };
 
   const getUnInscribedTransactionDetails = async (tcAddress: string): Promise<ITCTxDetail[]> => {
     if (!tcAddress) throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
-    const { unInscribedTxDetails: unInscribeTxs } = await tcClient.getUnInscribedTransactionDetailByAddress(tcAddress);
+    const { unInscribedTxDetails: unInscribeTxs } = await window.tcClient.getUnInscribedTransactionDetailByAddress(
+      tcAddress,
+    );
     return unInscribeTxs;
   };
 

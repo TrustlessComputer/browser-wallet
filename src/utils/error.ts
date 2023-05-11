@@ -5,6 +5,7 @@ export const ERROR_CODE = {
   ACCOUNT_EMPTY: '-3003',
   HAVE_UN_INSCRIBE_TX: '-3004',
   ADDRESS_NOT_FOUND: '-3005',
+  FEE_RATE_INVALID: '-3006',
 };
 
 export const ERROR_MESSAGE = {
@@ -32,6 +33,10 @@ export const ERROR_MESSAGE = {
     message: 'Address not found.',
     desc: 'Address not found.',
   },
+  [ERROR_CODE.FEE_RATE_INVALID]: {
+    message: 'Fee rate invalid.',
+    desc: 'Fee rate invalid.',
+  },
 };
 
 class WError extends Error {
@@ -55,7 +60,7 @@ export const getErrorMessage = (error: unknown, name: string) => {
   let desc = '';
   if (error instanceof WError) {
     message = error.getMessage();
-    desc = error.desc;
+    desc = error.desc + `(${error.code})`;
   } else if (error instanceof Error && error.message) {
     message = error.message;
     desc = error.message;
