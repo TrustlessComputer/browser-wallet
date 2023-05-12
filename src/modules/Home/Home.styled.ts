@@ -24,7 +24,7 @@ export const TabContainer = styled.div`
     scrollbar-width: none;
     width: fit-content;
 
-    border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme.primary['5b']};
+    border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['border-primary']};
     border-radius: ${px2rem(40)};
     padding: ${px2rem(4)} ${px2rem(8)};
 
@@ -54,7 +54,7 @@ export const TabContainer = styled.div`
       border: none;
       color: ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
       opacity: 1;
-      background: ${({ theme }: { theme: DefaultTheme }) => theme.bg.secondary};
+      background: ${({ theme }: { theme: DefaultTheme }) => theme.bg['tab-item']};
       border-radius: ${px2rem(100)};
 
       /* .tab-item::after {

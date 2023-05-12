@@ -10,7 +10,9 @@ export const Element = styled.div`
   p {
     font-weight: 500;
     font-size: ${px2rem(18)};
-    color: ${({ theme }) => theme.yellow.A};
+    color: ${({ theme }) => theme['button-primary']};
+    width: ${px2rem(108)};
+    text-align: center;
   }
 
   .indicator {

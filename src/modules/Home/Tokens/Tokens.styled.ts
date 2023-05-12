@@ -31,6 +31,10 @@ export const StyledTokenProfile = styled.div`
     }
   }
 
+  .token-name {
+    font-weight: 500;
+  }
+
   .loading {
     display: flex;
     align-items: center;

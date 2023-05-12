@@ -7,12 +7,12 @@ export const Styled = styled.div`
   text-decoration: none !important;
   --bs-card-bg: none;
 
-  border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme.primary['5b']};
+  border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['border-primary']};
   border-radius: ${px2rem(8)};
   cursor: pointer;
 
   :hover {
-    border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['border-third']};
+    border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
   }
 
   .card-content {
@@ -45,6 +45,9 @@ export const Styled = styled.div`
 
   .card-info {
     padding: ${px2rem(16)} ${px2rem(24)};
+    background-color: ${({ theme }: { theme: DefaultTheme }) => theme.bg['nft-item']};
+    border-bottom-left-radius: ${px2rem(8)};
+    border-bottom-right-radius: ${px2rem(8)};
 
     .card-title1 {
       font-style: normal;

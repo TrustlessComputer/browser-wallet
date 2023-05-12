@@ -33,10 +33,10 @@ const Home = () => {
           maxWidth="20"
           maxHeight="20"
           src={src}
-          color={isActive ? 'text-highlight' : 'text-primary'}
+          color={isActive ? 'text-tab-item' : 'text-primary'}
           type="stroke"
         />
-        <Text className="tab-text" color={isActive ? 'text-highlight' : 'text-primary'}>
+        <Text className="tab-text" color={isActive ? 'text-tab-item' : 'text-primary'}>
           {text}
         </Text>
       </div>

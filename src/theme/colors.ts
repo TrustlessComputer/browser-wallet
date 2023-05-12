@@ -80,6 +80,7 @@ export const darkTheme = {
   'text-third': colors.dark['5'],
   'text-four': colors.dark['40'],
   'text-five': colors.dark['20'],
+  'text-tab-item': colors.yellow['A'],
 
   // button
   'button-primary': colors.yellow['A'],
@@ -96,6 +97,8 @@ export const darkTheme = {
     third: colors.dark['100'],
     four: colors.primary['f2'],
     modal: colors.dark['100'],
+    'tab-item': colors.dark['80'],
+    'nft-item': 'transparent',
   },
 
   card: {
@@ -112,10 +115,11 @@ export const lightTheme = {
   'text-primary': colors.dark['100'],
   'text-secondary': colors.dark['60'],
   'text-highlight': colors.yellow['A'],
-  'text-parallel': colors.dark['100'],
+  'text-parallel': colors.white,
   'text-third': colors.dark['5'],
   'text-four': colors.dark['40'],
   'text-five': colors.dark['60'],
+  'text-tab-item': colors.white,
 
   // button
   'button-primary': colors.yellow['C'],
@@ -132,11 +136,13 @@ export const lightTheme = {
     third: colors.light['100'],
     four: colors.primary['f2'],
     modal: colors.white,
+    'tab-item': colors.yellow['C'],
+    'nft-item': colors.light['80'],
   },
 
   card: {
     primary: colors.dark['120'],
     secondary: colors.light['80'],
-    bns: '#17171a',
+    bns: 'transparent',
   },
 };
