@@ -16,7 +16,7 @@ export const StyledBNSCard = styled.div`
     border-radius: ${px2rem(8)};
 
     :hover {
-      border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['border-third']};
+      border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
     }
   }
 

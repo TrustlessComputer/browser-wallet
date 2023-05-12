@@ -13,7 +13,7 @@ const reducers = combineReducers(reducer);
 const persistConfig = {
   key: 'browser-wallet',
   storage,
-  whitelist: ['wallet'],
+  whitelist: ['wallet', 'application'],
   transforms: [saveIsLockedWallet],
 };
 

@@ -23,7 +23,7 @@ export const StyledButton = styled.button`
 
   &.outline {
     background-color: transparent;
-    color: ${({ theme }) => theme['text-highlight']};
+    color: ${({ theme }) => theme['button-primary']};
     border: 1px solid ${({ theme }) => theme['button-primary']};
   }
 

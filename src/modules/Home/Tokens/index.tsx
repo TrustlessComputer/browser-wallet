@@ -14,6 +14,7 @@ import BigNumber from 'bignumber.js';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import Button from '@/components/Button';
 import network from '@/lib/network.helpers';
+import Text from '@/components/Text';
 
 const LIMIT_PAGE = 50;
 
@@ -77,16 +78,34 @@ const Tokens = () => {
     return {
       id: `token-${token?.address}}`,
       render: {
-        number: token?.index,
+        number: (
+          <Text color="text-primary" size="body-large">
+            {token?.index}
+          </Text>
+        ),
         name: (
-          <a href={linkTokenExplorer} rel="rel=”noopener noreferrer”" target="_blank">
-            {token?.name || '-'}
-          </a>
+          <Text color="text-primary" size="body-large" fontWeight="medium">
+            <a href={linkTokenExplorer} className="token-name" rel="rel=”noopener noreferrer”" target="_blank">
+              {token?.name || '-'}
+            </a>
+          </Text>
         ),
 
-        symbol: token?.symbol || '-',
-        balance: balance,
-        supply: Number(totalSupply) > 0 ? totalSupply : '-',
+        symbol: (
+          <Text color="text-primary" size="body-large">
+            {token?.symbol || '-'}
+          </Text>
+        ),
+        balance: (
+          <Text color="text-primary" size="body-large">
+            {balance}
+          </Text>
+        ),
+        supply: (
+          <Text color="text-primary" size="body-large">
+            {Number(totalSupply) > 0 ? totalSupply : '-'}
+          </Text>
+        ),
         action: (
           <>
             {balanceNumb > 0 && (

@@ -5,9 +5,11 @@ import { ScreenMarginTop } from '@/theme/css/margin.top';
 import { ScreenMarginBottom } from '@/theme/css/margin.bottom';
 import { ScreenMarginLeft } from '@/theme/css/margin.left';
 import { ScreenMarginRight } from '@/theme/css/margin.right';
+import { useAppSelector } from '@/state/hooks';
+import { isDarkSelector } from '@/state/application/selector';
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const darkMode = true;
+  const darkMode = useAppSelector(isDarkSelector);
   const themeObject = useMemo(() => getTheme(darkMode), [darkMode]);
   return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>;
 }
