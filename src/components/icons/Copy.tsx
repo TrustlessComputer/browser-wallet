@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 interface IProps extends IWrapSVGProps {
   content: string | undefined;
+  icon?: string;
 }
 
 const CopyIcon = React.memo((props: IProps) => {
@@ -16,7 +17,9 @@ const CopyIcon = React.memo((props: IProps) => {
     copy(props.content);
     toast.success('Copied');
   };
-  return <IconSVG src={`${CDN_URL_ICONS}/ic-copy-dark.svg`} maxWidth="32" {...props} onClick={onCopy} />;
+  return (
+    <IconSVG src={`${CDN_URL_ICONS}/${props.icon || 'ic-copy-dark.svg'}`} maxWidth="32" {...props} onClick={onCopy} />
+  );
 });
 
 export default CopyIcon;

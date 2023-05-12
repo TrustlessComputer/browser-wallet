@@ -25,7 +25,11 @@ const ItemWrapper = styled(Col)<{ isActive: boolean }>`
 
   .price {
     margin-top: ${px2rem(16)};
-    font-size: ${px2rem(20)};
+    text-align: center;
+  }
+
+  .price-custom {
+    margin-top: ${px2rem(4)};
     text-align: center;
   }
 
