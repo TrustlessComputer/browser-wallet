@@ -111,8 +111,8 @@ const Tokens = () => {
   const debounceLoadMore = debounce(onLoadMoreTokens, 300);
 
   useEffect(() => {
-    if (user && user.address) fetchTokensOwned();
-  }, [user]);
+    if (profileWallet) fetchTokensOwned();
+  }, [profileWallet]);
 
   if (!tokensList || tokensList.length === 0 || !profileWallet) {
     return <Empty />;
