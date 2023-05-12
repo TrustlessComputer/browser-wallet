@@ -39,6 +39,11 @@ export const StyledTransaction = styled.div`
     font-weight: 500;
   }
 
+  .status-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .status {
     text-transform: capitalize;
 

@@ -103,9 +103,6 @@ const FeeRate = React.memo((props: IProps) => {
         <Text size="body" align="center">
           Customize Sats
         </Text>
-        {!!amount && amount !== '-' && (
-          <Text size="note" color="text-secondary" className="vbyte">{`~${amount} ${symbol}`}</Text>
-        )}
         {/*{!!amount && <Text size="regular" className="vbyte">{`${props.customRate} sats/vByte`}</Text>}*/}
         <input
           ref={customRef}
@@ -117,6 +114,9 @@ const FeeRate = React.memo((props: IProps) => {
           onChange={onEditCustomFee}
           className="custom-input"
         />
+        {!!amount && amount !== '-' && (
+          <Text size="body" className="price-custom" color="text-primary">{`~${amount} ${symbol}`}</Text>
+        )}
       </ItemWrapper>
     );
   };

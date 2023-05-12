@@ -13,6 +13,8 @@ import useBitcoin from '@/hooks/useBitcoin';
 import network from '@/lib/network.helpers';
 import { TransactorContext } from '@/contexts/transactor.context';
 import CopyIcon from '@/components/icons/Copy';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import { Row } from '@/components/Row';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -95,16 +97,20 @@ const Transactions = React.memo(() => {
     return {
       id: trans.Hash,
       render: {
-        type: method,
+        type: (
+          <Text size="body-large" fontWeight="medium" color="text-primary">
+            {method}
+          </Text>
+        ),
         tx_id: (
           <div className="id-wrapper">
             <div className="tx-wrapper">
               <div className={`tx-id`}>{formatLongAddress(trans.Hash)}</div>
               <div className="icCopy">
-                <CopyIcon className="ic-copy" content={trans.Hash} />
+                <CopyIcon className="ic-copy" icon={'ic-copy-alt-dark.svg'} maxWidth="44px" content={trans.Hash} />
               </div>
             </div>
-            <Text>
+            <Text color="text-secondary">
               BTC:{' '}
               {trans.btcHash ? (
                 <a className="tx-link" target="_blank" href={linkToMempool}>
@@ -116,22 +122,35 @@ const Transactions = React.memo(() => {
             </Text>
           </div>
         ),
-        fromAddress: formatLongAddress(trans.From) || '-',
-        toAddress: formatLongAddress(trans.To) || '-',
+        fromAddress: (
+          <Row align="center" gap="12px">
+            <Jazzicon diameter={40} seed={jsNumberForAddress(trans.From)} />
+            <Text color="text-primary">{formatLongAddress(trans.From) || '-'}</Text>
+          </Row>
+        ),
+        toAddress: (
+          <Row align="center" gap="12px">
+            <Jazzicon diameter={40} seed={jsNumberForAddress(trans.To)} />
+            <Text color="text-primary">{formatLongAddress(trans.To) || '-'}</Text>
+          </Row>
+        ),
         time: (
           <>
             {localDateString}
             <Text>Nonce: {trans.Nonce}</Text>
           </>
         ),
-        status:
-          statusCode === 0 ? (
-            <Button className="resume-btn" type="button" onClick={onOpenResumeModal} disabled={isProcessing}>
-              Process
-            </Button>
-          ) : (
-            <div className={`status ${status.toLowerCase()}`}>{statusComp ? statusComp : status}</div>
-          ),
+        status: (
+          <div className="status-container">
+            {statusCode === 0 ? (
+              <Button className="resume-btn" type="button" onClick={onOpenResumeModal} disabled={isProcessing}>
+                Process
+              </Button>
+            ) : (
+              <div className={`status ${status.toLowerCase()}`}>{statusComp ? statusComp : status}</div>
+            )}
+          </div>
+        ),
       },
     };
   });
