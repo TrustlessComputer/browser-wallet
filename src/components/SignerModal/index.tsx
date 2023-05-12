@@ -26,7 +26,7 @@ const SignerModal = ({ show, onClose, children, title }: Props) => {
   }, [step, userSecretKey?.address]);
 
   const renderContent = () => {
-    if (isLocked) {
+    if (isLocked && show) {
       return <AuthUnlock onSuccess={_onUnlocked} />;
     }
     return children;

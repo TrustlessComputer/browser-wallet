@@ -96,18 +96,6 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <form className="form" onSubmit={handleSubmit}>
               <Input
-                title="AMOUNT"
-                id="amount"
-                type="number"
-                name="amount"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.amount}
-                className="input"
-                placeholder={`Enter the amount`}
-                errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
-              />
-              <Input
                 title="TRANSFER BTC TO"
                 id="toAddress"
                 type="text"
@@ -118,6 +106,18 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
                 className="input"
                 placeholder={`Paste BTC wallet address here`}
                 errorMsg={errors.toAddress && touched.toAddress ? errors.toAddress : undefined}
+              />
+              <Input
+                title="AMOUNT"
+                id="amount"
+                type="number"
+                name="amount"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.amount}
+                className="input"
+                placeholder={`Enter the amount`}
+                errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
               />
               <FeeRate
                 allRate={feeRate}
