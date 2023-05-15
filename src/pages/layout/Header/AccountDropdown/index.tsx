@@ -116,6 +116,19 @@ const AccountDropdown = React.memo(() => {
     );
   };
 
+  const renderAction = (iconName: string, title: string, onClick: () => void) => {
+    return (
+      <div className="actions">
+        <div className="create-btn" onClick={onClick}>
+          <IconSVG src={`${CDN_URL_ICONS}/${iconName}`} maxWidth="20" />
+          <Text color="text-primary" fontWeight="medium" size="body" className="text">
+            {title}
+          </Text>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <Dropdown
@@ -151,14 +164,8 @@ const AccountDropdown = React.memo(() => {
                 ),
               )}
           </DropdownList>
-          <div className="actions">
-            <div className="create-btn" onClick={() => setShowModal(true)}>
-              <IconSVG src={`${CDN_URL_ICONS}/ic-plus-square-dark.svg`} maxWidth="20" />
-              <Text color="text-primary" fontWeight="medium" size="body" className="text">
-                Create new account
-              </Text>
-            </div>
-          </div>
+          {renderAction('ic-plus-square-dark.svg', 'Create new account', () => setShowModal(true))}
+          {renderAction('ic-lock-open-dark.svg', 'Lock', () => dispatch(setIsLockedWallet(true)))}
         </DropDownContainer>
       </Dropdown>
       <CreateModal show={showModal} handleClose={() => setShowModal(false)} />
