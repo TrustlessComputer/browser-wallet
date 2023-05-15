@@ -3,7 +3,7 @@ import Dropdown from '@/components/Popover';
 import Text from '@/components/Text';
 import { CDN_URL_ICONS } from '@/configs';
 import React, { useContext } from 'react';
-import { DropdownItem, DropdownList, Element } from './styled';
+import { DropdownItem, DropdownList } from './styled';
 import network, { INetwork } from '@/lib/network.helpers';
 import { SwitchNetworkAction } from '@/pages/layout/Header/NetworkDropdown/SwitchNetwork.actions';
 import { useAppDispatch } from '@/state/hooks';
@@ -29,14 +29,11 @@ const NetworkDropdown = React.memo(() => {
   return (
     <Dropdown
       element={
-        <Element>
-          <IconSVG src={`${CDN_URL_ICONS}/${selectNetwork.Icon}`} maxWidth="32" />
-          <Text color="text-primary" fontWeight="medium" size="body">
-            {selectNetwork.Name}
-          </Text>
-          <IconSVG src={`${CDN_URL_ICONS}/ic-arrow-down-dark.svg`} maxWidth="14" />
-        </Element>
+        <Text color="text-primary" fontWeight="medium" size="body">
+          {selectNetwork.Name}
+        </Text>
       }
+      icon={<IconSVG src={`${CDN_URL_ICONS}/${selectNetwork.Icon}`} maxWidth="32" />}
     >
       <DropdownList>
         {networks &&

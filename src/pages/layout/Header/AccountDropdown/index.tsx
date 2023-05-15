@@ -15,7 +15,7 @@ import copy from 'copy-to-clipboard';
 import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import CreateModal from './CreateModal';
-import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem, DropDownContainer } from './styled';
+import { DropdownItem, DropdownList, MoreDropdownList, MoreDropdownItem, DropDownContainer } from './styled';
 import { SwitchAccountAction } from '@/pages/layout/Header/AccountDropdown/SwitchAccount.actions';
 import throttle from 'lodash/throttle';
 import { getErrorMessage } from '@/utils/error';
@@ -120,15 +120,12 @@ const AccountDropdown = React.memo(() => {
     <>
       <Dropdown
         element={
-          <Element>
-            <Text color="text-primary" fontWeight="medium" size="body">
-              {ellipsisCenter({
-                str: user.address,
-                limit: 4,
-              })}
-            </Text>
-            <IconSVG src={`${CDN_URL_ICONS}/ic-arrow-down-dark.svg`} maxWidth="14" />
-          </Element>
+          <Text color="text-primary" fontWeight="medium" size="body">
+            {ellipsisCenter({
+              str: user.address,
+              limit: 4,
+            })}
+          </Text>
         }
         width={384}
         closeDropdown={showModal}

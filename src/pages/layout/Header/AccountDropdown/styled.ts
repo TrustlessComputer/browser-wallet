@@ -1,12 +1,7 @@
 import styled from 'styled-components';
 import px2rem from '@/utils/px2rem';
 
-export const Element = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: ${px2rem(12)};
-`;
+export const Element = styled.div``;
 
 export const DropDownContainer = styled.div`
   .actions {
