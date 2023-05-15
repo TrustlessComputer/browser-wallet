@@ -1,6 +1,6 @@
 import { getGasPrice } from '@/utils/contract.signer';
 import useProvider from '@/hooks/useProvider';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
 import BigNumber from 'bignumber.js';
 import format from '@/utils/amount';
@@ -13,6 +13,8 @@ const useGasFee = () => {
   const [error, setError] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
   const [gasPrice, setGasPrice] = React.useState<number | undefined>(0);
+  const [estimating, setEstimating] = useState(false);
+
   const provider = useProvider();
 
   const onGetGasPrice = async () => {
@@ -60,6 +62,8 @@ const useGasFee = () => {
     setGasLimit,
     error: customError,
     setError,
+    estimating,
+    setEstimating,
   };
 };
 

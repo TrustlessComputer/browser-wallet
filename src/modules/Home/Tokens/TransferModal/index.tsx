@@ -86,7 +86,7 @@ const TransferModal = (props: Props) => {
     setEstimating(false);
   };
 
-  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey?.privateKey]);
+  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};

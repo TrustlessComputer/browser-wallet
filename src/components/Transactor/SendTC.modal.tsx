@@ -76,10 +76,8 @@ const SendTCModal = (props: Props) => {
       });
       setGasLimit(gasLimit);
       setError('');
-      console.log('SANG TEST: 111');
     } catch (error) {
       const { message } = getErrorMessage(error, 'estimateGas');
-      console.log('SANG TEST: 222', message);
       setError(message);
     }
     setEstimating(false);
