@@ -69,7 +69,7 @@ const RemoveAccount = React.memo((props: Props) => {
   };
 
   return (
-    <SignerModal show={show} onClose={handleClose} title="Remove Account">
+    <SignerModal show={show} onClose={handleClose} title="Remove Account" width={600}>
       <Container>
         <div className="form-container">
           <div className="account">

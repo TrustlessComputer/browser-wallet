@@ -14,7 +14,7 @@ interface SetPasswordProps {
   onConfirmPassword: (password: string) => void;
 }
 
-export const REQUIRE_PASSWORD_LENGTH = 8;
+export const REQUIRE_PASSWORD_LENGTH = 4;
 
 const SetPassword = (props: SetPasswordProps) => {
   const [password, setPassword] = React.useState(MOCKUP_PASSWORD);

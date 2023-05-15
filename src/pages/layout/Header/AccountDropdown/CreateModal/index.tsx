@@ -58,7 +58,7 @@ const CreateAccount = React.memo((props: Props) => {
   };
 
   return (
-    <SignerModal show={show} onClose={handleClose} title="Create Account">
+    <SignerModal show={show} onClose={handleClose} title="Create Account" width={600}>
       <Container>
         <div className="form-container">
           <Formik
