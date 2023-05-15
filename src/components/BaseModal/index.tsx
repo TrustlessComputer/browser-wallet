@@ -1,6 +1,6 @@
 import React from 'react';
 import IconSVG from '@/components/IconSVG';
-import { CDN_URL } from '@/configs';
+import { CDN_URL_ICONS } from '@/configs';
 import { Modal } from 'react-bootstrap';
 import { StyledModal, Title, SubTitle } from './BaseModal.styled';
 
@@ -23,8 +23,9 @@ const BaseModal = (props: Props) => {
         <IconSVG
           className="cursor-pointer ic-close-anim"
           onClick={handleClose}
-          src={`${CDN_URL}/icons/ic-close-dark.svg`}
+          src={`${CDN_URL_ICONS}/ic-close-dark.svg`}
           maxWidth="32"
+          useDarkmode
         />
       </Modal.Header>
       <Modal.Body onScroll={onScrollBody}>

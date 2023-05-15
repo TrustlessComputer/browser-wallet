@@ -1,6 +1,8 @@
+import { useAppSelector } from '@/state/hooks';
 import { FC } from 'react';
 import SVG from 'react-inlinesvg';
 import { StyledIconSVG } from './IconSVG.styled';
+import { isDarkSelector } from '@/state/application/selector';
 
 export type IconSVGProps = {
   src: string;
@@ -10,6 +12,7 @@ export type IconSVGProps = {
   type?: string;
   color?: string;
   onClick?: (e: any) => void;
+  useDarkmode?: boolean;
 };
 
 const IconSVG: FC<IconSVGProps> = ({
@@ -20,7 +23,10 @@ const IconSVG: FC<IconSVGProps> = ({
   type = '',
   color = '',
   onClick,
+  useDarkmode = false,
 }) => {
+  const darkMode = useAppSelector(isDarkSelector);
+  const wrapSrc = useDarkmode && !darkMode && src.includes('-dark.svg') ? src.replaceAll('-dark', '-light') : src;
   return (
     <StyledIconSVG
       className={className}
@@ -30,7 +36,7 @@ const IconSVG: FC<IconSVGProps> = ({
       color={color}
       onClick={onClick}
     >
-      <SVG src={src} />
+      <SVG src={wrapSrc} />
     </StyledIconSVG>
   );
 };
