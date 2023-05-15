@@ -8,6 +8,7 @@ interface Props extends PropsWithChildren {
   onClose: () => void;
   title: string;
   subTitle?: string;
+  width?: number;
 }
 
 enum SignerStep {
@@ -15,7 +16,7 @@ enum SignerStep {
   sign = 'sign',
 }
 
-const SignerModal = ({ show, onClose, children, title, subTitle }: Props) => {
+const SignerModal = ({ show, onClose, children, title, subTitle, width = 800 }: Props) => {
   const userSecretKey = useUserSecretKey();
   const [step, setStep] = React.useState<SignerStep>(SignerStep.unlock);
 
@@ -45,7 +46,7 @@ const SignerModal = ({ show, onClose, children, title, subTitle }: Props) => {
       handleClose={onClose}
       title={isLocked ? '' : title}
       subTitle={isLocked ? '' : subTitle}
-      width={800}
+      width={isLocked ? 800 : width}
     >
       <>{renderContent()}</>
     </BaseModal>

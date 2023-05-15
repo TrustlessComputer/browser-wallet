@@ -32,9 +32,8 @@ interface IFormValue {
 const SendTCModal = (props: Props) => {
   const { show = false, onClose } = props;
   const [submitting, setSubmitting] = useState(false);
-  const [estimating, setEstimating] = useState(false);
   const userSecretKey = useUserSecretKey();
-  const { maxFee, setGasLimit, error, setError } = useGasFee();
+  const { maxFee, setGasLimit, error, setError, setEstimating, estimating } = useGasFee();
 
   const {
     feeRate,
