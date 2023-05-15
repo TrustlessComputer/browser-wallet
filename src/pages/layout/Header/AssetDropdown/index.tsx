@@ -39,6 +39,7 @@ const AssetDropdown = React.memo(() => {
         </Element>
       }
       width={384}
+      type="hover"
     >
       {user && (
         <DropdownList>

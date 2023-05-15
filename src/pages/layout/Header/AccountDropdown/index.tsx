@@ -5,20 +5,21 @@ import Text from '@/components/Text';
 import { CDN_URL_ICONS } from '@/configs';
 import Token from '@/constants/token';
 import { AssetsContext } from '@/contexts/assets.context';
+import { SwitchAccountAction } from '@/pages/layout/Header/AccountDropdown/SwitchAccount.actions';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
+import { setIsLockedWallet } from '@/state/wallet/reducer';
 import { listAccountsSelector } from '@/state/wallet/selector';
 import { compareString, ellipsisCenter } from '@/utils';
 import format from '@/utils/amount';
+import { getErrorMessage } from '@/utils/error';
 import copy from 'copy-to-clipboard';
+import throttle from 'lodash/throttle';
 import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
-import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem, DropDownContainer } from './styled';
-import { SwitchAccountAction } from '@/pages/layout/Header/AccountDropdown/SwitchAccount.actions';
-import throttle from 'lodash/throttle';
-import { getErrorMessage } from '@/utils/error';
 import CreateModal from './CreateModal';
 import RemoveModal from './RemoveModal';
+import { DropDownContainer, DropdownItem, DropdownList, MoreDropdownItem, MoreDropdownList } from './styled';
 
 interface IAccount {
   name: string;
@@ -131,19 +132,29 @@ const AccountDropdown = React.memo(() => {
     );
   };
 
+  const renderAction = (iconName: string, title: string, onClick: () => void) => {
+    return (
+      <div className="actions">
+        <div className="create-btn" onClick={onClick}>
+          <IconSVG src={`${CDN_URL_ICONS}/${iconName}`} maxWidth="20" />
+          <Text color="text-primary" fontWeight="medium" size="body" className="text">
+            {title}
+          </Text>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <Dropdown
         element={
-          <Element>
-            <Text color="text-primary" fontWeight="medium" size="body">
-              {ellipsisCenter({
-                str: user.address,
-                limit: 4,
-              })}
-            </Text>
-            <IconSVG src={`${CDN_URL_ICONS}/ic-arrow-down-dark.svg`} maxWidth="14" />
-          </Element>
+          <Text color="text-primary" fontWeight="medium" size="body">
+            {ellipsisCenter({
+              str: user.address,
+              limit: 4,
+            })}
+          </Text>
         }
         width={384}
         closeDropdown={!!removeAccount || showCreateModal}
@@ -169,14 +180,8 @@ const AccountDropdown = React.memo(() => {
                 ),
               )}
           </DropdownList>
-          <div className="actions">
-            <div className="create-btn" onClick={() => setShowCreateModal(true)}>
-              <IconSVG src={`${CDN_URL_ICONS}/ic-plus-square-dark.svg`} maxWidth="20" />
-              <Text color="text-primary" fontWeight="medium" size="body" className="text">
-                Create new account
-              </Text>
-            </div>
-          </div>
+          {renderAction('ic-plus-square-dark.svg', 'Create new account', () => setShowCreateModal(true))}
+          {renderAction('ic-lock-open-dark.svg', 'Lock', () => dispatch(setIsLockedWallet(true)))}
         </DropDownContainer>
       </Dropdown>
       <CreateModal show={showCreateModal} handleClose={() => setShowCreateModal(false)} />

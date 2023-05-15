@@ -41,12 +41,22 @@ const Wrapper = styled.div<{ show?: boolean }>`
   align-items: center;
   justify-content: center;
 
-  background: transparent;
+  background: ${({ theme, show }) => (show ? theme.yellow.A : 'transparent')};
   border: 1px solid ${({ theme }) => theme['border-primary']};
   padding: ${px2rem(0)} ${px2rem(12)};
   border-radius: ${px2rem(8)};
   height: ${px2rem(48)};
   cursor: pointer;
+
+  .element {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: ${px2rem(12)};
+    p {
+      color: ${({ theme, show }) => (show ? theme.dark[100] : theme['button-primary'])};
+    }
+  }
 `;
 
 export { PopoverWrapper, OverlayWrapper, Wrapper };
