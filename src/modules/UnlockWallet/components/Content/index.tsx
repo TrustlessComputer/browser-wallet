@@ -70,9 +70,9 @@ const UnlockContent = React.memo((props: IProps) => {
       <Text className="mt-16" size="h4" fontWeight="medium">
         Unlock your wallet
       </Text>
-      {/* <Text color="text-secondary" size="h5" align="center" className="">
+      <Text color="text-secondary" size="h5" align="center" className="">
         Enter your password to unlock your wallet.
-      </Text> */}
+      </Text>
       <Input
         title="Password"
         classContainer="mt-32"

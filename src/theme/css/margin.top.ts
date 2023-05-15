@@ -3,6 +3,9 @@ import px2rem from '@/utils/px2rem';
 
 export const ScreenMarginTop = css`
   // margin top
+  .mt-4 {
+    margin-top: ${px2rem(4)};
+  }
   .mt-8 {
     margin-top: ${px2rem(8)};
   }

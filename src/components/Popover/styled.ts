@@ -57,6 +57,10 @@ const Wrapper = styled.div<{ show?: boolean }>`
       color: ${({ theme, show }) => (show ? theme.dark[100] : theme['button-primary'])};
     }
   }
+
+  :hover {
+    opacity: ${({ show }) => (show ? 1 : 0.8)};
+  }
 `;
 
 export { PopoverWrapper, OverlayWrapper, Wrapper };
