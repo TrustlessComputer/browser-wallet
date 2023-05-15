@@ -9,3 +9,4 @@ export { default as MoreVerticalIcon } from './MoreVerical';
 export { default as DisconnectIcon } from './Disconnect';
 export { default as ExchangeIcon } from './Exchange';
 export { default as ExportIcon } from './Export';
+export { default as TrashIcon } from './Trash';
