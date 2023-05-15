@@ -1,4 +1,4 @@
-import { DisconnectIcon, ExportIcon } from '@/components/icons';
+import { ExportIcon, TrashIcon } from '@/components/icons';
 import IconSVG from '@/components/IconSVG';
 import Dropdown from '@/components/Popover';
 import Text from '@/components/Text';
@@ -7,18 +7,23 @@ import Token from '@/constants/token';
 import { AssetsContext } from '@/contexts/assets.context';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
-import { setIsLockedWallet } from '@/state/wallet/reducer';
 import { listAccountsSelector } from '@/state/wallet/selector';
 import { compareString, ellipsisCenter } from '@/utils';
 import format from '@/utils/amount';
 import copy from 'copy-to-clipboard';
 import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
-import CreateModal from './CreateModal';
 import { DropdownItem, DropdownList, Element, MoreDropdownList, MoreDropdownItem, DropDownContainer } from './styled';
 import { SwitchAccountAction } from '@/pages/layout/Header/AccountDropdown/SwitchAccount.actions';
 import throttle from 'lodash/throttle';
 import { getErrorMessage } from '@/utils/error';
+import CreateModal from './CreateModal';
+import RemoveModal from './RemoveModal';
+
+interface IAccount {
+  name: string;
+  address: string;
+}
 
 const AccountDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
@@ -30,10 +35,10 @@ const AccountDropdown = React.memo(() => {
     },
     dispatch: dispatch,
   });
-
   const { tcBalance } = useContext(AssetsContext);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [removeAccount, setRemoveAccount] = useState<IAccount | undefined>(undefined);
 
   const onSwitchAccount = React.useCallback(
     throttle((address: string) => {
@@ -58,11 +63,13 @@ const AccountDropdown = React.memo(() => {
       onClick: () => {},
     },
     {
-      title: 'Disconnect',
-      titleClass: 'text-disconnect',
-      icon: <DisconnectIcon />,
-      iconClass: 'icon-disconnect',
-      onClick: () => dispatch(setIsLockedWallet(true)),
+      title: 'Remove Account',
+      titleClass: 'text-remove',
+      icon: <TrashIcon />,
+      iconClass: 'icon-remove',
+      onClick: (account: IAccount) => {
+        setRemoveAccount(account);
+      },
     },
   ];
 
@@ -102,7 +109,15 @@ const AccountDropdown = React.memo(() => {
           >
             <MoreDropdownList>
               {MoreList.map(item => (
-                <MoreDropdownItem key={item.title} onClick={item.onClick}>
+                <MoreDropdownItem
+                  key={item.title}
+                  onClick={() => {
+                    item.onClick({
+                      name,
+                      address,
+                    });
+                  }}
+                >
                   <div className={item.iconClass}>{item.icon}</div>
                   <Text className={item.titleClass} size="note">
                     {item.title}
@@ -131,7 +146,7 @@ const AccountDropdown = React.memo(() => {
           </Element>
         }
         width={384}
-        closeDropdown={showModal}
+        closeDropdown={!!removeAccount || showCreateModal}
       >
         <DropDownContainer>
           <DropdownList>
@@ -155,7 +170,7 @@ const AccountDropdown = React.memo(() => {
               )}
           </DropdownList>
           <div className="actions">
-            <div className="create-btn" onClick={() => setShowModal(true)}>
+            <div className="create-btn" onClick={() => setShowCreateModal(true)}>
               <IconSVG src={`${CDN_URL_ICONS}/ic-plus-square-dark.svg`} maxWidth="20" />
               <Text color="text-primary" fontWeight="medium" size="body" className="text">
                 Create new account
@@ -164,7 +179,15 @@ const AccountDropdown = React.memo(() => {
           </div>
         </DropDownContainer>
       </Dropdown>
-      <CreateModal show={showModal} handleClose={() => setShowModal(false)} />
+      <CreateModal show={showCreateModal} handleClose={() => setShowCreateModal(false)} />
+      {!!removeAccount && (
+        <RemoveModal
+          show={!!removeAccount}
+          address={removeAccount.address}
+          name={removeAccount.name}
+          handleClose={() => setRemoveAccount(undefined)}
+        />
+      )}
     </>
   );
 });

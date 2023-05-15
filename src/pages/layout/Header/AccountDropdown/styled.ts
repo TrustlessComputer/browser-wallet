@@ -115,13 +115,13 @@ export const MoreDropdownItem = styled.div`
     }
   }
 
-  .icon-disconnect {
+  .icon-remove {
     padding: ${px2rem(4)};
     background-color: ${({ theme }) => theme.red.C};
     border-radius: ${px2rem(4)};
   }
 
-  .text-disconnect {
+  .text-remove {
     color: ${({ theme }) => theme.red.C};
   }
 
