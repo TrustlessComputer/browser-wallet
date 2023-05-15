@@ -4,10 +4,9 @@ import { Formik } from 'formik';
 import isNumber from 'lodash/isNumber';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Container } from './TransferModal.styled';
+import { Container } from '@/components/Transactor/styled';
 import SignerModal from '@/components/SignerModal';
 import useContractOperation from '@/hooks/useContractOperation';
-import useTransferERC20, { ITransferERC20 } from '@/hooks/contracts-operation.ts/useTransferERC20';
 import { validateEVMAddress } from '@/utils';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
@@ -17,12 +16,11 @@ import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
 import useGasFee from '@/components/GasFee/useGasFee';
 import { useUserSecretKey } from '@/state/wallet/hooks';
 import GasFee from '@/components/GasFee';
+import useTransferNativeToken, { ITransferNativeToken } from '@/hooks/contracts-operation.ts/useTransferNativeToken';
 
 type Props = {
   show: boolean;
-  handleClose: () => void;
-  erc20TokenAddress?: string;
-  decimals: number;
+  onClose: () => void;
 };
 
 interface IFormValue {
@@ -30,8 +28,8 @@ interface IFormValue {
   amount: string;
 }
 
-const TransferModal = (props: Props) => {
-  const { show = false, handleClose, erc20TokenAddress, decimals } = props;
+const SendTCModal = (props: Props) => {
+  const { show = false, onClose } = props;
   const [submitting, setSubmitting] = useState(false);
   const [estimating, setEstimating] = useState(false);
   const userSecretKey = useUserSecretKey();
@@ -48,8 +46,8 @@ const TransferModal = (props: Props) => {
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
 
-  const { run: onTransferERC20, estimateGas } = useContractOperation<ITransferERC20, TransactionResponse>({
-    operation: useTransferERC20,
+  const { run: onTransferERC20, estimateGas } = useContractOperation<ITransferNativeToken, TransactionResponse>({
+    operation: useTransferNativeToken,
     inscribeable: true,
     feeRate: currentRate,
   });
@@ -62,7 +60,7 @@ const TransferModal = (props: Props) => {
 
   const onEstimateGas = async (payload: IFormValue) => {
     try {
-      if (!erc20TokenAddress || !estimateGas) {
+      if (!estimateGas) {
         throw new WError(ERROR_CODE.INVALID_PARAMS);
       }
 
@@ -74,19 +72,22 @@ const TransferModal = (props: Props) => {
       const gasLimit = await estimateGas({
         receiver: payload.toAddress,
         amount: payload.amount,
-        tokenAddress: erc20TokenAddress,
-        decimals: decimals,
       });
       setGasLimit(gasLimit);
       setError('');
+      console.log('SANG TEST: 111');
     } catch (error) {
       const { message } = getErrorMessage(error, 'estimateGas');
+      console.log('SANG TEST: 222', message);
       setError(message);
     }
     setEstimating(false);
   };
 
-  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey?.privateKey]);
+  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [
+    userSecretKey?.privateKey,
+    userSecretKey?.address,
+  ]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -109,23 +110,16 @@ const TransferModal = (props: Props) => {
   };
 
   const handleSubmit = async (payload: IFormValue): Promise<void> => {
-    if (!erc20TokenAddress) {
-      toast.error('Token information not found');
-      setSubmitting(false);
-      return;
-    }
     try {
       setSubmitting(true);
       const tx = await onTransferERC20({
         receiver: payload.toAddress,
         amount: payload.amount,
-        tokenAddress: erc20TokenAddress,
-        decimals,
       });
       if (tx.hash) {
         toast.success('Transaction has been created. Please wait for few minutes.');
       }
-      handleClose();
+      onClose();
     } catch (err) {
       toast.error((err as Error).message);
       console.log(err);
@@ -135,7 +129,7 @@ const TransferModal = (props: Props) => {
   };
 
   return (
-    <SignerModal show={show} onClose={handleClose} title="Transfer Token">
+    <SignerModal show={show} onClose={onClose} title="Transfer TC">
       <Container>
         <Formik
           key="create"
@@ -149,7 +143,7 @@ const TransferModal = (props: Props) => {
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <form className="form" onSubmit={handleSubmit}>
               <Input
-                title="TRANSFER TOKEN TO"
+                title="TRANSFER TC TO"
                 id="toAddress"
                 type="text"
                 name="toAddress"
@@ -200,4 +194,4 @@ const TransferModal = (props: Props) => {
   );
 };
 
-export default TransferModal;
+export default SendTCModal;

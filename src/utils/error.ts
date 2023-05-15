@@ -7,6 +7,7 @@ export const ERROR_CODE = {
   ADDRESS_NOT_FOUND: '-3005',
   FEE_RATE_INVALID: '-3006',
   INVALID_PARAMS: '-3007',
+  TX_SIZE: '-3008',
 };
 
 export const ERROR_MESSAGE = {
@@ -42,6 +43,10 @@ export const ERROR_MESSAGE = {
     message: 'Invalid params.',
     desc: 'Invalid params.',
   },
+  [ERROR_CODE.TX_SIZE]: {
+    message: 'Invalid transaction size params.',
+    desc: 'Invalid transaction size params.',
+  },
 };
 
 class WError extends Error {
@@ -69,8 +74,9 @@ export const getErrorMessage = (error: unknown, name: string) => {
   } else if (error instanceof Error && error.message) {
     message = error.message;
     desc = error.message;
-    if (Object(error).reason) {
-      const reason = Object(error).reason;
+    const _error = Object(error);
+    if (_error.reason) {
+      const reason = _error.reason;
       message = reason;
       desc = reason;
     }

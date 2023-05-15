@@ -19,7 +19,7 @@ const AssetDropdown = React.memo(() => {
   const selectNetwork = network.getSelectedNetwork();
 
   const { tcBalance, btcBalance } = useContext(AssetsContext);
-  const { onOpenBTCModal } = useContext(TransactorContext);
+  const { onOpenBTCModal, onOpenTCModal } = useContext(TransactorContext);
 
   const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });
   const formatBtcBalance = format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal });
@@ -64,7 +64,9 @@ const AssetDropdown = React.memo(() => {
               <div className="action" onClick={() => onCopy(user.address)}>
                 <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
               </div>
-              <div className="action action-hide" />
+              <div className="action" onClick={onOpenTCModal}>
+                <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="20" />
+              </div>
             </div>
           </DropdownItem>
 

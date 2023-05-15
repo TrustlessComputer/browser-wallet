@@ -3,7 +3,8 @@ export enum TransactionType {
   ERC20 = 'Token', // Tokens
   BFS = 'Artifact', // Artifact
   BNS = 'Name', // Name
-  NONE = 'None', // Name
+  NONE = 'None', // None
+  TC = 'Token', // Tokens
 }
 
 export enum EventType {
@@ -18,4 +19,5 @@ export type ContractOperationHook<P, R> = (arg?: any) => {
   estimateGas?: (args: P) => Promise<number>;
   transactionType: TransactionType;
   eventType: EventType;
+  txSize?: number;
 };

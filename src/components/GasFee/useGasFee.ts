@@ -44,11 +44,11 @@ const useGasFee = () => {
   }, [gasLimit, gasPrice]);
 
   const customError = React.useMemo(() => {
+    if (error) return error;
     if (!maxFee.feeOriginal.toNumber()) return '';
     if (maxFee.feeOriginal.gt(tcBalance)) {
       return 'You do not have enough TC in your account to pay for transaction fees on Trustless Computer network.';
     }
-    if (error) return error;
     return '';
   }, [maxFee.feeOriginal, tcBalance, error]);
 
