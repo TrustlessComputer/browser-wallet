@@ -27,6 +27,12 @@ export const StyledButton = styled.button`
     border: 1px solid ${({ theme }) => theme['button-primary']};
   }
 
+  &.outline-negative {
+    background-color: transparent;
+    color: ${({ theme }) => theme['button-negative']};
+    border: 1px solid ${({ theme }) => theme['button-negative']};
+  }
+
   &.small {
     padding: ${px2rem(11)} ${px2rem(16)};
     font-size: ${px2rem(16)};

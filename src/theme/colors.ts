@@ -84,6 +84,7 @@ export const darkTheme = {
 
   // button
   'button-primary': colors.yellow['A'],
+  'button-negative': colors.red.A,
 
   // border
   'border-primary': colors.dark['60'],
@@ -123,6 +124,7 @@ export const lightTheme = {
 
   // button
   'button-primary': colors.yellow['C'],
+  'button-negative': colors.red.A,
 
   // border
   'border-primary': colors.dark['10'],

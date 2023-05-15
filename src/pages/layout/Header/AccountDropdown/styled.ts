@@ -26,6 +26,10 @@ export const DropDownContainer = styled.div`
     :hover {
       opacity: 0.8;
     }
+
+    .text-remove {
+      color: ${({ theme }) => theme.red.A};
+    }
   }
 `;
 
