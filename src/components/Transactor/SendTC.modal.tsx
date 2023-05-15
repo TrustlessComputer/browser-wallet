@@ -17,6 +17,7 @@ import useGasFee from '@/components/GasFee/useGasFee';
 import { useUserSecretKey } from '@/state/wallet/hooks';
 import GasFee from '@/components/GasFee';
 import useTransferNativeToken, { ITransferNativeToken } from '@/hooks/contracts-operation.ts/useTransferNativeToken';
+import { TC_ADDRESS_TEST } from '@/configs';
 
 type Props = {
   show: boolean;
@@ -134,7 +135,7 @@ const SendTCModal = (props: Props) => {
         <Formik
           key="create"
           initialValues={{
-            toAddress: '',
+            toAddress: TC_ADDRESS_TEST || '',
             amount: '',
           }}
           validate={validateForm}

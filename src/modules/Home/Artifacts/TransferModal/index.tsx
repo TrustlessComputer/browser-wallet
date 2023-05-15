@@ -9,6 +9,7 @@ import { Container, ImageContainer, TransferContainer, Title } from './TransferM
 import NFTDisplayBox from '@/components/NFTDisplayBox';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
 import { FeeRate } from '@/components/FeeRate';
+import { TC_ADDRESS_TEST } from '@/configs';
 
 type Props = {
   show: boolean;
@@ -95,7 +96,7 @@ const TransferModal = (props: Props) => {
           <Formik
             key="create"
             initialValues={{
-              toAddress: '',
+              toAddress: TC_ADDRESS_TEST || '',
               amount: '',
             }}
             validate={validateForm}
