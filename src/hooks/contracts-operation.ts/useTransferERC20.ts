@@ -9,6 +9,7 @@ import { TransactionResponse } from '@ethersproject/abstract-provider';
 import convert from '@/utils/convert';
 import BigNumber from 'bignumber.js';
 import { TRANSFER_TX_SIZE } from '@/configs';
+import useBitcoin from '@/hooks/useBitcoin';
 
 export interface ITransferERC20 {
   amount: string;
@@ -22,6 +23,7 @@ export interface ITransferERC20 {
 const useTransferERC20: ContractOperationHook<ITransferERC20, TransactionResponse> = () => {
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
+  const { getInscribeableNonce } = useBitcoin();
 
   const estimateGas = useCallback(
     async (params: ITransferERC20) => {
@@ -33,7 +35,7 @@ const useTransferERC20: ContractOperationHook<ITransferERC20, TransactionRespons
       const gasLimit = await contract.estimateGas.transfer(params.receiver, new BigNumber(transferAmount).toFixed());
       return gasLimit.toNumber();
     },
-    [userSecretKey?.privateKey, provider],
+    [userSecretKey, provider],
   );
 
   const call = useCallback(
@@ -43,12 +45,15 @@ const useTransferERC20: ContractOperationHook<ITransferERC20, TransactionRespons
       }
       const privateKey = userSecretKey.privateKey;
       const { amount, tokenAddress, receiver, decimals } = params;
+      const nonce = await getInscribeableNonce(userSecretKey.address);
       const transferAmount = convert.toOriginalAmount({ humanAmount: amount, decimals: decimals });
       const contract = getContractSigner(tokenAddress, ERC20ABIJson.abi, provider, privateKey);
-      const tx: TransactionResponse = await contract.transfer(receiver, new BigNumber(transferAmount).toFixed());
+      const tx: TransactionResponse = await contract.transfer(receiver, new BigNumber(transferAmount).toFixed(), {
+        nonce: nonce,
+      });
       return tx;
     },
-    [userSecretKey?.privateKey, provider],
+    [userSecretKey, provider],
   );
 
   return {

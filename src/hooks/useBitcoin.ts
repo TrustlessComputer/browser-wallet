@@ -94,6 +94,11 @@ const useBitcoin = () => {
     return Hex;
   };
 
+  const getInscribeableNonce = async (tcAddress: string): Promise<number> => {
+    const nonce = await window.tcClient.getInscribeableNonce(tcAddress);
+    return nonce;
+  };
+
   return {
     getAssetsCreateTx: _getAssetsCreateTx,
 
@@ -104,6 +109,7 @@ const useBitcoin = () => {
     getUnInscribedTransactions,
     getUnInscribedTransactionDetails,
     getTCTransactionByHash,
+    getInscribeableNonce,
   };
 };
 

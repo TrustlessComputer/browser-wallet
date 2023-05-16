@@ -82,10 +82,7 @@ const SendTCModal = (props: Props) => {
     setEstimating(false);
   };
 
-  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [
-    userSecretKey?.privateKey,
-    userSecretKey?.address,
-  ]);
+  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};

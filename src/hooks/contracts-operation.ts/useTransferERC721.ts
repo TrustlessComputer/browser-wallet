@@ -7,6 +7,7 @@ import useProvider from '@/hooks/useProvider';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { TRANSFER_TX_SIZE } from '@/configs';
 import ERC721ABIJson from '@/abis/erc721.json';
+import useBitcoin from '@/hooks/useBitcoin';
 
 export interface ITransferERC721 {
   receiver: string;
@@ -17,6 +18,7 @@ export interface ITransferERC721 {
 const useTransferERC721: ContractOperationHook<ITransferERC721, TransactionResponse> = () => {
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
+  const { getInscribeableNonce } = useBitcoin();
 
   const estimateGas = useCallback(
     async (params: ITransferERC721) => {
@@ -37,8 +39,11 @@ const useTransferERC721: ContractOperationHook<ITransferERC721, TransactionRespo
       }
       const privateKey = userSecretKey.privateKey;
       const { tokenAddress, receiver, tokenID } = params;
+      const nonce = await getInscribeableNonce(userSecretKey.address);
       const contract = getContractSigner(tokenAddress, ERC721ABIJson.abi, provider, privateKey);
-      const tx: TransactionResponse = await contract.transferFrom(userSecretKey.address, receiver, tokenID);
+      const tx: TransactionResponse = await contract.transferFrom(userSecretKey.address, receiver, tokenID, {
+        nonce,
+      });
       return tx;
     },
     [userSecretKey, provider],
