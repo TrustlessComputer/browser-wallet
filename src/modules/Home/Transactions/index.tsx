@@ -16,7 +16,7 @@ const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
 const Transactions = React.memo(() => {
   const { onOpenResumeModal } = useContext(TransactorContext);
-  const { transactions, loading, uninscribed } = useHistory();
+  const { transactions, loading, uninscribed } = useHistory({ isGetUnInscribedSize: false });
 
   const numbPending = React.useMemo(() => {
     return uninscribed.length;
