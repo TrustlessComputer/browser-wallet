@@ -1,5 +1,10 @@
 import { TC_SDK } from '@/lib';
-import { ICreateBatchInscribeParams, ICreateInscribeParams, ISendBTCParams } from '@/interfaces/use-bitcoin';
+import {
+  ICreateBatchInscribeParams,
+  ICreateInscribeParams,
+  IIsSpeedUpBTCParams,
+  ISendBTCParams,
+} from '@/interfaces/use-bitcoin';
 import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets.context';
 import { ICollectedUTXOResp } from '@/interfaces/api/bitcoin';
@@ -9,6 +14,7 @@ import WError, { ERROR_CODE } from '@/utils/error';
 import Token from '@/constants/token';
 import BigNumber from 'bignumber.js';
 import convert from '@/utils/convert';
+import { IStatusCode } from '@/interfaces/history';
 
 const useBitcoin = () => {
   const { getAssetsCreateTx } = useContext(AssetsContext);
@@ -99,6 +105,44 @@ const useBitcoin = () => {
     return nonce;
   };
 
+  const getStatusCode = async (txHash: string, tcAddress: string): Promise<IStatusCode> => {
+    if (tcAddress) {
+      try {
+        const res = await window.tcClient.getTCTxByHash(txHash);
+        if (res && res.blockHash) {
+          if (res.blockHash === '0x0') {
+            return IStatusCode.FAILED;
+          }
+          return IStatusCode.SUCCESS;
+        }
+      } catch (e) {
+        // handle error
+      }
+    }
+    return IStatusCode.PROCESSING;
+  };
+
+  const getIsRBFable = async (payload: IIsSpeedUpBTCParams) => {
+    try {
+      const { isRBFable, oldFeeRate, minSat } = await TC_SDK.isRBFable({
+        revealTxID: payload.btcHash,
+        tcAddress: payload.tcAddress,
+        btcAddress: payload.btcAddress,
+      });
+      return {
+        isRBFable,
+        oldFeeRate: Math.ceil(oldFeeRate),
+        minSat: Math.ceil(minSat || 0),
+      };
+    } catch (e) {
+      return {
+        isRBFable: false,
+        oldFeeRate: 0,
+        minSat: 0,
+      };
+    }
+  };
+
   return {
     getAssetsCreateTx: _getAssetsCreateTx,
 
@@ -110,6 +154,8 @@ const useBitcoin = () => {
     getUnInscribedTransactionDetails,
     getTCTransactionByHash,
     getInscribeableNonce,
+    getStatusCode,
+    getIsRBFable,
   };
 };
 

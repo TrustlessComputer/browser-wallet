@@ -2,63 +2,25 @@ import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import Table from '@/components/Table';
 import Text from '@/components/Text';
-import { ITCTxDetail } from '@/interfaces/transaction';
-import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { formatLongAddress } from '@/utils';
 import { formatUnixDateTime } from '@/utils/time';
-import { debounce } from 'lodash';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { HashWrapper, StyledTransaction } from './styled';
-import useBitcoin from '@/hooks/useBitcoin';
 import network from '@/lib/network.helpers';
 import { TransactorContext } from '@/contexts/transactor.context';
 import CopyIcon from '@/components/icons/Copy';
-import historyStorage from '@/modules/Home/Transactions/storage';
-import toast from 'react-hot-toast';
-import { getErrorMessage } from '@/utils/error';
-import { IHistory, IStatusCode, StatusMesg } from '@/interfaces/history';
+import { IStatusCode, StatusMesg } from '@/interfaces/history';
+import useHistory from '@/hooks/useHistory';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
-export enum TransactionStatus {
-  Pending = 'Pending',
-  Processing = 'Processing',
-  Confirmed = 'Confirmed',
-  Failed = 'Failed',
-  Success = 'Success',
-}
-
 const Transactions = React.memo(() => {
-  const user = useCurrentUserInfo();
-  const [transactions, setTransactions] = useState<IHistory[]>([]);
-  const [uninscribed, setUnInscribed] = useState<ITCTxDetail[]>([]);
   const { onOpenResumeModal } = useContext(TransactorContext);
-  const { getUnInscribedTransactionDetails } = useBitcoin();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isProcessing] = useState(false);
+  const { transactions, loading, uninscribed } = useHistory();
 
   const numbPending = React.useMemo(() => {
     return uninscribed.length;
   }, [uninscribed]);
-
-  const getTransactions = async () => {
-    try {
-      if (!user) return;
-      setIsLoading(true);
-      const storageTransactions = historyStorage.getTransactions(user?.address);
-      const uninscribedTransactions = await getUnInscribedTransactionDetails(user.address);
-
-      setTransactions(storageTransactions);
-      setUnInscribed(uninscribedTransactions);
-    } catch (error) {
-      const { message } = getErrorMessage(error, 'getUnInscribed');
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const debounceGetTransactions = React.useCallback(debounce(getTransactions, 300), [user?.address]);
 
   const transactionsData = (transactions || []).map(trans => {
     const localDateString = trans?.time
@@ -144,16 +106,6 @@ const Transactions = React.memo(() => {
     };
   });
 
-  React.useEffect(() => {
-    debounceGetTransactions();
-    let interval = setInterval(() => {
-      debounceGetTransactions();
-    }, 10000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [user?.address]);
-
   return (
     <StyledTransaction>
       {!!numbPending && (
@@ -161,12 +113,12 @@ const Transactions = React.memo(() => {
           <Text size="h5">{`You have ${numbPending} incomplete ${
             numbPending === 1 ? 'transaction' : 'transactions'
           }`}</Text>
-          <Button disabled={isProcessing} className="process-btn" type="button" onClick={onOpenResumeModal}>
-            {isProcessing ? 'Processing...' : 'Process them now'}
+          <Button className="process-btn" type="button" onClick={onOpenResumeModal}>
+            Process them now
           </Button>
         </div>
       )}
-      {isLoading && (
+      {loading && (
         <div className="spinner">
           <Spinner />
         </div>

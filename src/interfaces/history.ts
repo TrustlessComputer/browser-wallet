@@ -1,10 +1,11 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider';
+import { ITCTxDetail } from '@/interfaces/transaction';
 
 export enum IStatusCode {
-  PENDING,
-  PROCESSING,
-  SUCCESS,
-  FAILED,
+  PENDING = 0,
+  PROCESSING = 1,
+  SUCCESS = 2,
+  FAILED = 3,
 }
 
 export const StatusMesg = {
@@ -36,4 +37,9 @@ interface INormaTxBuilderPayload {
   type: string;
 }
 
-export type { IHistory, INormaTxBuilderPayload };
+interface IUnInscribedTxBuilderPayload {
+  transactions: ITCTxDetail[];
+  tcAddress: string;
+}
+
+export type { IHistory, INormaTxBuilderPayload, IUnInscribedTxBuilderPayload };
