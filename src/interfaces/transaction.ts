@@ -41,15 +41,7 @@ export interface IUpdateStatusTxPayload {
   status?: string;
 }
 
-export type IStatusCode = 0 | 1 | 2 | 3; // pending | processing | success | failed
-
-export interface ITCTxDetail extends TC_SDK.TCTxDetail {
-  time?: string;
-  dappURL?: string;
-  method?: string;
-  btcHash?: string;
-  statusCode?: IStatusCode;
-}
+export interface ITCTxDetail extends TC_SDK.TCTxDetail {}
 
 export interface IStoredSignValue extends TC_SDK.CallWalletPayload {
   time?: string;

@@ -2,6 +2,12 @@ import px2rem from '@/utils/px2rem';
 import styled, { DefaultTheme } from 'styled-components';
 
 export const StyledTransaction = styled.div`
+  .spinner {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
   .transactions {
     height: 100vh;
   }
@@ -105,3 +111,31 @@ export const StyledTransaction = styled.div`
     }
   }
 `;
+
+const HashWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: ${px2rem(18)};
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .title {
+      min-width: 35px;
+      width: fit-content;
+    }
+    a {
+      width: fit-content;
+    }
+    .ic-copy {
+      width: ${px2rem(15)};
+      height: ${px2rem(15)};
+      cursor: pointer;
+      position: relative;
+      justify-content: center;
+      display: flex;
+    }
+  }
+`;
+
+export { HashWrapper };

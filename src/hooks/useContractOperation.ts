@@ -8,11 +8,15 @@ import format from '@/utils/amount';
 import Token from '@/constants/token';
 import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets.context';
+import { TransactionResponse } from '@ethersproject/abstract-provider';
+import historyStorage, { HistoryStorage } from '@/modules/Home/Transactions/storage';
+import { IHistory } from '@/interfaces/history';
 
 interface IParams<P, R> {
   operation: ContractOperationHook<P, R>;
   inscribeable?: boolean;
   feeRate?: number;
+  isSignTransaction?: boolean;
 }
 
 interface IContractOperationReturn<P, R> {
@@ -21,12 +25,26 @@ interface IContractOperationReturn<P, R> {
 }
 
 const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationReturn<P, R> => {
-  const { inscribeable, operation, feeRate } = args;
+  const { inscribeable, operation, feeRate, isSignTransaction = false } = args;
   const userSecretKey = useUserSecretKey();
   const { btcBalance } = useContext(AssetsContext);
   const { createInscribeTx, getUnInscribedTransactions } = useBitcoin();
-  const { call, estimateGas, txSize } = operation();
+  const { call, estimateGas, txSize, transactionType, eventType } = operation();
+
+  const getHistoryBuilder = (tx: R, btcHash?: string): IHistory | undefined => {
+    if ('hash' in tx && !isSignTransaction) {
+      const history = HistoryStorage.NormalTransactionBuilder({
+        transaction: tx as TransactionResponse,
+        type: `${eventType} ${transactionType}`,
+        btcHash,
+      });
+      return history;
+    }
+    return undefined;
+  };
+
   const run = async (params: P): Promise<R> => {
+    let history: IHistory | undefined;
     if (!inscribeable) {
       const tx: R = await call({
         ...params,
@@ -45,11 +63,9 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
     if (unInscribedTxIDs.length > 0) {
       throw new WError(ERROR_CODE.HAVE_UN_INSCRIBE_TX);
     }
-
     if (!feeRate) {
       throw new WError(ERROR_CODE.FEE_RATE_INVALID);
     }
-
     if (!txSize) {
       throw new WError(ERROR_CODE.TX_SIZE);
     }
@@ -73,14 +89,26 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
       ...params,
     });
 
-    const btcTx = await createInscribeTx({
-      assets: undefined,
-      feeRate: feeRate,
-      tcTxIDs: [Object(tx).hash],
-    });
-
-    console.info('BTC transaction: ', btcTx);
-
+    history = getHistoryBuilder(tx);
+    try {
+      const btcTx = await createInscribeTx({
+        assets: undefined,
+        feeRate: feeRate,
+        tcTxIDs: [Object(tx).hash],
+      });
+      console.info('BTC transaction: ', btcTx);
+      if (history) {
+        historyStorage.setTransaction(userSecretKey.address, {
+          ...history,
+          btcHash: btcTx.revealTxID,
+        });
+      }
+    } catch (error) {
+      if (history) {
+        historyStorage.setTransaction(userSecretKey.address, history);
+      }
+      throw error;
+    }
     return tx;
   };
 

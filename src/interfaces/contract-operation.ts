@@ -4,7 +4,7 @@ export enum TransactionType {
   BFS = 'Artifact', // Artifact
   BNS = 'Name', // Name
   NONE = 'None', // None
-  TC = 'Token', // Tokens
+  TC = 'TC', // Tokens
 }
 
 export enum EventType {
