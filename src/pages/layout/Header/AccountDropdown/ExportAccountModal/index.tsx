@@ -44,7 +44,11 @@ const ExportAccount = React.memo((props: Props) => {
     const nodes: TC_SDK.IDeriveKey[] = hdWallet.nodes || [];
     const selected = nodes?.find(node => compareString({ str1: node.address, str2: address, method: 'equal' }));
     if (selected) {
-      setPrivateKey(selected.privateKey);
+      let privateKey = selected.privateKey;
+      if (selected.privateKey.startsWith('0x')) {
+        privateKey = selected.privateKey.slice(2);
+      }
+      setPrivateKey(privateKey);
     }
   };
 
@@ -60,7 +64,7 @@ const ExportAccount = React.memo((props: Props) => {
   }, [provider]);
 
   return (
-    <SignerModal show={show} onClose={onClose} title="Show Private Keys" width={600}>
+    <SignerModal show={show} onClose={onClose} title="Show Private Key" width={600}>
       <Container>
         <div className="form-container">
           <div className="account">
