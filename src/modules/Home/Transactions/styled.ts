@@ -25,9 +25,6 @@ export const StyledTransaction = styled.div`
 
     .process-btn {
       padding: 12px 32px;
-      border-radius: 4px;
-      font-size: ${px2rem(16)};
-      font-weight: 600;
     }
   }
 

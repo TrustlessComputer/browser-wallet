@@ -123,7 +123,7 @@ const Transactions = React.memo(() => {
     <StyledTransaction>
       {!!numbPending && (
         <div className="header-wrapper">
-          <Text size="body-large">{`You have ${numbPending} incomplete ${
+          <Text size="h5" color="text-highlight">{`You have ${numbPending} incomplete ${
             numbPending === 1 ? 'transaction' : 'transactions'
           }`}</Text>
           <Button className="process-btn" type="button" onClick={onOpenResumeModal}>
