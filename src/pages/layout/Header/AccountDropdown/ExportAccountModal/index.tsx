@@ -1,4 +1,3 @@
-import Button from '@/components/Button';
 import SignerModal from '@/components/SignerModal';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
@@ -13,6 +12,8 @@ import Token from '@/constants/token';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { compareString } from '@/utils';
 import copy from 'copy-to-clipboard';
+import AlertMessage from '@/components/AlertMessage';
+import { AlertMessageType } from '@/components/AlertMessage/AlertMessage';
 
 interface Props {
   show: boolean;
@@ -65,7 +66,7 @@ const ExportAccount = React.memo((props: Props) => {
 
   return (
     <SignerModal show={show} onClose={onClose} title="Show Private Key" width={600}>
-      <Container>
+      <Container className="mt-24">
         <div className="form-container">
           <div className="account">
             <Row justify="space-between">
@@ -80,23 +81,27 @@ const ExportAccount = React.memo((props: Props) => {
               {address}
             </Text>
           </div>
+
           <div
-            className="box-key mt-32"
+            className="box-key mt-24"
             onClick={() => {
               copy(privateKey);
               toast.success('Copied');
             }}
           >
-            <Text>This is your private key (click to copy)</Text>
-            <Text size="h5" color="text-highlight" fontWeight="medium" className="key-text mt-8">
+            <Text color="text-secondary" fontWeight="semibold">
+              This is your private key (click to copy)
+            </Text>
+            <Text size="body" color="button-negative" fontWeight="medium" className="key-text">
               {privateKey}
             </Text>
           </div>
-          <div className="actions" onClick={onClose}>
-            <Button sizes="stretch" className="confirm-btn">
-              Done
-            </Button>
-          </div>
+
+          <AlertMessage
+            className="mt-16"
+            type={AlertMessageType.warning}
+            message="Never disclose this key. Anyone with your private keys can steal any assets held in your account."
+          />
         </div>
       </Container>
     </SignerModal>

@@ -20,13 +20,13 @@ const AlertMessage = (props: AlertMessageProps) => {
   if (!props.message) {
     return <div />;
   }
-  let ic = <WarningIcon />;
+  let ic = <WarningIcon width="28px" />;
   switch (props.type) {
     case AlertMessageType.error:
-      ic = <ErrorIcon />;
+      ic = <ErrorIcon width="28px" />;
       break;
     case AlertMessageType.success:
-      ic = <VerifyIcon />;
+      ic = <VerifyIcon width="28px" />;
       break;
   }
   return (
