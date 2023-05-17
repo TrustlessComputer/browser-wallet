@@ -110,6 +110,21 @@ export const StyledTransaction = styled.div`
       text-align: right;
     }
   }
+  .pending {
+    color: ${({ theme }) => theme['text-highlight']};
+  }
+  .success {
+    color: ${({ theme }) => theme.green.A};
+  }
+  .failed {
+    color: ${({ theme }) => theme.red.A};
+  }
+  .waiting {
+    color: ${({ theme }) => theme.blue.A};
+  }
+  .processing {
+    color: ${({ theme }) => theme.blue.A};
+  }
 `;
 
 const HashWrapper = styled.div`

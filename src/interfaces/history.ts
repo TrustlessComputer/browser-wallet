@@ -42,4 +42,9 @@ interface IUnInscribedTxBuilderPayload {
   tcAddress: string;
 }
 
-export type { IHistory, INormaTxBuilderPayload, IUnInscribedTxBuilderPayload };
+interface IUpdatedStatusPayload {
+  tcHash: string;
+  status: IStatusCode;
+}
+
+export type { IHistory, INormaTxBuilderPayload, IUnInscribedTxBuilderPayload, IUpdatedStatusPayload };

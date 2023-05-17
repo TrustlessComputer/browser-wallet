@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { FeeRate } from '@/components/FeeRate';
 import { Container } from '@/components/Transactor/styled';
 import Button from '@/components/Button';
-import useHistory from '@/hooks/useHistory';
+import useTransaction from '@/hooks/useTransaction';
 
 interface IProps {
   show: boolean;
@@ -29,7 +29,7 @@ const ResumeModal = React.memo(({ show, onClose }: IProps) => {
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
 
-  const { uninscribed, sizeByte, debounceGetTransactions, isLoaded } = useHistory({ isGetUnInscribedSize: true });
+  const { uninscribed, sizeByte, debounceGetTransactions, isLoaded } = useTransaction({ isGetUnInscribedSize: true });
   const { createBatchInscribeTxs } = useBitcoin();
 
   const [submitting, setSubmitting] = React.useState(false);

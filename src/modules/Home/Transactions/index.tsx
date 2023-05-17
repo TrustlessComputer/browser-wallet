@@ -10,19 +10,19 @@ import network from '@/lib/network.helpers';
 import { TransactorContext } from '@/contexts/transactor.context';
 import CopyIcon from '@/components/icons/Copy';
 import { IStatusCode, StatusMesg } from '@/interfaces/history';
-import useHistory from '@/hooks/useHistory';
+import { TransactionContext } from '@/contexts/transaction.context';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
 const Transactions = React.memo(() => {
   const { onOpenResumeModal } = useContext(TransactorContext);
-  const { transactions, loading, uninscribed } = useHistory({ isGetUnInscribedSize: false });
+  const { history, isLoading, uninscribed } = useContext(TransactionContext);
 
   const numbPending = React.useMemo(() => {
     return uninscribed.length;
   }, [uninscribed]);
 
-  const transactionsData = (transactions || []).map(trans => {
+  const transactionsData = (history || []).map(trans => {
     const localDateString = trans?.time
       ? formatUnixDateTime({
           dateTime: Number(trans.time) / 1000,
@@ -99,7 +99,9 @@ const Transactions = React.memo(() => {
         ),
         status: (
           <div>
-            <Text size="h6">{status}</Text>
+            <Text size="h6" className={status.toLowerCase().split(' ')[0]}>
+              {status}
+            </Text>
           </div>
         ),
       },
@@ -118,7 +120,7 @@ const Transactions = React.memo(() => {
           </Button>
         </div>
       )}
-      {loading && (
+      {isLoading && (
         <div className="spinner">
           <Spinner />
         </div>

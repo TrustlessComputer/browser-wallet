@@ -1,6 +1,6 @@
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import React, { useState } from 'react';
-import { IHistory } from '@/interfaces/history';
+import { IHistory, IStatusCode, IUpdatedStatusPayload } from '@/interfaces/history';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import useBitcoin from '@/hooks/useBitcoin';
 import historyStorage, { HistoryStorage } from '@/modules/Home/Transactions/storage';
@@ -13,7 +13,7 @@ interface IProps {
   isGetUnInscribedSize: boolean;
 }
 
-const useHistory = (props: IProps) => {
+const useTransactions = ({ isGetUnInscribedSize }: IProps) => {
   const user = useCurrentUserInfo();
   const [transactions, setTransactions] = useState<IHistory[]>([]);
   const [uninscribed, setUnInscribed] = useState<ITCTxDetail[]>([]);
@@ -21,7 +21,7 @@ const useHistory = (props: IProps) => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
 
-  const { getUnInscribedTransactionDetails, getTCTransactionByHash } = useBitcoin();
+  const { getUnInscribedTransactionDetails, getTCTransactionByHash, getStatusCode } = useBitcoin();
 
   const getTransactionSize = async (uninscribed: ITCTxDetail[]) => {
     const Hexs = await Promise.all(
@@ -42,7 +42,8 @@ const useHistory = (props: IProps) => {
       setIsLoading(true);
       const storageTransactions = historyStorage.getTransactions(user?.address);
       const uninscribedTransactions = await getUnInscribedTransactionDetails(user.address);
-      if (props.isGetUnInscribedSize) {
+
+      if (isGetUnInscribedSize) {
         await getTransactionSize(uninscribedTransactions);
       }
       const pendingTxs = HistoryStorage.UnInscribedTransactionBuilder({
@@ -50,9 +51,32 @@ const useHistory = (props: IProps) => {
         tcAddress: user.address,
       });
 
-      const transactions = uniqBy([...pendingTxs, ...storageTransactions], item => item.tcHash.toLowerCase());
+      const transactions: IHistory[] = [];
+      const updatedStatusHashs: Array<IUpdatedStatusPayload> = [];
+      for (const trans of storageTransactions) {
+        const { tcHash, btcHash, status } = trans;
+        let statusCode = status;
+        if (!!btcHash && status === IStatusCode.PROCESSING) {
+          statusCode = await getStatusCode(tcHash, user.address);
+          if ([IStatusCode.SUCCESS, IStatusCode.FAILED].includes(statusCode)) {
+            // update local storage
+            updatedStatusHashs.push({
+              tcHash,
+              status: statusCode,
+            });
+          }
+        }
+        transactions.push({
+          ...trans,
+          status: statusCode,
+        });
 
-      setTransactions(transactions);
+        if (updatedStatusHashs.length) {
+          historyStorage.updateStatusCode(user.address, updatedStatusHashs);
+        }
+      }
+
+      setTransactions(uniqBy([...pendingTxs, ...transactions], item => item.tcHash.toLowerCase()));
       setUnInscribed(uninscribedTransactions);
       setIsLoaded(true);
     } catch (error) {
@@ -65,18 +89,8 @@ const useHistory = (props: IProps) => {
 
   const debounceGetTransactions = React.useCallback(debounce(getTransactions, 300), [user?.address]);
 
-  React.useEffect(() => {
-    debounceGetTransactions();
-    let interval = setInterval(() => {
-      debounceGetTransactions();
-    }, 10000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [user?.address]);
-
   return {
-    loading: isLoading,
+    isLoading,
     isLoaded,
     transactions,
     uninscribed,
@@ -87,4 +101,4 @@ const useHistory = (props: IProps) => {
   };
 };
 
-export default useHistory;
+export default useTransactions;

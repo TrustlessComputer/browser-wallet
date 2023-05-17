@@ -96,12 +96,9 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
         feeRate: feeRate,
         tcTxIDs: [Object(tx).hash],
       });
-      console.info('BTC transaction: ', btcTx);
+      history = getHistoryBuilder(tx, btcTx.revealTxID);
       if (history) {
-        historyStorage.setTransaction(userSecretKey.address, {
-          ...history,
-          btcHash: btcTx.revealTxID,
-        });
+        historyStorage.setTransaction(userSecretKey.address, history);
       }
     } catch (error) {
       if (history) {
