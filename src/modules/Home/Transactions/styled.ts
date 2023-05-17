@@ -114,16 +114,21 @@ export const StyledTransaction = styled.div`
     color: ${({ theme }) => theme['text-highlight']};
   }
   .success {
-    color: ${({ theme }) => theme.green.A};
+    color: ${({ theme }) => theme.green.B};
   }
   .failed {
     color: ${({ theme }) => theme.red.A};
   }
   .waiting {
-    color: ${({ theme }) => theme.blue.A};
+    color: ${({ theme }) => theme.blue.B};
+    text-decoration: underline;
+    cursor: pointer;
+    :hover {
+      opacity: 0.8;
+    }
   }
   .processing {
-    color: ${({ theme }) => theme.blue.A};
+    color: ${({ theme }) => theme.blue.B};
   }
   a {
     font-weight: 500 !important;

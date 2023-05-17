@@ -12,7 +12,6 @@ import CopyIcon from '@/components/icons/Copy';
 import { IStatusCode, StatusMesg } from '@/interfaces/history';
 import { TransactionContext } from '@/contexts/transaction.context';
 import { Row } from '@/components/Row';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
@@ -45,7 +44,7 @@ const Transactions = React.memo(() => {
         status = trans.btcHash ? StatusMesg.WAITING : StatusMesg.PROCESSING;
         break;
     }
-
+    const btcExplorer = `${network.current.BTCExplorer}/tx/${trans.btcHash}`;
     return {
       id: trans.tcHash,
       render: {
@@ -67,7 +66,7 @@ const Transactions = React.memo(() => {
             </div>
             <div className="row mt-8">
               <span className="title">BTC:</span>
-              <a className="tx-id" target="_blank" href="">
+              <a className="tx-id" target="_blank" href={`${btcExplorer}`}>
                 {formatLongAddress(trans.btcHash) || '--'}
               </a>
               {!!trans.btcHash && (
@@ -82,7 +81,6 @@ const Transactions = React.memo(() => {
           <div>
             {trans.to ? (
               <Row align="center" gap="12px">
-                <Jazzicon diameter={40} seed={jsNumberForAddress(trans.to)} />
                 <Text size="body-large">
                   <a href={`${network.current.Explorer}/address/${trans.to}`} target="_blank">
                     {formatLongAddress(trans.to)}
@@ -104,7 +102,15 @@ const Transactions = React.memo(() => {
         ),
         status: (
           <div>
-            <Text size="h6" className={status.toLowerCase().split(' ')[0]}>
+            <Text
+              size="h6"
+              className={status.toLowerCase().split(' ')[0]}
+              onClick={() => {
+                if (status === StatusMesg.WAITING) {
+                  window.open(btcExplorer, '_blank');
+                }
+              }}
+            >
               {status}
             </Text>
           </div>
