@@ -68,10 +68,10 @@ const ResumeModal = React.memo(({ show, onClose }: IProps) => {
           status: IStatusCode.PROCESSING,
         });
       }
+      onClose();
+      toast.success('Process transactions successfully.');
       setTimeout(() => {
         getTransactions();
-        onClose();
-        toast.success('Process transactions successfully.');
       }, 2000);
     } catch (error) {
       const { message } = getErrorMessage(error, 'submitResume');

@@ -1,5 +1,6 @@
 import { Transaction } from 'web3-eth';
 import * as TC_SDK from 'trustless-computer-sdk';
+import { IHistory } from '@/interfaces/history';
 
 export interface ICustomTransaction extends Transaction {
   Hex: string;
@@ -49,4 +50,11 @@ export interface IStoredSignValue extends TC_SDK.CallWalletPayload {
 
 export interface IStoredSign {
   [key: string]: IStoredSignValue;
+}
+
+export interface ISpeedUpTx {
+  btcHash: string;
+  tcTxs: IHistory[];
+  currentRate: number;
+  minRate: number;
 }

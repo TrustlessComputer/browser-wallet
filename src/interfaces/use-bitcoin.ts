@@ -23,3 +23,10 @@ export interface IIsSpeedUpBTCParams {
   btcAddress: string;
   tcAddress: string;
 }
+
+export interface ICreateSpeedUpBTCParams {
+  btcHash: string;
+  feeRate: number;
+  tcAddress: string;
+  btcAddress: string;
+}

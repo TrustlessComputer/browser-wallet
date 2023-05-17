@@ -81,6 +81,7 @@ export const darkTheme = {
   'text-four': colors.dark['40'],
   'text-five': colors.dark['20'],
   'text-tab-item': colors.yellow['A'],
+  'text-error': colors.red.A,
 
   // button
   'button-primary': colors.yellow['A'],
@@ -121,6 +122,7 @@ export const lightTheme = {
   'text-four': colors.dark['40'],
   'text-five': colors.dark['60'],
   'text-tab-item': colors.white,
+  'text-error': colors.red.A,
 
   // button
   'button-primary': colors.yellow['C'],

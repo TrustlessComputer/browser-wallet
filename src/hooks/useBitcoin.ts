@@ -2,6 +2,7 @@ import { TC_SDK } from '@/lib';
 import {
   ICreateBatchInscribeParams,
   ICreateInscribeParams,
+  ICreateSpeedUpBTCParams,
   IIsSpeedUpBTCParams,
   ISendBTCParams,
 } from '@/interfaces/use-bitcoin';
@@ -72,7 +73,7 @@ const useBitcoin = () => {
     }));
   };
 
-  const onSendBTC = async ({ receiver, amount, feeRate }: ISendBTCParams) => {
+  const createSendBTCTx = async ({ receiver, amount, feeRate }: ISendBTCParams) => {
     const assets = await _getAssetsCreateTx();
     if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
     const { txHex } = await TC_SDK.createTx(
@@ -92,6 +93,21 @@ const useBitcoin = () => {
     );
     // broadcast tx
     await TC_SDK.broadcastTx(txHex);
+  };
+
+  const createSpeedUpBTCTx = async (payload: ICreateSpeedUpBTCParams): Promise<string> => {
+    const assets = await _getAssetsCreateTx();
+    if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
+    const { revealTxID } = await TC_SDK.replaceByFeeInscribeTx({
+      senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
+      utxos: assets.txrefs,
+      inscriptions: assets.inscriptions_by_outputs,
+      revealTxID: payload.btcHash,
+      feeRatePerByte: payload.feeRate,
+      tcAddress: payload.tcAddress,
+      btcAddress: payload.btcAddress,
+    });
+    return revealTxID;
   };
 
   const getTCTransactionByHash = async (tcTxID: string): Promise<string> => {
@@ -148,7 +164,8 @@ const useBitcoin = () => {
 
     createInscribeTx,
     createBatchInscribeTxs,
-    onSendBTC,
+    createSpeedUpBTCTx,
+    createSendBTCTx,
 
     getUnInscribedTransactions,
     getUnInscribedTransactionDetails,

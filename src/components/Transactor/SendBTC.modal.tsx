@@ -35,7 +35,7 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
     isLoading: isLoadingRate,
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
-  const { onSendBTC } = useBitcoin();
+  const { createSendBTCTx } = useBitcoin();
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -60,7 +60,7 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
   const handleSubmit = async (payload: IFormValue): Promise<void> => {
     try {
       setSubmitting(true);
-      await onSendBTC({
+      await createSendBTCTx({
         receiver: payload.toAddress,
         amount: payload.amount,
         feeRate: currentRate,

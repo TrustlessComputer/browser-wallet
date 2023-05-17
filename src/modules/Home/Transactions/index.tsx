@@ -12,16 +12,30 @@ import CopyIcon from '@/components/icons/Copy';
 import { IStatusCode, StatusMesg } from '@/interfaces/history';
 import { TransactionContext } from '@/contexts/transaction.context';
 import { Row } from '@/components/Row';
+import SpeedUpModal from '@/components/Transactor/SpeedUp.modal';
+import { ISpeedUpTx } from '@/interfaces/transaction';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
 const Transactions = React.memo(() => {
   const { onOpenResumeModal } = useContext(TransactorContext);
   const { history, isLoading, uninscribed } = useContext(TransactionContext);
+  const [speedUpTx, setSpeedUpTx] = React.useState<ISpeedUpTx | undefined>(undefined);
 
   const numbPending = React.useMemo(() => {
     return uninscribed.length;
   }, [uninscribed]);
+
+  const handleSpeedUp = (btcHash: string) => {
+    const tcTxs = history.filter(trans => trans.btcHash && trans.btcHash.toLowerCase() === btcHash.toLowerCase());
+    const tx = tcTxs.find(tx => !!tx.currentSat);
+    setSpeedUpTx({
+      btcHash,
+      tcTxs,
+      currentRate: tx?.currentSat || 0,
+      minRate: tx?.minSat || 0,
+    });
+  };
 
   const transactionsData = (history || []).map(trans => {
     const localDateString = trans?.time
@@ -101,7 +115,7 @@ const Transactions = React.memo(() => {
           </div>
         ),
         status: (
-          <div>
+          <div className="status-wrapper">
             <Text
               size="h6"
               className={status.toLowerCase().split(' ')[0]}
@@ -113,6 +127,16 @@ const Transactions = React.memo(() => {
             >
               {status}
             </Text>
+            {!!trans.isRBFable && !!trans.btcHash && (
+              <Button
+                variants="outline"
+                onClick={() => {
+                  handleSpeedUp(trans.btcHash || '');
+                }}
+              >
+                Speed up
+              </Button>
+            )}
           </div>
         ),
       },
@@ -137,6 +161,7 @@ const Transactions = React.memo(() => {
         </div>
       )}
       <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
+      <SpeedUpModal show={!!speedUpTx} onClose={() => setSpeedUpTx(undefined)} speedUpTx={speedUpTx} />
     </StyledTransaction>
   );
 });

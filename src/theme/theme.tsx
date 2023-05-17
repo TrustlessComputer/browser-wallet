@@ -43,7 +43,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
     ${ScreenMarginBottom}
     ${ScreenMarginLeft}
     ${ScreenMarginRight}
-}
+  }
 
   summary::-webkit-details-marker {
     display:none;

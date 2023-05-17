@@ -47,6 +47,13 @@ export const StyledTransaction = styled.div`
     justify-content: flex-end;
   }
 
+  .status-wrapper {
+    gap: ${px2rem(12)};
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
   .status {
     text-transform: capitalize;
 

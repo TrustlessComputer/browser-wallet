@@ -21,7 +21,7 @@ const useTransactions = ({ isGetUnInscribedSize }: IProps) => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
 
-  const { getUnInscribedTransactionDetails, getTCTransactionByHash, getStatusCode } = useBitcoin();
+  const { getUnInscribedTransactionDetails, getTCTransactionByHash, getStatusCode, getIsRBFable } = useBitcoin();
 
   const getTransactionSize = async (uninscribed: ITCTxDetail[]) => {
     const Hexs = await Promise.all(
@@ -56,8 +56,24 @@ const useTransactions = ({ isGetUnInscribedSize }: IProps) => {
       for (const trans of storageTransactions) {
         const { tcHash, btcHash, status } = trans;
         let statusCode = status;
+        let isRBFable = false;
+        let currentSat = 0;
+        let minSat = 0;
         if (!!btcHash && status === IStatusCode.PROCESSING) {
-          statusCode = await getStatusCode(tcHash, user.address);
+          // statusCode = await getStatusCode(tcHash, user.address);
+          const [txStatus, RBFStatus] = await Promise.all([
+            await getStatusCode(tcHash, user.address),
+            await getIsRBFable({
+              btcHash: btcHash,
+              btcAddress: user.btcAddress,
+              tcAddress: user.address,
+            }),
+          ]);
+          statusCode = txStatus;
+          isRBFable = RBFStatus.isRBFable;
+          currentSat = RBFStatus.oldFeeRate;
+          minSat = RBFStatus.minSat;
+
           if ([IStatusCode.SUCCESS, IStatusCode.FAILED].includes(statusCode)) {
             // update local storage
             updatedStatusHashs.push({
@@ -66,9 +82,13 @@ const useTransactions = ({ isGetUnInscribedSize }: IProps) => {
             });
           }
         }
+
         transactions.push({
           ...trans,
           status: statusCode,
+          isRBFable,
+          currentSat,
+          minSat,
         });
 
         if (updatedStatusHashs.length) {

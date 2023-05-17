@@ -143,7 +143,7 @@ const FeeRate = React.memo((props: IProps) => {
         {renderCustomRate()}
       </Content>
       {!!props.error && (
-        <Text color="red" size="body">
+        <Text color="text-error" size="body" className="mt-8">
           {props.error}
         </Text>
       )}

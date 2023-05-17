@@ -56,6 +56,22 @@ export class HistoryStorage extends StorageService {
     this.set(key, newTransactions);
   };
 
+  updateSpeedUpBTCHash = (newBTCHash: string, oldBTCHash: string, tcAddress: string) => {
+    const key = this.getTxsHistoryKey(tcAddress);
+    const transactions = this.getTransactions(tcAddress);
+    const newTxs = transactions.map(trans => {
+      if (trans.btcHash && trans.btcHash.toLowerCase() === oldBTCHash.toLowerCase()) {
+        return {
+          ...trans,
+          btcHash: newBTCHash,
+          statusCode: IStatusCode.PROCESSING,
+        };
+      }
+      return trans;
+    });
+    this.set(key, newTxs);
+  };
+
   // transaction inside wallet
   // send ERC20, ERC721, TC
   static NormalTransactionBuilder = (payload: INormaTxBuilderPayload): IHistory => {
