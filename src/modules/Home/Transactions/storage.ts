@@ -45,7 +45,7 @@ export class HistoryStorage extends StorageService {
     const transactions = this.getTransactions(tcAddress);
     const newTransactions = transactions.map(trans => {
       const { tcHash } = trans;
-      const isExist = tcHashs.find(_tcHash => compareString({ str1: _tcHash, str2: tcHash, method: 'equal' })) || {};
+      const isExist = tcHashs.some(hash => compareString({ str1: hash, str2: tcHash, method: 'equal' }));
       if (!isExist) return trans;
       return {
         ...trans,
@@ -76,20 +76,6 @@ export class HistoryStorage extends StorageService {
   // send ERC20, ERC721, TC
   static NormalTransactionBuilder = (payload: INormaTxBuilderPayload): IHistory => {
     const { transaction, btcHash, type } = payload;
-    console.log('SANG TEST: ', {
-      tcHash: transaction.hash,
-      btcHash: btcHash,
-      from: transaction.from,
-      to: transaction.to || '',
-      status: btcHash ? IStatusCode.PROCESSING : IStatusCode.PENDING,
-      type: type,
-      dappURL: window.location.origin,
-      isRBFable: false,
-      nonce: transaction.nonce,
-      time: new Date().getTime(),
-      currentSat: 0,
-      minSat: 0,
-    });
     return {
       tcHash: transaction.hash,
       btcHash: btcHash,

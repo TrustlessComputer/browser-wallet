@@ -42,7 +42,6 @@ const useTransactions = ({ isGetUnInscribedSize }: IProps) => {
       setIsLoading(true);
       const storageTransactions = historyStorage.getTransactions(user?.address);
       const uninscribedTransactions = await getUnInscribedTransactionDetails(user.address);
-
       if (isGetUnInscribedSize) {
         await getTransactionSize(uninscribedTransactions);
       }

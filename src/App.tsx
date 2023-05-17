@@ -25,9 +25,9 @@ const App: React.FC = (): React.ReactElement => {
           <ThemedGlobalStyle />
           <InitialProvider>
             <AssetsProvider>
-              <TransactorProvider>
-                <TransactionProvider>{element}</TransactionProvider>
-              </TransactorProvider>
+              <TransactionProvider>
+                <TransactorProvider>{element}</TransactorProvider>
+              </TransactionProvider>
             </AssetsProvider>
           </InitialProvider>
           <Toaster position="top-center" reverseOrder={false} />

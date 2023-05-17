@@ -107,7 +107,9 @@ const ResumeModal = React.memo(({ show, onClose }: IProps) => {
   return (
     <SignerModal show={show} onClose={onClose} title="Process Incomplete Transactions">
       <Container>
-        <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className="token-table" />
+        <div className="mt-32 mb-32">
+          <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className="token-table" />
+        </div>
         <FeeRate
           allRate={feeRate}
           isCustom={true}

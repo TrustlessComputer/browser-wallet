@@ -26,7 +26,7 @@ export const TransactionProvider: React.FC<PropsWithChildren> = ({
   children,
 }: PropsWithChildren): React.ReactElement => {
   const user = useCurrentUserInfo();
-  const { isLoading, isLoaded, debounceGetTransactions, transactions, uninscribed } = useTransactions({
+  const { isLoading, isLoaded, debounceGetTransactions, transactions, uninscribed, getTransactions } = useTransactions({
     isGetUnInscribedSize: false,
   });
 
@@ -44,11 +44,11 @@ export const TransactionProvider: React.FC<PropsWithChildren> = ({
     return {
       isLoading,
       isLoaded,
-      getTransactions: debounceGetTransactions,
+      getTransactions: getTransactions,
       history: transactions,
       uninscribed,
     };
-  }, [isLoading, isLoaded, debounceGetTransactions, transactions, uninscribed]);
+  }, [isLoading, isLoaded, getTransactions, transactions, uninscribed]);
 
   return <TransactionContext.Provider value={contextValues}>{children}</TransactionContext.Provider>;
 };
