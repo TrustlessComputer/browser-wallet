@@ -4,6 +4,7 @@ import {
   INormaTxBuilderPayload,
   IStatusCode,
   IUnInscribedTxBuilderPayload,
+  IUpdatedBTCHashPayload,
   IUpdatedStatusPayload,
 } from '@/interfaces/history';
 import { compareString } from '@/utils';
@@ -33,6 +34,23 @@ export class HistoryStorage extends StorageService {
       return {
         ...trans,
         status,
+      };
+    });
+    this.set(key, newTransactions);
+  };
+
+  updateBTCHash = (tcAddress: string, payload: IUpdatedBTCHashPayload) => {
+    const { btcHash, status, tcHashs } = payload;
+    const key = this.getTxsHistoryKey(tcAddress);
+    const transactions = this.getTransactions(tcAddress);
+    const newTransactions = transactions.map(trans => {
+      const { tcHash } = trans;
+      const isExist = tcHashs.find(_tcHash => compareString({ str1: _tcHash, str2: tcHash, method: 'equal' })) || {};
+      if (!isExist) return trans;
+      return {
+        ...trans,
+        status,
+        btcHash,
       };
     });
     this.set(key, newTransactions);

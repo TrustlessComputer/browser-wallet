@@ -47,4 +47,16 @@ interface IUpdatedStatusPayload {
   status: IStatusCode;
 }
 
-export type { IHistory, INormaTxBuilderPayload, IUnInscribedTxBuilderPayload, IUpdatedStatusPayload };
+interface IUpdatedBTCHashPayload {
+  status: IStatusCode;
+  btcHash: string;
+  tcHashs: string[];
+}
+
+export type {
+  IHistory,
+  INormaTxBuilderPayload,
+  IUnInscribedTxBuilderPayload,
+  IUpdatedStatusPayload,
+  IUpdatedBTCHashPayload,
+};
