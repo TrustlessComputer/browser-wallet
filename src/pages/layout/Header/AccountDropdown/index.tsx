@@ -109,22 +109,27 @@ const AccountDropdown = React.memo(() => {
             }
           >
             <MoreDropdownList>
-              {MoreList.map(item => (
-                <MoreDropdownItem
-                  key={item.title}
-                  onClick={() => {
-                    item.onClick({
-                      name,
-                      address,
-                    });
-                  }}
-                >
-                  <div className={item.iconClass}>{item.icon}</div>
-                  <Text className={item.titleClass} size="note">
-                    {item.title}
-                  </Text>
-                </MoreDropdownItem>
-              ))}
+              {MoreList.map(item => {
+                if (accounts.length <= 1 && item.title === 'Remove Account') {
+                  return <></>;
+                }
+                return (
+                  <MoreDropdownItem
+                    key={item.title}
+                    onClick={() => {
+                      item.onClick({
+                        name,
+                        address,
+                      });
+                    }}
+                  >
+                    <div className={item.iconClass}>{item.icon}</div>
+                    <Text className={item.titleClass} size="note">
+                      {item.title}
+                    </Text>
+                  </MoreDropdownItem>
+                );
+              })}
             </MoreDropdownList>
           </Dropdown>
         </div>
