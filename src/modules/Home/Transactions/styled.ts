@@ -19,9 +19,9 @@ export const StyledTransaction = styled.div`
 
     padding: ${px2rem(24)} ${px2rem(48)};
     background-color: #2e2e2e;
-    margin-bottom: 32px;
+    margin-bottom: ${px2rem(32)};
 
-    gap: ${px2rem(32)};
+    gap: ${px2rem(24)};
 
     .process-btn {
       padding: 12px 32px;
@@ -110,6 +110,10 @@ export const StyledTransaction = styled.div`
       text-align: right;
     }
   }
+
+  a {
+    font-weight: 500 !important;
+  }
 `;
 
 const HashWrapper = styled.div`
@@ -128,12 +132,16 @@ const HashWrapper = styled.div`
       width: fit-content;
     }
     .ic-copy {
-      width: ${px2rem(15)};
-      height: ${px2rem(15)};
+      width: ${px2rem(20)};
+      height: ${px2rem(20)};
       cursor: pointer;
       position: relative;
       justify-content: center;
       display: flex;
+
+      :hover {
+        opacity: 0.8;
+      }
     }
   }
 `;
