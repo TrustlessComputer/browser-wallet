@@ -11,6 +11,8 @@ import { TransactorContext } from '@/contexts/transactor.context';
 import CopyIcon from '@/components/icons/Copy';
 import { IStatusCode, StatusMesg } from '@/interfaces/history';
 import { TransactionContext } from '@/contexts/transaction.context';
+import { Row } from '@/components/Row';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
@@ -79,11 +81,14 @@ const Transactions = React.memo(() => {
         receiver: (
           <div>
             {trans.to ? (
-              <Text size="h6">
-                <a href={`${network.current.Explorer}/address/${trans.to}`} target="_blank">
-                  {formatLongAddress(trans.to)}
-                </a>
-              </Text>
+              <Row align="center" gap="12px">
+                <Jazzicon diameter={40} seed={jsNumberForAddress(trans.to)} />
+                <Text size="body-large">
+                  <a href={`${network.current.Explorer}/address/${trans.to}`} target="_blank">
+                    {formatLongAddress(trans.to)}
+                  </a>
+                </Text>
+              </Row>
             ) : (
               '-'
             )}
@@ -91,8 +96,8 @@ const Transactions = React.memo(() => {
         ),
         time: (
           <div>
-            <Text size="h6">{localDateString}</Text>
-            <Text size="h6" className="mt-8">
+            <Text size="body-large">{localDateString}</Text>
+            <Text size="body-large" className="mt-8">
               Nonce: {trans.nonce}
             </Text>
           </div>
@@ -112,7 +117,7 @@ const Transactions = React.memo(() => {
     <StyledTransaction>
       {!!numbPending && (
         <div className="header-wrapper">
-          <Text size="h5">{`You have ${numbPending} incomplete ${
+          <Text size="body-large">{`You have ${numbPending} incomplete ${
             numbPending === 1 ? 'transaction' : 'transactions'
           }`}</Text>
           <Button className="process-btn" type="button" onClick={onOpenResumeModal}>

@@ -6,7 +6,6 @@ const Container = styled.div`
 
   .form-container {
     width: 100%;
-    margin-top: ${px2rem(36)};
 
     .account {
       display: flex;
@@ -26,6 +25,7 @@ const Container = styled.div`
       gap: ${px2rem(6)};
       background: ${({ theme }) => theme.bg.secondary};
       border-radius: ${px2rem(8)};
+      cursor: pointer;
       .key-text {
         line-break: anywhere;
       }
