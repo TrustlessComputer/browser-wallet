@@ -20,6 +20,7 @@ import toast from 'react-hot-toast';
 import CreateModal from './CreateModal';
 import RemoveModal from './RemoveModal';
 import { DropDownContainer, DropdownItem, DropdownList, MoreDropdownItem, MoreDropdownList } from './styled';
+import ExportAccount from '@/pages/layout/Header/AccountDropdown/ExportAccountModal';
 
 interface IAccount {
   name: string;
@@ -40,6 +41,7 @@ const AccountDropdown = React.memo(() => {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [removeAccount, setRemoveAccount] = useState<IAccount | undefined>(undefined);
+  const [exportAccount, setExportAccount] = useState<IAccount | undefined>(undefined);
 
   const onSwitchAccount = React.useCallback(
     throttle((address: string) => {
@@ -61,7 +63,9 @@ const AccountDropdown = React.memo(() => {
       titleClass: 'text-normal',
       icon: <ExportIcon />,
       iconClass: 'icon-normal',
-      onClick: () => {},
+      onClick: (account: IAccount) => {
+        setExportAccount(account);
+      },
     },
     {
       title: 'Remove Account',
@@ -162,7 +166,7 @@ const AccountDropdown = React.memo(() => {
           </Text>
         }
         width={384}
-        closeDropdown={!!removeAccount || showCreateModal}
+        closeDropdown={!!removeAccount || showCreateModal || !!exportAccount}
       >
         <DropDownContainer>
           <DropdownList>
@@ -196,6 +200,14 @@ const AccountDropdown = React.memo(() => {
           address={removeAccount.address}
           name={removeAccount.name}
           handleClose={() => setRemoveAccount(undefined)}
+        />
+      )}
+      {!!exportAccount && (
+        <ExportAccount
+          show={!!exportAccount}
+          address={exportAccount.address}
+          name={exportAccount.name}
+          handleClose={() => setExportAccount(undefined)}
         />
       )}
     </>

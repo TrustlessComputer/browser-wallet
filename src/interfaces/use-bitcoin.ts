@@ -17,3 +17,9 @@ export interface ICreateBatchInscribeParams {
   tcTxDetails: ITCTxDetail[];
   feeRate: number;
 }
+
+export interface IIsSpeedUpBTCParams {
+  btcHash: string;
+  btcAddress: string;
+  tcAddress: string;
+}

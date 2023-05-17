@@ -7,6 +7,7 @@ import useProvider from '@/hooks/useProvider';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { ethers } from 'ethers';
 import { TRANSFER_TX_SIZE } from '@/configs';
+import useBitcoin from '@/hooks/useBitcoin';
 
 export interface ITransferNativeToken {
   amount: string;
@@ -16,6 +17,7 @@ export interface ITransferNativeToken {
 const useTransferNativeToken: ContractOperationHook<ITransferNativeToken, TransactionResponse> = () => {
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
+  const { getInscribeableNonce } = useBitcoin();
 
   const estimateGas = useCallback(
     async (params: ITransferNativeToken) => {
@@ -38,11 +40,13 @@ const useTransferNativeToken: ContractOperationHook<ITransferNativeToken, Transa
       if (!userSecretKey?.privateKey || !provider) {
         throw new WError(ERROR_CODE.ACCOUNT_EMPTY);
       }
+      const nonce = await getInscribeableNonce(userSecretKey.address);
       const walletSigner = getWalletSigner(userSecretKey.privateKey, provider);
       const tx: TransactionResponse = await walletSigner.sendTransaction({
         from: userSecretKey.address,
         value: ethers.utils.parseEther(String(params.amount)),
         to: params.receiver,
+        nonce,
       });
       return tx;
     },
