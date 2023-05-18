@@ -16,7 +16,7 @@ const useSignTransaction = () => {
   const provider = useProvider();
   const userSecretKey = useUserSecretKey();
 
-  const onEstimateGas = async (payload: ISignTransactionPayload) => {
+  const estimateGas = async (payload: ISignTransactionPayload) => {
     if (!provider) {
       throw new WError(ERROR_CODE.ACCOUNT_EMPTY);
     }
@@ -49,7 +49,7 @@ const useSignTransaction = () => {
   };
 
   return {
-    onEstimateGas,
+    estimateGas,
     createAndSendTransaction,
   };
 };
