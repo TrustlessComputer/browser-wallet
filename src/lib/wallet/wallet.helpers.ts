@@ -38,7 +38,7 @@ const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
     const account = nodes.find(node => compareString({ str1: node.address, str2: address, method: 'equal' }));
     if (account) {
       const btcPrivateKeyBuffer = TC_SDK.convertPrivateKeyFromStr(btcPrivateKey);
-      const btcAddress = TC_SDK.generateTaprootAddress(btcPrivateKeyBuffer);
+      const { address: btcAddress } = TC_SDK.generateP2WPKHKeyPair(btcPrivateKeyBuffer);
       return {
         ...account,
         btcPrivateKey: btcPrivateKey,

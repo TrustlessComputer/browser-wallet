@@ -76,21 +76,24 @@ const useBitcoin = () => {
   const createSendBTCTx = async ({ receiver, amount, feeRate }: ISendBTCParams) => {
     const assets = await _getAssetsCreateTx();
     if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
-    const { txHex } = await TC_SDK.createTx(
-      userSecretKey.btcPrivateKeyBuffer,
-      assets.txrefs,
-      assets.inscriptions_by_outputs,
-      '',
-      receiver,
-      new BigNumber(
-        convert.toOriginalAmount({
-          humanAmount: amount,
-          decimals: Token.BITCOIN.decimal,
-        }),
-      ),
-      feeRate,
-      true,
+    const sendAmount = new BigNumber(
+      convert.toOriginalAmount({
+        humanAmount: amount,
+        decimals: Token.BITCOIN.decimal,
+      }),
     );
+
+    const { txHex } = await TC_SDK.createTx({
+      senderAddress: userSecretKey.btcAddress,
+      senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
+      feeRatePerByte: feeRate,
+      receiverInsAddress: receiver,
+      utxos: assets.txrefs,
+      sendAmount: sendAmount,
+      sendInscriptionID: '',
+      inscriptions: {},
+    });
+
     // broadcast tx
     await TC_SDK.broadcastTx(txHex);
   };

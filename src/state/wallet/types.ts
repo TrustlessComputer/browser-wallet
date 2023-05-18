@@ -14,7 +14,7 @@ export interface WalletState {
 }
 
 interface IUserSecretKey extends TC_SDK.IDeriveKey {
-  // bitcoin taproot
+  // bitcoin segwit
   btcPrivateKey: string;
   btcPrivateKeyBuffer: Buffer;
   btcAddress: string;
