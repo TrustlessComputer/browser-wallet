@@ -8,6 +8,7 @@ export const ERROR_CODE = {
   FEE_RATE_INVALID: '-3006',
   INVALID_PARAMS: '-3007',
   TX_SIZE: '-3008',
+  SIGN_DIFF_ACCOUNT: '-3009',
 };
 
 export const ERROR_MESSAGE = {
@@ -46,6 +47,10 @@ export const ERROR_MESSAGE = {
   [ERROR_CODE.TX_SIZE]: {
     message: 'Invalid transaction size params.',
     desc: 'Invalid transaction size params.',
+  },
+  [ERROR_CODE.SIGN_DIFF_ACCOUNT]: {
+    message: 'The account to sign is different from the request account.',
+    desc: 'The account to sign is different from the request account.',
   },
 };
 

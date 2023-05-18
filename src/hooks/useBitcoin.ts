@@ -35,6 +35,7 @@ const useBitcoin = () => {
     if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
     const tx = await TC_SDK.createInscribeTx({
       senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
+      senderAddress: userSecretKey.btcAddress,
       utxos: assets.txrefs,
       inscriptions: {},
       tcTxIDs: payload.tcTxIDs,
@@ -48,6 +49,7 @@ const useBitcoin = () => {
     if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
     const res = await TC_SDK.createBatchInscribeTxs({
       senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
+      senderAddress: userSecretKey.btcAddress,
       utxos: assets.txrefs,
       inscriptions: {},
       tcTxDetails,
@@ -103,12 +105,12 @@ const useBitcoin = () => {
     if (!assets || !userSecretKey?.btcPrivateKeyBuffer) throw new Error('Can not load assets');
     const { revealTxID } = await TC_SDK.replaceByFeeInscribeTx({
       senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
+      btcAddress: userSecretKey.btcAddress,
       utxos: assets.txrefs,
       inscriptions: assets.inscriptions_by_outputs,
       revealTxID: payload.btcHash,
       feeRatePerByte: payload.feeRate,
       tcAddress: payload.tcAddress,
-      btcAddress: payload.btcAddress,
     });
     return revealTxID;
   };
