@@ -2,20 +2,17 @@ import React, { PropsWithChildren, useMemo } from 'react';
 import SendBTCModal from '@/components/Transactor/SendBTC.modal';
 import ResumeModal from '@/components/Transactor/Resume.modal';
 import SendTCModal from '@/components/Transactor/SendTC.modal';
-import SignInscribeModal from '@/components/Transactor/SignInscribe.modal';
 
 export interface ITransactorContext {
   onOpenBTCModal: () => void;
   onOpenResumeModal: () => void;
   onOpenTCModal: () => void;
-  onOpenSignInscribeModal: () => void;
 }
 
 const initialValue: ITransactorContext = {
   onOpenBTCModal: () => undefined,
   onOpenResumeModal: () => undefined,
   onOpenTCModal: () => undefined,
-  onOpenSignInscribeModal: () => undefined,
 };
 
 export const TransactorContext = React.createContext<ITransactorContext>(initialValue);
@@ -35,16 +32,11 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
   const onOpenTCModal = () => setShowTCModal(true);
   const onCloseTCModal = () => setShowTCModal(false);
 
-  const [showSignInscribeModal, setShowSignInscribeModal] = React.useState(false);
-  const onOpenSignInscribeModal = () => setShowSignInscribeModal(true);
-  const onCloseSignInscribeModal = () => setShowSignInscribeModal(false);
-
   const contextValues = useMemo((): ITransactorContext => {
     return {
       onOpenBTCModal,
       onOpenResumeModal,
       onOpenTCModal,
-      onOpenSignInscribeModal,
     };
   }, []);
 
@@ -54,7 +46,6 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
       <SendBTCModal show={showBTCModal} onClose={onCloseBTCModal} />
       <ResumeModal show={showResumeModal} onClose={onCloseResumeModal} />
       <SendTCModal show={showTCModal} onClose={onCloseTCModal} />
-      <SignInscribeModal show={showSignInscribeModal} onClose={onCloseSignInscribeModal} />
     </TransactorContext.Provider>
   );
 };
