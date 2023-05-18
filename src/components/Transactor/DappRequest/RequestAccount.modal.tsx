@@ -36,7 +36,7 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
 
   const onAcceptRequest = async () => {
     if (!requestID || !userInfo) return;
-    const connection = new TC_CONNECT.WalletConnect();
+    const connection = new TC_CONNECT.WalletConnect('', requestID);
     await connection.postResultAccount({
       btcAddress: userInfo.btcAddress,
       method: TC_CONNECT.RequestMethod.account,

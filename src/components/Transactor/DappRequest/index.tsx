@@ -43,8 +43,8 @@ const DappRequest = React.memo(() => {
     return <RequestAccountModal request={request} requestID={requestID} onClose={onClose} />;
   }
 
-  if (request.method === TC_CONNECT.RequestMethod.sign && !!requestID) {
-    return <SignTransactionModal request={request} show={!!requestID} onClose={onClose} />;
+  if (request.method === TC_CONNECT.RequestMethod.sign) {
+    return <SignTransactionModal request={request} requestID={requestID} onClose={onClose} />;
   }
 
   return <></>;
