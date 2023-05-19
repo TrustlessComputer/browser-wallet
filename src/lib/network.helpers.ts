@@ -1,5 +1,6 @@
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
+import { compareString } from '@/utils';
 
 const ENVS = import.meta.env;
 const DEFAULT_NETWORK_NAME: string = ENVS.VITE_DEFAULT_NETWORK_NAME;
@@ -57,31 +58,35 @@ class Network {
   }
 
   getSelectedNetwork(): INetwork {
-    const key = LocalStorageKey.SELECTED_NETWORK;
-    let network = storageLocal.get(key);
-    if (!network) {
-      const networks = this.getListNetworks();
-      const dfNetwork = networks.find(item => item.Name.toLowerCase() === (DEFAULT_NETWORK_NAME || '').toLowerCase());
-      network = dfNetwork ? dfNetwork : networks[0];
-      storageLocal.set(key, network);
+    const key = LocalStorageKey.SELECTED_NETWORK_NAME;
+    const networks = this.getListNetworks();
+    const defaultName = DEFAULT_NETWORK_NAME || networks[0].Name;
+    let selectedName = storageLocal.get(key) || defaultName;
+    const isExist = networks.some(network =>
+      compareString({
+        str1: network.Name,
+        str2: selectedName,
+        method: 'equal',
+      }),
+    );
+
+    if (!isExist) {
+      selectedName = networks[0].Name;
     }
+
+    const network = networks.find(network => network.Name.toLowerCase() === selectedName.toLowerCase()) as INetwork;
     this.current = network;
+    storageLocal.set(key, network.Name);
     return network;
   }
 
   getListNetworks(): INetwork[] {
-    const key = LocalStorageKey.NETWORK_LIST;
-    const networks: Array<INetwork> | undefined = storageLocal.get(key);
-    if (!networks || !networks.length) {
-      storageLocal.set(key, NETWORKS);
-      return NETWORKS;
-    }
-    return networks;
+    return NETWORKS;
   }
 
   switchNetwork(network: INetwork) {
-    const key = LocalStorageKey.SELECTED_NETWORK;
-    storageLocal.set(key, network);
+    const key = LocalStorageKey.SELECTED_NETWORK_NAME;
+    storageLocal.set(key, network.Name);
   }
 }
 
