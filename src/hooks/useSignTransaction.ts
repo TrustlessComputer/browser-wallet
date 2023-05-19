@@ -9,7 +9,7 @@ import useBitcoin from '@/hooks/useBitcoin';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import BigNumber from 'bignumber.js';
 import Web3 from 'web3';
-import { IHistory } from '@/interfaces/history';
+import { IHistory, IStatusCode } from '@/interfaces/history';
 import historyStorage, { HistoryStorage } from '@/modules/Home/Transactions/storage';
 import sleep from '@/utils/sleep';
 
@@ -83,6 +83,11 @@ const useSignTransaction = () => {
     });
     let inscribeTx: ISignResp | undefined;
     for (const submited of batchInscribeTxResp) {
+      historyStorage.updateBTCHash(userSecretKey?.address || '', {
+        tcHashs: submited.tcTxIDs,
+        btcHash: submited.revealTxID,
+        status: IStatusCode.PROCESSING,
+      });
       const isExist = submited.tcTxIDs.some(tcTxID =>
         compareString({ str1: tcTxID, str2: transaction.hash, method: 'equal' }),
       );
