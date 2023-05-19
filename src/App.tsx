@@ -35,7 +35,6 @@ const App: React.FC = (): React.ReactElement => {
             </AssetsProvider>
           </InitialProvider>
           <Toaster position="top-center" reverseOrder={false} />
-          <Toaster position="top-center" reverseOrder={false} />
         </ThemeProvider>
       </PersistGate>
     </Provider>

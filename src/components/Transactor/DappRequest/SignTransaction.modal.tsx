@@ -50,6 +50,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     currentRate,
     customRate,
     isLoading: isLoadingRate,
+    onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
 
   const signMethod = React.useMemo(() => {
@@ -148,6 +149,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     debounceGetTransactions();
     const interval = setInterval(() => {
       debounceEstimateGas();
+      onFetchFee();
     }, 10000);
     return () => clearInterval(interval);
   }, [userSecretKey]);
@@ -234,7 +236,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         </Button>
         <Button
           sizes="stretch"
-          disabled={estimating || submitting}
+          disabled={estimating || submitting || !!error}
           isLoading={estimating || submitting}
           onClick={onSignRequest}
         >

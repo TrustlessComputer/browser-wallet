@@ -39,7 +39,13 @@ const NetworkDropdown = React.memo(() => {
         {networks &&
           networks.length > 0 &&
           networks.map((item, index) => (
-            <DropdownItem key={index.toString()} onClick={() => onSwitchNetwork(item)}>
+            <DropdownItem
+              key={index.toString()}
+              onClick={() => {
+                if (item.Name === selectNetwork.Name) return;
+                return onSwitchNetwork(item);
+              }}
+            >
               <div className="item">
                 <IconSVG src={`${CDN_URL_ICONS}/${item.Icon}`} maxWidth="32" />
                 <div>

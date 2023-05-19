@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const GasFee = React.memo((props: IProps) => {
-  const { tcBalance } = useContext(AssetsContext);
+  const { tcBalance, btcBalance } = useContext(AssetsContext);
   return (
     <Container>
       <Row justify="space-between" className="mb-12">
@@ -27,11 +27,22 @@ const GasFee = React.memo((props: IProps) => {
           TC
         </Text>
       </Row>
-      <Row justify="space-between">
+      <Row justify="space-between" className="mb-12">
         <Text size="body-large">
           Gas <span className="sub-text">(estimated)</span>
         </Text>
         <Text size="body-large">{props.fee} TC</Text>
+      </Row>
+      <Row justify="space-between">
+        <Text size="body-large">BTC Balance</Text>
+        <Text size="body-large">
+          {format.formatAmount({
+            originalAmount: new BigNumber(btcBalance).toNumber(),
+            decimals: Token.BITCOIN.decimal,
+            maxDigits: 7,
+          })}
+          BTC
+        </Text>
       </Row>
       {!!props.error && (
         <Text className="error-text" size="note">
