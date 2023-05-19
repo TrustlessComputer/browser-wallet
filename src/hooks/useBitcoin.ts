@@ -121,11 +121,6 @@ const useBitcoin = () => {
     return Hex;
   };
 
-  const getInscribeableNonce = async (tcAddress: string): Promise<number> => {
-    const nonce = await window.tcClient.getInscribeableNonce(tcAddress);
-    return nonce;
-  };
-
   const getStatusCode = async (txHash: string, tcAddress: string): Promise<IStatusCode> => {
     if (tcAddress) {
       try {
@@ -175,7 +170,6 @@ const useBitcoin = () => {
     getUnInscribedTransactions,
     getUnInscribedTransactionDetails,
     getTCTransactionByHash,
-    getInscribeableNonce,
     getStatusCode,
     getIsRBFable,
   };

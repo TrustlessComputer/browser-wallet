@@ -2,13 +2,12 @@ import { ContractOperationHook, TransactionType, EventType } from '@/interfaces/
 import { useCallback } from 'react';
 import { useUserSecretKey } from '@/state/wallet/hooks';
 import WError, { ERROR_CODE } from '@/utils/error';
-import { getContractSigner } from '@/utils/contract.signer';
+import { getContractSigner, getTransactionCount } from '@/utils/contract.signer';
 import useProvider from '@/hooks/useProvider';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { BNS_CONTRACT, TRANSFER_TX_SIZE } from '@/configs';
 import BNSABIJson from '@/abis/bns.json';
 import { stringToBuffer } from '@/utils';
-import useBitcoin from '@/hooks/useBitcoin';
 
 export interface ITransferName {
   name: string;
@@ -18,7 +17,6 @@ export interface ITransferName {
 const useTransferName: ContractOperationHook<ITransferName, TransactionResponse> = () => {
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
-  const { getInscribeableNonce } = useBitcoin();
 
   const estimateGas = useCallback(
     async (params: ITransferName) => {
@@ -44,7 +42,7 @@ const useTransferName: ContractOperationHook<ITransferName, TransactionResponse>
       const { receiver } = params;
       const contract = getContractSigner(BNS_CONTRACT, BNSABIJson.abi, provider, privateKey);
       const byteCode = stringToBuffer(params.name);
-      const nonce = await getInscribeableNonce(userSecretKey.address);
+      const nonce = await getTransactionCount(userSecretKey.address, provider);
       // Map name to token ID
       const tokenID = await contract.registry(byteCode);
       const tx: TransactionResponse = await contract.transferFrom(userSecretKey.address, receiver, tokenID, { nonce });
