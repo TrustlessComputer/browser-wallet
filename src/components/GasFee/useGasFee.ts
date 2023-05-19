@@ -42,7 +42,7 @@ const useGasFee = () => {
     return {
       feeOriginal,
       feeText,
-      gasLimit: new BigNumber(gasLimit || 0).multipliedBy(1e18).toFixed(),
+      gasLimit: new BigNumber(gasLimit || 0).toNumber(),
       gasLimitText: gasLimit ? `${format.number(gasLimit)}` : undefined,
     };
   }, [gasLimit, gasPrice]);

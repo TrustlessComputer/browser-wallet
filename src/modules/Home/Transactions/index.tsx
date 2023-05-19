@@ -2,7 +2,7 @@ import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import Table from '@/components/Table';
 import Text from '@/components/Text';
-import { formatLongAddress } from '@/utils';
+import { capitalizeFirstLetter, formatLongAddress } from '@/utils';
 import { formatUnixDateTime } from '@/utils/time';
 import React, { useContext } from 'react';
 import { HashWrapper, StyledTransaction } from './styled';
@@ -58,13 +58,14 @@ const Transactions = React.memo(() => {
         status = trans.btcHash ? StatusMesg.WAITING : StatusMesg.PROCESSING;
         break;
     }
+    const transactionType = capitalizeFirstLetter(trans.type || '-');
     const btcExplorer = `${network.current.BTCExplorer}/tx/${trans.btcHash}`;
     return {
       id: trans.tcHash,
       render: {
         type: (
           <Text size="h6" fontWeight="medium" color="text-primary">
-            {trans.type || '-'}
+            {transactionType}
           </Text>
         ),
         tx_id: (

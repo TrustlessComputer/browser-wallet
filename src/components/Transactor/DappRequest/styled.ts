@@ -3,10 +3,13 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   margin-top: ${px2rem(24)};
-
-  .sub-function {
-    color: ${({ theme }) => theme['text-secondary']};
-    font-size: 14px;
+  position: relative;
+  .loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
   }
 `;
 

@@ -6,7 +6,7 @@ import React, { PropsWithChildren } from 'react';
 interface Props extends PropsWithChildren {
   show: boolean;
   onClose: () => void;
-  title: string;
+  title: string | React.ReactNode;
   subTitle?: string;
   width?: number;
 }

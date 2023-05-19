@@ -20,11 +20,11 @@ const getContractSigner = (address: string, ABI: any, provider: JsonRpcProvider,
   return new Contract(address, ABI, walletSigner);
 };
 
-const getTransactionCount = (address: string, provider: JsonRpcProvider): Promise<number> => {
+const getTransactionCount = async (address: string, provider: JsonRpcProvider): Promise<number> => {
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
-  const nonce = provider.getTransactionCount(address, 'pending');
+  const nonce = await provider.getTransactionCount(address, 'pending');
   return nonce;
 };
 

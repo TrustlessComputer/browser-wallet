@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { StyledModal, Title, SubTitle } from './BaseModal.styled';
 
 type Props = {
-  title?: string;
+  title?: string | React.ReactNode;
   subTitle?: string;
   children: React.ReactElement;
   show: boolean;

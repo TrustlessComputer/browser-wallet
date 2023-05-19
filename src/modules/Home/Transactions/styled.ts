@@ -56,7 +56,6 @@ export const StyledTransaction = styled.div`
 
   .status {
     text-transform: capitalize;
-
     &.confirmed {
       color: #00aa6c;
       text-decoration: underline;

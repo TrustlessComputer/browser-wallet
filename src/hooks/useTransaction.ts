@@ -8,12 +8,14 @@ import { debounce, uniqBy } from 'lodash';
 import { getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
 import Web3 from 'web3';
+import { TRANSFER_TX_SIZE } from '@/configs';
 
 interface IProps {
   isGetUnInscribedSize: boolean;
+  isSignTransaction?: boolean;
 }
 
-const useTransactions = ({ isGetUnInscribedSize }: IProps) => {
+const useTransactions = ({ isGetUnInscribedSize, isSignTransaction = false }: IProps) => {
   const user = useCurrentUserInfo();
   const [transactions, setTransactions] = useState<IHistory[]>([]);
   const [uninscribed, setUnInscribed] = useState<ITCTxDetail[]>([]);
@@ -29,10 +31,14 @@ const useTransactions = ({ isGetUnInscribedSize }: IProps) => {
         return getTCTransactionByHash(Hash);
       }),
     );
-    const sizeByte: number = Hexs.reduce((prev, curr) => {
-      const currSize = Web3.utils.hexToBytes(curr).length;
-      return currSize + prev;
-    }, 0);
+
+    const sizeByte: number = Hexs.reduce(
+      (prev, curr) => {
+        const currSize = Web3.utils.hexToBytes(curr).length;
+        return currSize + prev;
+      },
+      isSignTransaction ? TRANSFER_TX_SIZE : 0,
+    );
     setSizeByte(sizeByte);
   };
 
