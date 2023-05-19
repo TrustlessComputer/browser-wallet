@@ -71,8 +71,8 @@ const SignTransactionModal = ({ requestID, request }: IProps) => {
 
   const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey]);
 
-  React.useEffect(() => {
-    debounceEstimateGas();
+  useAsyncEffect(async () => {
+    await debounceEstimateGas();
     const interval = setInterval(debounceEstimateGas, 10000);
     return () => clearInterval(interval);
   }, [userSecretKey]);
