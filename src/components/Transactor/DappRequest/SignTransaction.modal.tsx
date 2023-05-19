@@ -5,16 +5,18 @@ import { useUserSecretKey } from '@/state/wallet/hooks';
 import { useSignTransaction } from '@/hooks/useSignTransaction';
 import useAsyncEffect from 'use-async-effect';
 import { debounce } from 'lodash';
-import { getSignatures } from '@/services/4byte';
+import { getSignatures } from '@/services/signature';
 import useGasFee from '@/components/GasFee/useGasFee';
 import { getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
-import { FunctionItem } from '@/interfaces/api/4byte';
-import { Container } from '@/components/Transactor/DappRequest/styled';
+import { FunctionItem } from '@/interfaces/api/signature';
+import { Container, ButtonGroup, AdvanceWrapper } from '@/components/Transactor/DappRequest/styled';
 import Text from '@/components/Text';
 import GasFee from '@/components/GasFee';
 import { FeeRate } from '@/components/FeeRate';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
+import AccordionComponent from '@/components/Accordion';
+import Button from '@/components/Button';
 
 interface IProps {
   requestID: string;
@@ -75,12 +77,29 @@ const SignTransactionModal = ({ requestID, request }: IProps) => {
         <Text size="h6" color="text-highlight" style={{ textTransform: 'uppercase' }}>
           {functionName?.name || 'unknow'}
         </Text>
-        {!!functionName?.function && (
-          <Text size="body" color="text-secondary" className="mt-6">
-            {functionName?.function || 'unknow'}
-          </Text>
-        )}
         <GasFee fee={maxFee.feeText} error={error} />
+        <AccordionComponent
+          className="mt-24 mb-24"
+          header="Advance"
+          content={
+            <AdvanceWrapper>
+              {!!functionName && (
+                <div className="box">
+                  <Text color="text-secondary" fontWeight="semibold">
+                    Function
+                  </Text>
+                  <Text className="mt-8">{functionName.function}</Text>
+                </div>
+              )}
+              <div className="box mt-16">
+                <Text color="text-secondary" fontWeight="semibold">
+                  Call data
+                </Text>
+                <Text className="mt-8">{request.calldata}</Text>
+              </div>
+            </AdvanceWrapper>
+          }
+        />
         {Boolean(request.isInscribe) && (
           <FeeRate
             allRate={feeRate}
@@ -94,6 +113,12 @@ const SignTransactionModal = ({ requestID, request }: IProps) => {
           />
         )}
       </Container>
+      <ButtonGroup className="mt-32">
+        <Button sizes="stretch" variants="outline">
+          Cancel
+        </Button>
+        <Button sizes="stretch">Sign</Button>
+      </ButtonGroup>
     </SignerModal>
   );
 };

@@ -10,3 +10,4 @@ export { default as DisconnectIcon } from './Disconnect';
 export { default as ExchangeIcon } from './Exchange';
 export { default as ExportIcon } from './Export';
 export { default as TrashIcon } from './Trash';
+export { default as ArrowDownIcon } from './ArrowDown';

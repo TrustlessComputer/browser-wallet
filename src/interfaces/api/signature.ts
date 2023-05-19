@@ -1,6 +1,6 @@
 interface FunctionItemResp {
-  text_signature: string;
   id: number;
+  name: string;
 }
 
 interface FunctionItem {

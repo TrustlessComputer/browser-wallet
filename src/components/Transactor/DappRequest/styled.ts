@@ -17,4 +17,15 @@ const ButtonGroup = styled.div`
   gap: ${px2rem(24)};
 `;
 
-export { Container, ButtonGroup };
+const AdvanceWrapper = styled.div`
+  .box {
+    background-color: ${({ theme }) => theme.bg.secondary};
+    padding: 12px;
+    border-radius: 8px;
+    p {
+      line-break: anywhere;
+    }
+  }
+`;
+
+export { Container, ButtonGroup, AdvanceWrapper };
