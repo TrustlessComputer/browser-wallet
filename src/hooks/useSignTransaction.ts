@@ -54,7 +54,7 @@ const useSignTransaction = () => {
     }
     const gasLimit = await provider.estimateGas({
       from: payload.from,
-      to: payload.to,
+      to: payload.to || undefined,
       data: payload.calldata,
       value: ethers.BigNumber.from(payload.value || '0'),
     });
@@ -114,7 +114,7 @@ const useSignTransaction = () => {
     const nonce = await getTransactionCount(userSecretKey.address, provider);
     const transaction: TransactionResponse = await walletSigner.sendTransaction({
       from: payload.from,
-      to: payload.to,
+      to: payload.to || undefined,
       data: payload.calldata,
       value: ethers.BigNumber.from(payload.value || '0'),
       gasLimit: Web3.utils.toHex(payload.gasLimit || 0),

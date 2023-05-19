@@ -53,7 +53,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   } = useFeeRate({ minFeeRate: undefined });
 
   const signMethod = React.useMemo(() => {
-    return request.to ? functionName?.name || 'Unknow' : 'Deploy Contract';
+    return request.to ? functionName?.name || 'Unknow' : 'Contract Deployment';
   }, [request, functionName?.name]);
 
   const onEstimateGas = async () => {
