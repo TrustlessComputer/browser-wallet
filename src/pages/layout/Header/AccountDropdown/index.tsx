@@ -90,7 +90,13 @@ const AccountDropdown = React.memo(() => {
   const renderItem = (isChecked: boolean, name: string, formatAddress: string, balance: string, address: string) => {
     return (
       <DropdownItem key={`${address}-${isChecked}`}>
-        <div className="item" onClick={() => onSwitchAccount(address)}>
+        <div
+          className="item"
+          onClick={() => {
+            if (isChecked) return;
+            onSwitchAccount(address);
+          }}
+        >
           <IconSVG className="icon" src={isChecked ? `${CDN_URL_ICONS}/ic-check-dark.svg` : ''} maxWidth="24" />
           <div>
             <Text color="text-primary" fontWeight="light" size="body">
