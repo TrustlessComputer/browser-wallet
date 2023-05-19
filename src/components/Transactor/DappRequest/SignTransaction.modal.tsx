@@ -234,7 +234,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         </Button>
         <Button
           sizes="stretch"
-          disabled={estimating || submitting}
+          disabled={estimating || submitting || !!error}
           isLoading={estimating || submitting}
           onClick={onSignRequest}
         >
