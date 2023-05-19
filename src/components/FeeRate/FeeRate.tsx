@@ -5,6 +5,7 @@ import { FeeRateName, IFeeRate } from '@/interfaces/api/bitcoin';
 import * as TC_SDK from 'trustless-computer-sdk';
 import BigNumber from 'bignumber.js';
 import { formatBTCPrice } from '@/utils/format';
+import Spinner from '@/components/Spinner';
 
 interface IProps {
   isLoading: boolean;
@@ -121,10 +122,6 @@ const FeeRate = React.memo((props: IProps) => {
     );
   };
 
-  if (props.isLoading) {
-    return <></>;
-  }
-
   return (
     <Container>
       <Text
@@ -141,6 +138,11 @@ const FeeRate = React.memo((props: IProps) => {
         {renderItem(FeeRateName.halfHourFee)}
         {renderItem(FeeRateName.fastestFee)}
         {renderCustomRate()}
+        {props.isLoading && (
+          <div className="loader">
+            <Spinner />
+          </div>
+        )}
       </Content>
       {!!props.error && (
         <Text color="text-error" size="body" className="mt-8">

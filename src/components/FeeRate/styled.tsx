@@ -23,6 +23,14 @@ const ItemWrapper = styled(Col)<{ isActive: boolean }>`
     border: 1px solid ${({ theme }) => theme['border-secondary']};
   }
 
+  .loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .price {
     margin-top: ${px2rem(16)};
     text-align: center;
