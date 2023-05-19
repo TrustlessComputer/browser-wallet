@@ -54,6 +54,9 @@ export const Title = styled.p`
   font-size: ${px2rem(28)};
   line-height: ${px2rem(38)};
   color: ${({ theme }) => theme['text-primary']};
+  :first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 export const SubTitle = styled.p`

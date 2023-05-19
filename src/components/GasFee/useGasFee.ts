@@ -42,6 +42,8 @@ const useGasFee = () => {
     return {
       feeOriginal,
       feeText,
+      gasLimit: new BigNumber(gasLimit || 0).multipliedBy(1e18).toFixed(),
+      gasLimitText: gasLimit ? `${format.number(gasLimit)}` : undefined,
     };
   }, [gasLimit, gasPrice]);
 
@@ -56,8 +58,6 @@ const useGasFee = () => {
 
   return {
     loading,
-    gasPrice,
-    gasLimit,
     maxFee,
     setGasLimit,
     error: customError,

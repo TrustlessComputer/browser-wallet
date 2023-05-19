@@ -27,7 +27,6 @@ const GasFee = React.memo((props: IProps) => {
           TC
         </Text>
       </Row>
-
       <Row justify="space-between">
         <Text size="body-large">
           Gas <span className="sub-text">(estimated)</span>

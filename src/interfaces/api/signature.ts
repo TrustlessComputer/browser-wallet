@@ -4,7 +4,6 @@ interface FunctionItemResp {
 }
 
 interface FunctionItem {
-  id: number;
   name: string;
   function: string;
 }

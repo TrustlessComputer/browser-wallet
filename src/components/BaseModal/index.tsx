@@ -29,7 +29,7 @@ const BaseModal = (props: Props) => {
         />
       </Modal.Header>
       <Modal.Body onScroll={onScrollBody}>
-        {title && <Title>{title}</Title>}
+        {title && <Title className="header-title">{title}</Title>}
         {subTitle && <SubTitle>{subTitle}</SubTitle>}
         {children}
       </Modal.Body>

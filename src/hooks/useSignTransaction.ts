@@ -38,7 +38,6 @@ const useSignTransaction = () => {
     if (payload.from && !compareString({ str1: walletSigner.address, str2: payload.from, method: 'equal' })) {
       throw new WError(ERROR_CODE.SIGN_DIFF_ACCOUNT);
     }
-
     const gasLimit = await provider.estimateGas({
       from: payload.from,
       to: payload.to,

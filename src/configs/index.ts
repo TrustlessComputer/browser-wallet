@@ -22,5 +22,5 @@ export const BFS_ADDRESS: string = ENVS.VITE_BFS_CONTRACT;
 
 export const TRANSFER_TX_SIZE = 1000;
 export const DEPLOY_CONTRACT_TX_SIZE = 24000;
-
+export const COEFFICIENT_GAS_LIMIT = 1.2;
 export const GAS_LIMIT_TRANSFER = 21000;

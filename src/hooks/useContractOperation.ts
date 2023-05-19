@@ -11,6 +11,7 @@ import { AssetsContext } from '@/contexts/assets.context';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import historyStorage, { HistoryStorage } from '@/modules/Home/Transactions/storage';
 import { IHistory } from '@/interfaces/history';
+import { COEFFICIENT_GAS_LIMIT } from '@/configs';
 
 interface IParams<P, R> {
   operation: ContractOperationHook<P, R>;
@@ -116,7 +117,7 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
     const gasLimit: number = await estimateGas({
       ...params,
     });
-    return new BigNumber(gasLimit).multipliedBy(1.05).toNumber();
+    return new BigNumber(gasLimit).multipliedBy(COEFFICIENT_GAS_LIMIT).toNumber();
   };
 
   return {

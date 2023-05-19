@@ -11,7 +11,6 @@ const getSignatures = async (calldata: string): Promise<FunctionItem | undefined
   if (data && !!data.length) {
     const item = data[0];
     return {
-      id: item.id,
       name: item.name.split('(')[0],
       function: item.name,
     };

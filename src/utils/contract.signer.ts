@@ -24,7 +24,7 @@ const getTransactionCount = (address: string, provider: JsonRpcProvider): Promis
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
-  const nonce = provider.getTransactionCount(address);
+  const nonce = provider.getTransactionCount(address, 'pending');
   return nonce;
 };
 

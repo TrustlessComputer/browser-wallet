@@ -17,6 +17,9 @@ import { FeeRate } from '@/components/FeeRate';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
 import AccordionComponent from '@/components/Accordion';
 import Button from '@/components/Button';
+import { Row } from '@/components/Row';
+import { ellipsisCenter } from '@/utils';
+import network from '@/lib/network.helpers';
 
 interface IProps {
   requestID: string;
@@ -28,7 +31,7 @@ const SignTransactionModal = ({ requestID, request }: IProps) => {
   const [functionName, setFunctionName] = React.useState<FunctionItem | undefined>(undefined);
   const userSecretKey = useUserSecretKey();
   const { estimateGas } = useSignTransaction();
-  const { maxFee, setGasLimit, error, setEstimating } = useGasFee();
+  const { maxFee, setGasLimit, error, setEstimating, estimating } = useGasFee();
   const {
     feeRate,
     onChangeFee,
@@ -68,32 +71,54 @@ const SignTransactionModal = ({ requestID, request }: IProps) => {
 
   const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey]);
 
-  useAsyncEffect(debounceEstimateGas, [userSecretKey]);
+  React.useEffect(() => {
+    debounceEstimateGas();
+    const interval = setInterval(debounceEstimateGas, 10000);
+    return () => clearInterval(interval);
+  }, [userSecretKey]);
+
   useAsyncEffect(getFunctionCall, []);
 
   return (
-    <SignerModal show={!!requestID} onClose={onRejectRequest} title="Sign transaction">
+    <SignerModal
+      show={!!requestID}
+      onClose={onRejectRequest}
+      title={request.to ? functionName?.name || 'Unknow' : 'Deploy Contract'}
+    >
       <Container>
-        <Text size="h6" color="text-highlight" style={{ textTransform: 'uppercase' }}>
-          {functionName?.name || 'unknow'}
-        </Text>
+        <Row justify="space-between" className="mb-12 mt-32">
+          <Text size="body-large">TO</Text>
+          <Text size="body-large">
+            <a href={`${network.current.Explorer}/address/${request.to}`} target="_blank">
+              {ellipsisCenter({ str: request.to || '' })}
+            </a>
+          </Text>
+        </Row>
         <GasFee fee={maxFee.feeText} error={error} />
         <AccordionComponent
           className="mt-24 mb-24"
           header="Advance"
           content={
             <AdvanceWrapper>
-              {!!functionName && (
+              {maxFee.gasLimitText && (
                 <div className="box">
+                  <Row justify="space-between">
+                    <Text size="body-large">Gas Limit</Text>
+                    <Text size="body-large">{maxFee.gasLimitText}</Text>
+                  </Row>
+                </div>
+              )}
+              {!!functionName && (
+                <div className="box mt-16">
                   <Text color="text-secondary" fontWeight="semibold">
-                    Function
+                    FUNCTION TYPE
                   </Text>
                   <Text className="mt-8">{functionName.function}</Text>
                 </div>
               )}
               <div className="box mt-16">
                 <Text color="text-secondary" fontWeight="semibold">
-                  Call data
+                  HEX DATA: 36 BYTES
                 </Text>
                 <Text className="mt-8">{request.calldata}</Text>
               </div>
@@ -117,7 +142,9 @@ const SignTransactionModal = ({ requestID, request }: IProps) => {
         <Button sizes="stretch" variants="outline">
           Cancel
         </Button>
-        <Button sizes="stretch">Sign</Button>
+        <Button disabled={estimating} sizes="stretch" isLoading={estimating}>
+          Sign
+        </Button>
       </ButtonGroup>
     </SignerModal>
   );
