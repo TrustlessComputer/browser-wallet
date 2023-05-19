@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import Text from '@/components/Text';
+import px2rem from '@/utils/px2rem';
 
 const Container = styled.button`
   box-sizing: border-box;
 
-  width: 160px;
-  height: 40px;
+  min-width: ${px2rem(160)};
+  height: ${px2rem(40)};
 
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 11px 16px 10px 12px;
-  gap: 8px;
+  padding: ${px2rem(11)} ${px2rem(16)} ${px2rem(10)} ${px2rem(12)};
+  gap: ${px2rem(8)};
 
   border: 1px solid ${({ theme }) => theme['border-primary']};
-  border-radius: 8px;
+  border-radius: ${px2rem(8)};
 
   :hover {
     outline: none !important;

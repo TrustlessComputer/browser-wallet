@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import px2rem from '@/utils/px2rem';
 
 const Container = styled.div`
   display: flex;
@@ -7,7 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
-  max-width: 1000px;
+  max-width: ${px2rem(1000)};
 `;
 
 const Dash = styled.div`

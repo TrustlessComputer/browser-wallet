@@ -7,30 +7,21 @@ const Content = styled.div`
   flex: 1;
   flex-direction: column;
   align-items: center;
+  width: 100% !important;
 
-  .box {
+  .input-container {
     display: flex;
     width: 100%;
-    min-height: 106px;
-    background-color: ${({ theme }) => theme.bg['secondary']};
-    border-radius: 8px;
-    padding: ${px2rem(32)};
     position: relative;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    .overlay {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0.98;
+
+    width: 100% !important;
+    max-width: ${px2rem(780)};
+
+    .wrap-title {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(1px);
-      background-color: ${({ theme }) => theme.bg['secondary']};
-      border-radius: 8px;
+      align-self: flex-start;
     }
   }
 `;

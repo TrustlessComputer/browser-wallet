@@ -59,7 +59,7 @@ const Import = React.memo((props: IProps) => {
   ];
 
   return (
-    <Container className="mt-60">
+    <Container className="mt-32">
       <HeaderBack
         centerComponent={() => <Steps currentStep={currentStep} steps={steps} />}
         onClickGoBack={onGotoHome}

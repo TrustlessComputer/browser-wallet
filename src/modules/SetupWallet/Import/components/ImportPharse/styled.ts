@@ -1,3 +1,4 @@
+import px2rem from '@/utils/px2rem';
 import styled from 'styled-components';
 
 const Content = styled.div`
@@ -7,25 +8,26 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 800px;
+  max-width: ${px2rem(800)};
 
   .box {
+    display: flex;
     width: 100%;
-    margin-top: 16px;
-    min-height: 106px;
-    padding: 24px;
-    background: ${({ theme }) => theme.bg.secondary};
-    border-radius: 8px;
+    min-height: ${px2rem(106)};
+    background-color: ${({ theme }) => theme.bg['secondary']};
+    border-radius: ${px2rem(8)};
+    padding: ${px2rem(32)};
     position: relative;
+    align-items: center;
+    justify-content: center;
 
     .input-phrase {
-      font-weight: 600;
-      font-size: 18px;
-      line-height: 140%;
+      font-weight: 50;
+      font-size: ${px2rem(20)};
       text-align: center;
       width: 100%;
-      min-height: 86px;
-      padding-top: 28px;
+      min-height: ${px2rem(86)};
+      padding-top: ${px2rem(28)};
       color: ${({ theme }) => theme['text-primary']};
       word-break: break-word;
       background-color: transparent;

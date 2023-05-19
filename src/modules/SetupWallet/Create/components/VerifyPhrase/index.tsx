@@ -43,13 +43,13 @@ const VerifyPhrase = (props: VerifyPhraseProps) => {
 
   return (
     <Content>
-      <Text className="mt-60" size="h4" fontWeight="medium">
+      <Text className="mt-48" size="h4" fontWeight="medium">
         Confirm your secret backup phrase
       </Text>
-      <Text color="text-secondary" size="h5" align="center" className="mt-24">
+      <Text color="text-secondary" size="h6" align="center" fontWeight="regular" className="mt-16">
         Please select each phrase in order to make sure it is correct.
       </Text>
-      <div className="mnemonic-box mt-48">
+      <div className="mnemonic-box mt-60">
         {phraseListShuffle.map((item, index) => (
           <MnemonicItemWrapper key={item}>
             <MnemonicItem
@@ -62,7 +62,7 @@ const VerifyPhrase = (props: VerifyPhraseProps) => {
           </MnemonicItemWrapper>
         ))}
       </div>
-      <div className="box mt-32">
+      <div className="box mt-32 mb-16">
         <Text size="h6" fontWeight="medium" align="center">
           {phraseSelectedString}
         </Text>
@@ -71,7 +71,7 @@ const VerifyPhrase = (props: VerifyPhraseProps) => {
         <AlertMessage type={AlertMessageType.error} message="That's not quite right" />
       )}
 
-      <Button sizes="stretch" disabled={!isPhraseCorrect} className="submit-btn mt-48" onClick={props.onVerifySuccess}>
+      <Button sizes="stretch" disabled={!isPhraseCorrect} className="submit-btn mt-32" onClick={props.onVerifySuccess}>
         Verify
       </Button>
     </Content>

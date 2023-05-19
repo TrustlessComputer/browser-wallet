@@ -28,32 +28,36 @@ const Content = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    width: 70%;
-    gap: 12px;
+    max-width: ${px2rem(828)};
+    gap: ${px2rem(8)};
   }
 
   .box {
     min-height: 106px;
-    border-radius: 8px;
-    padding: ${px2rem(24)} ${px2rem(32)};
+    border-radius: ${px2rem(8)};
+    /* padding: ${px2rem(24)} ${px2rem(32)}; */
     display: flex;
     flex-wrap: wrap;
     position: relative;
     align-items: center;
     justify-content: center;
     background: ${({ theme }) => theme.bg.secondary};
-    width: 70%;
+    width: 100%;
+    max-width: ${px2rem(780)};
+    margin-left: ${px2rem(8)};
+    margin-right: ${px2rem(8)};
   }
 
   .submit-btn {
-    width: 70% !important;
+    width: 100% !important;
+    max-width: ${px2rem(780)};
   }
 
   ${MediaQueryBuilder('md', MediaMedium)}
 `;
 
 const MnemonicItemWrapper = styled.div`
-  margin-bottom: 8px;
+  margin-bottom: ${px2rem(8)};
 `;
 
 export { Content, MnemonicItemWrapper };

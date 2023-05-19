@@ -7,12 +7,6 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: ${px2rem(32)};
-  padding-right: ${px2rem(32)};
-  @media screen and (max-width: ${BREAKPOINTS.xs}) {
-    padding-left: ${px2rem(16)};
-    padding-right: ${px2rem(16)};
-  }
 `;
 
 export const StepItem = styled.div<{
@@ -31,13 +25,13 @@ export const StepItem = styled.div<{
       flex-direction: row;
       align-items: center;
       .indicator-left {
-        height: 1px;
+        height: ${px2rem(1)};
         flex: 1;
         background-color: ${({ theme, hideIndicatorLeft, isVerify, isSelected }) =>
           hideIndicatorLeft ? 'transparent' : isVerify || isSelected ? theme['button-primary'] : theme['bg'].secondary};
       }
       .indicator-right {
-        height: 1px;
+        height: ${px2rem(1)};
         flex: 1;
         background-color: ${({ theme, hideIndicatorRight, isVerify }) =>
           isVerify ? theme['button-primary'] : hideIndicatorRight ? 'transparent' : theme['bg'].secondary};
@@ -53,8 +47,7 @@ export const StepItem = styled.div<{
         justify-content: center;
         .number {
           font-weight: 600;
-          font-size: 16px;
-          line-height: 140%;
+          font-size: ${px2rem(16)};
           text-align: center;
           color: ${({ theme, isSelected, isVerify }) =>
             isSelected || isVerify ? theme['text-parallel'] : theme['text-secondary']};
@@ -63,25 +56,24 @@ export const StepItem = styled.div<{
     }
 
     .title {
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 140%;
+      font-weight: 400;
+      font-size: ${px2rem(16)};
       text-align: center;
-      padding-left: 16px;
-      padding-right: 16px;
-      margin-top: 16px;
+      padding-left: ${px2rem(16)};
+      padding-right: ${px2rem(16)};
+      margin-top: ${px2rem(16)};
       color: ${({ theme, isSelected, isVerify }) =>
         isSelected || isVerify ? theme['text-highlight'] : theme['text-secondary']};
-      height: 42px;
+      height: ${px2rem(42)};
     }
   }
 
   @media screen and (max-width: ${BREAKPOINTS.xs}) {
     .content {
       .title {
-        padding-left: 4px;
-        padding-right: 4px;
-        height: 62px;
+        padding-left: ${px2rem(4)};
+        padding-right: ${px2rem(4)};
+        height: ${px2rem(62)};
       }
     }
   }

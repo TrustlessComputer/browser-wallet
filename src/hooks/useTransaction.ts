@@ -45,15 +45,16 @@ const useTransactions = ({ isGetUnInscribedSize, isSignTransaction = false }: IP
   const getTransactions = async () => {
     try {
       if (!user) return;
+      const tcAddress = user.address;
       setIsLoading(true);
-      const storageTransactions = historyStorage.getTransactions(user?.address);
-      const uninscribedTransactions = await getUnInscribedTransactionDetails(user.address);
+      const storageTransactions = historyStorage.getTransactions(tcAddress);
+      const uninscribedTransactions = await getUnInscribedTransactionDetails(tcAddress);
       if (isGetUnInscribedSize) {
         await getTransactionSize(uninscribedTransactions);
       }
       const pendingTxs = HistoryStorage.UnInscribedTransactionBuilder({
         transactions: uninscribedTransactions,
-        tcAddress: user.address,
+        tcAddress,
       });
 
       const transactions: IHistory[] = [];

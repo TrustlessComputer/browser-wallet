@@ -37,16 +37,16 @@ const BackupPhrase = (props: BackupPhraseProps) => {
 
   return (
     <Content>
-      <Text className="mt-60" size="h4" fontWeight="medium">
+      <Text className="mt-48" size="h4" fontWeight="medium">
         Secret backup phrase
       </Text>
-      <Text color="text-secondary" size="h5" align="center" className="mt-24">
+      <Text color="text-secondary" size="h6" align="center" fontWeight="regular" className="mt-16">
         Your secret backup phrase makes it easy to back up and restore your account.
       </Text>
 
       {props.phrase ? (
         <div className="box button-hover mt-60" onClick={onClick} onMouseLeave={() => setHidePhrase(true)}>
-          <Text size="h5" fontWeight="semibold" align="center">
+          <Text size="h6" fontWeight="medium" align="center">
             {props.phrase}
           </Text>
           {hidePhrase && (

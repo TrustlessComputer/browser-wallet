@@ -25,7 +25,7 @@ const ImportPhrase = (props: ImportPhraseProps) => {
 
   const onChangePhrase = (event: any) => {
     const input = event.target.value;
-    setPhrase(input.trim());
+    setPhrase(input);
     setInValidPhrase(false);
   };
 
@@ -45,13 +45,13 @@ const ImportPhrase = (props: ImportPhraseProps) => {
 
   return (
     <Content>
-      <Text className="mt-60" size="h4" fontWeight="medium">
+      <Text className="mt-32" size="h4" fontWeight="medium">
         Import wallet
       </Text>
-      <Text color="text-secondary" size="h5" align="center" className="mt-24">
+      <Text color="text-secondary" size="h6" align="center" fontWeight="regular" className="mt-16">
         Recovery your phrase 12 words
       </Text>
-      <div className="box mt-60">
+      <div className="box mt-60 mb-16">
         <textarea
           className="input-phrase"
           placeholder="Your phrase (required)"
@@ -61,7 +61,7 @@ const ImportPhrase = (props: ImportPhraseProps) => {
         />
       </div>
       {isInValidPhrase && <AlertMessage type={AlertMessageType.error} message="Your phrase is invalid." />}
-      <Button sizes="stretch" className="mt-60" disabled={disabledContinue} onClick={onContinue}>
+      <Button sizes="stretch" className="mt-32" disabled={disabledContinue} onClick={onContinue}>
         Import
       </Button>
     </Content>

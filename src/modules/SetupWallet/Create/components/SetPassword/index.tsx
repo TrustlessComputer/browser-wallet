@@ -49,41 +49,47 @@ const SetPassword = (props: SetPasswordProps) => {
 
   return (
     <Content>
-      <Text className="mt-60" size="h4" fontWeight="medium" align="center">
+      <Text className="mt-48" size="h4" fontWeight="medium" align="center">
         Create password
       </Text>
-      <Text color="text-secondary" size="h5" align="center" className="mt-24">
+      <Text color="text-secondary" size="h6" align="center" fontWeight="regular" className="mt-16">
         This password will unlock your wallet only on this device.
       </Text>
-      <Text color="text-secondary" size="h6" className="mt-60">
-        Must be at least {REQUIRE_PASSWORD_LENGTH} characters.
-      </Text>
-      <Input
-        title="Password"
-        classContainer="mt-32"
-        type="password"
-        placeholder="Enter password"
-        value={password}
-        onChange={onChangePassword}
-      />
-      <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} requireLength={REQUIRE_PASSWORD_LENGTH} />
-      <Input
-        title="Confirm password"
-        classContainer="mt-24"
-        type="password"
-        placeholder="Re-enter password"
-        value={confirmPassword}
-        onChange={onChangeConfirmPassword}
-      />
-      {isStrongPassRef.current && (isMissMatch || props.errorMess) && (
-        <AlertMessage
-          type={AlertMessageType.error}
-          message={props.errorMess || 'Password and Confirm Password does not match!'}
+
+      <div className="input-container mt-60">
+        <div className="wrap-title">
+          <Text color="text-secondary" size="body-large">
+            Must be at least {REQUIRE_PASSWORD_LENGTH} characters.
+          </Text>
+        </div>
+        <Input
+          title="Password"
+          classContainer="mt-24 mb-8"
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={onChangePassword}
         />
-      )}
-      <Button className="mt-60" sizes="stretch" onClick={continueOnClick} disabled={!isStrongPassRef.current}>
-        Continue
-      </Button>
+        <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} requireLength={REQUIRE_PASSWORD_LENGTH} />
+        <Input
+          title="Confirm password"
+          classContainer="mt-16 mb-24"
+          type="password"
+          placeholder="Re-enter password"
+          value={confirmPassword}
+          onChange={onChangeConfirmPassword}
+        />
+
+        {isStrongPassRef.current && (isMissMatch || props.errorMess) && (
+          <AlertMessage
+            type={AlertMessageType.error}
+            message={props.errorMess || 'Password and Confirm Password does not match!'}
+          />
+        )}
+        <Button className="mt-32" sizes="stretch" onClick={continueOnClick} disabled={!isStrongPassRef.current}>
+          Continue
+        </Button>
+      </div>
     </Content>
   );
 };

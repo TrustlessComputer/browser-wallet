@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import px2rem from '@/utils/px2rem';
+
 const Content = styled.div`
   position: relative;
   display: flex;
@@ -10,13 +11,14 @@ const Content = styled.div`
   .box {
     display: flex;
     width: 100%;
-    min-height: 106px;
+    min-height: ${px2rem(106)};
     background-color: ${({ theme }) => theme.bg['secondary']};
-    border-radius: 8px;
+    border-radius: ${px2rem(8)};
     padding: ${px2rem(32)};
     position: relative;
     align-items: center;
     justify-content: center;
+
     .overlay {
       height: 100%;
       width: 100%;
@@ -29,14 +31,14 @@ const Content = styled.div`
       justify-content: center;
       backdrop-filter: blur(1px);
       background-color: ${({ theme }) => theme.bg['secondary']};
-      border-radius: 8px;
+      border-radius: ${px2rem(8)};
     }
   }
 
   .alert-wrapper {
-    padding: 6px 16px;
+    padding: ${px2rem(6)} ${px2rem(16)};
     border: 1px solid ${({ theme }) => theme['border-secondary']};
-    border-radius: 8px;
+    border-radius: ${px2rem(8)};
   }
 `;
 
