@@ -6,6 +6,7 @@ import * as TC_SDK from 'trustless-computer-sdk';
 import BigNumber from 'bignumber.js';
 import { formatBTCPrice } from '@/utils/format';
 import Spinner from '@/components/Spinner';
+import { TRANSFER_TX_SIZE } from '@/configs';
 
 interface IProps {
   isLoading: boolean;
@@ -41,18 +42,13 @@ const FeeRate = React.memo((props: IProps) => {
 
   const calcAmount = (feeRatePerByte: number | string) => {
     const options = props.options;
-    if (options && options.type === 'inscribe' && options.sizeByte) {
-      const estimatedFee = TC_SDK.estimateInscribeFee({
-        feeRatePerByte: Number(feeRatePerByte),
-        tcTxSizeByte: options.sizeByte,
-      });
-      return {
-        amount: formatBTCPrice(estimatedFee.totalFee.integerValue(BigNumber.ROUND_CEIL).toNumber()),
-        symbol: 'BTC',
-      };
-    }
+    const txSize = options?.sizeByte || TRANSFER_TX_SIZE;
+    const estimatedFee = TC_SDK.estimateInscribeFee({
+      feeRatePerByte: Number(feeRatePerByte),
+      tcTxSizeByte: txSize,
+    });
     return {
-      amount: undefined,
+      amount: formatBTCPrice(estimatedFee.totalFee.integerValue(BigNumber.ROUND_CEIL).toNumber()),
       symbol: 'BTC',
     };
   };
