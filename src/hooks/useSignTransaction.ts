@@ -59,7 +59,7 @@ const useSignTransaction = () => {
       data: payload.calldata,
       value: ethers.BigNumber.from(payload.value || '0'),
     });
-    return Math.ceil(gasLimit.toNumber() * 1.1);
+    return Math.ceil(gasLimit.toNumber() * 1.2);
   };
 
   const createInscribeTransaction = async (transaction: TransactionResponse, payload: ISignTransactionPayload) => {
@@ -101,6 +101,7 @@ const useSignTransaction = () => {
     }
     return inscribeTx;
   };
+
   const createAndSendTransaction = async (payload: ISignTransactionPayload): Promise<ISignResp | undefined> => {
     if (!provider || !userSecretKey) {
       throw new WError(ERROR_CODE.ACCOUNT_EMPTY);

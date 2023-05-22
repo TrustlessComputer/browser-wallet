@@ -91,7 +91,7 @@ export const getErrorMessage = (error: unknown, name: string) => {
 
   return {
     message: `${message} [${name}]`,
-    desc,
+    desc: `${desc} [${name}]`,
   };
 };
 

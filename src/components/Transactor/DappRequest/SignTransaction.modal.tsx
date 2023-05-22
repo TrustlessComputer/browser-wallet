@@ -47,7 +47,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     isSignTransaction: true,
   });
 
-  const { maxFee, setGasLimit, error, setEstimating, estimating } = useGasFee({ defaultGasPrice: request.gasPrice });
+  const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({ defaultGasPrice: undefined });
 
   const {
     feeRate,
@@ -75,10 +75,19 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
             from: userSecretKey.address,
             to: request.to || '',
           });
+
+      if (request.gasLimit) {
+        await estimateGas({
+          calldata: request.calldata,
+          from: userSecretKey.address,
+          to: request.to || '',
+        });
+      }
       setGasLimit(gasLimit);
+      setError('');
     } catch (error) {
       const { message } = getErrorMessage(error, 'estimateFee');
-      toast.error(message);
+      setError(message);
     } finally {
       setEstimating(false);
     }
@@ -137,13 +146,13 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
       });
       toast.success('Sign transaction successfully');
     } catch (error) {
-      const { message } = getErrorMessage(error, 'onSignRequest');
-      toast.error(message);
+      const { desc } = getErrorMessage(error, 'onSignRequest');
+      toast.error(desc);
       await connection.postResultSign({
         hash: '',
         nonce: 0,
         method: TC_CONNECT.RequestMethod.sign,
-        errMsg: message,
+        errMsg: desc,
       });
     } finally {
       setSubmitting(false);
