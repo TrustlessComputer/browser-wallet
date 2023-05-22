@@ -5,7 +5,6 @@ import useNativeBalance from '@/hooks/contracts-operation.ts/useNativeBalance';
 import { debounce } from 'lodash';
 import { getCollectedUTXO } from '@/services/bitcoin';
 import { ICollectedUTXOResp } from '@/interfaces/api/bitcoin';
-import { TC_SDK } from '@/lib';
 
 export interface IAssetsContext {
   tcBalance: string;
@@ -63,11 +62,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   );
 
   const btcBalance = React.useMemo(() => {
-    const balance = TC_SDK.getBTCBalance({
-      utxos: assets?.txrefs || [],
-      inscriptions: assets?.inscriptions_by_outputs || {},
-    });
-    return balance.toString();
+    return assets ? assets?.availableBalance.toString() : '0';
   }, [assets]);
 
   useEffect(() => {

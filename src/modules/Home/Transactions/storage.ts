@@ -13,7 +13,7 @@ import network from '@/lib/network.helpers';
 
 export class HistoryStorage extends StorageService {
   private getTxsHistoryKey = (tcAddress: string) => {
-    return `history-${network.current.Name}-${tcAddress.toLowerCase()}`;
+    return `history-${network.current.Key}-${tcAddress.toLowerCase()}`;
   };
   getTransactions = (tcAddress: string): IHistory[] => {
     const key = this.getTxsHistoryKey(tcAddress);
