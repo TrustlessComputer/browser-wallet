@@ -16,6 +16,7 @@ export interface INetwork {
   BE_API: string;
   Icon: string;
   BTCExplorer: string;
+  Key: string;
 }
 
 const NETWORKS: Array<INetwork> = [
@@ -28,6 +29,7 @@ const NETWORKS: Array<INetwork> = [
     BE_API: 'https://dapp.trustless.computer/dapp/api',
     Icon: 'ic-penguin-currency-dark.svg',
     BTCExplorer: 'https://mempool.space',
+    Key: 'Mainnet',
   },
   {
     Name: 'Regtest manual',
@@ -38,6 +40,7 @@ const NETWORKS: Array<INetwork> = [
     BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
     Icon: 'ic-penguin-regtest-dark.svg',
     BTCExplorer: 'https://blockstream.regtest.trustless.computer/regtest',
+    Key: 'Regtest manual',
   },
   {
     Name: 'Regtest auto',
@@ -48,6 +51,7 @@ const NETWORKS: Array<INetwork> = [
     BE_API: 'https://dapp.dev.trustless.computer/dapp/api',
     Icon: 'ic-penguin-regtest-dark.svg',
     BTCExplorer: 'https://blockstream.regtest.trustless.computer/regtest',
+    Key: 'Regtest auto',
   },
 ];
 

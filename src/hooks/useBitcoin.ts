@@ -36,7 +36,7 @@ const useBitcoin = () => {
     const tx = await TC_SDK.createInscribeTx({
       senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
       senderAddress: userSecretKey.btcAddress,
-      utxos: assets.txrefs,
+      utxos: assets.availableUTXOs,
       inscriptions: {},
       tcTxIDs: payload.tcTxIDs,
       feeRatePerByte: payload.feeRate,
@@ -50,7 +50,7 @@ const useBitcoin = () => {
     const res = await TC_SDK.createBatchInscribeTxs({
       senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
       senderAddress: userSecretKey.btcAddress,
-      utxos: assets.txrefs,
+      utxos: assets.availableUTXOs,
       inscriptions: {},
       tcTxDetails,
       feeRatePerByte: feeRate,
@@ -90,7 +90,7 @@ const useBitcoin = () => {
       senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
       feeRatePerByte: feeRate,
       receiverInsAddress: receiver,
-      utxos: assets.txrefs,
+      utxos: assets.availableUTXOs,
       sendAmount: sendAmount,
       sendInscriptionID: '',
       inscriptions: {},
@@ -106,8 +106,8 @@ const useBitcoin = () => {
     const { revealTxID } = await TC_SDK.replaceByFeeInscribeTx({
       senderPrivateKey: userSecretKey.btcPrivateKeyBuffer,
       btcAddress: userSecretKey.btcAddress,
-      utxos: assets.txrefs,
-      inscriptions: assets.inscriptions_by_outputs,
+      utxos: assets.availableUTXOs,
+      inscriptions: {},
       revealTxID: payload.btcHash,
       feeRatePerByte: payload.feeRate,
       tcAddress: payload.tcAddress,

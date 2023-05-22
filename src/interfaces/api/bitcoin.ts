@@ -1,4 +1,5 @@
 import * as TC_SDK from 'trustless-computer-sdk';
+import BigNumber from 'bignumber.js';
 
 export interface IInscriptionByOutput {
   [key: string]: TC_SDK.Inscription[];
@@ -7,13 +8,10 @@ export interface IInscriptionByOutput {
 export interface IBlockStreamTxs extends IPendingUTXO {}
 
 export interface ICollectedUTXOResp {
-  address: string;
-  inscription_id: string;
-  balance: number;
-  unconfirmed_balance: number;
-  final_balance: number;
-  txrefs: TC_SDK.UTXO[];
-  inscriptions_by_outputs: IInscriptionByOutput;
+  availableUTXOs: TC_SDK.UTXO[];
+  incomingUTXOs: TC_SDK.UTXO[];
+  availableBalance: BigNumber;
+  incomingBalance: BigNumber;
 }
 
 export enum FeeRateName {

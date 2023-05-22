@@ -1,10 +1,6 @@
-import { apiClient } from '@/services';
 import { FeeRateName, IBlockStreamTxs, ICollectedUTXOResp, IFeeRate, IPendingUTXO } from '@/interfaces/api/bitcoin';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { API_BLOCKSTREAM } from '@/configs';
-import { formatUTXOs, formatInscriptions } from '@/lib/assets.helpers';
-
-const WALLETS_API_PATH = '/wallets';
 
 // Collected UTXO
 export const getCollectedUTXO = async (
@@ -12,24 +8,11 @@ export const getCollectedUTXO = async (
   tcAddress: string,
 ): Promise<ICollectedUTXOResp | undefined> => {
   try {
-    const collected: any = await apiClient.get<ICollectedUTXOResp>(`${WALLETS_API_PATH}/${btcAddress}`);
-    const tempUTXOs = formatUTXOs([...(collected?.txrefs || [])]);
-    const inscriptions = formatInscriptions(collected?.inscriptions_by_outputs || {});
-    let utxos;
-    try {
-      utxos = await TC_SDK.aggregateUTXOs({
-        tcAddress: tcAddress,
-        btcAddress: btcAddress,
-        utxos: [...tempUTXOs],
-      });
-    } catch (e) {
-      utxos = [...tempUTXOs];
-    }
-    return {
-      ...collected,
-      txrefs: utxos || [],
-      inscriptions_by_outputs: inscriptions,
-    } as ICollectedUTXOResp;
+    const collected = await TC_SDK.getUTXOs({
+      btcAddress,
+      tcAddress,
+    });
+    return collected;
   } catch (err) {
     console.log(err);
   }
