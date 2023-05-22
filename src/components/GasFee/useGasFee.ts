@@ -7,7 +7,12 @@ import format from '@/utils/amount';
 import Token from '@/constants/token';
 import { AssetsContext } from '@/contexts/assets.context';
 
-const useGasFee = () => {
+interface IProps {
+  defaultGasPrice?: string;
+}
+
+const useGasFee = (props: IProps = { defaultGasPrice: undefined }) => {
+  const { defaultGasPrice } = props;
   const { tcBalance } = useContext(AssetsContext);
   const [gasLimit, setGasLimit] = React.useState<number | undefined>(undefined);
   const [error, setError] = React.useState<string>('');
@@ -21,7 +26,7 @@ const useGasFee = () => {
     try {
       setLoading(true);
       if (!provider) return;
-      const gasPrice = await getGasPrice(provider);
+      const gasPrice = defaultGasPrice ? Number(defaultGasPrice) : await getGasPrice(provider);
       setGasPrice(Number(gasPrice));
       setLoading(false);
     } catch (e) {
@@ -42,8 +47,12 @@ const useGasFee = () => {
     return {
       feeOriginal,
       feeText,
+
       gasLimit: new BigNumber(gasLimit || 0).toNumber(),
       gasLimitText: gasLimit ? `${format.number(gasLimit)}` : undefined,
+
+      gasPrice: new BigNumber(gasPrice || 0).toNumber(),
+      gasPriceText: gasPrice ? `${format.shorterAmount({ originalAmount: gasPrice, decimals: 9 })}` : undefined,
     };
   }, [gasLimit, gasPrice]);
 

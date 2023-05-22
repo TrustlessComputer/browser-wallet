@@ -23,6 +23,7 @@ export interface IEstimateGasPayload {
 export interface ISignTransactionPayload extends IEstimateGasPayload {
   inscribeable: boolean;
   gasLimit: number;
+  gasPrice: number;
   uninscribed: ITCTxDetail[];
   feeRate: number;
   method: string;
@@ -118,6 +119,7 @@ const useSignTransaction = () => {
       data: payload.calldata,
       value: ethers.BigNumber.from(payload.value || '0'),
       gasLimit: Web3.utils.toHex(payload.gasLimit || 0),
+      gasPrice: Web3.utils.toHex(payload.gasPrice || 0),
       nonce: nonce,
     });
 

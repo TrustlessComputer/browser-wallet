@@ -36,12 +36,14 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   const [submitting, setSubmitting] = React.useState(false);
   const userSecretKey = useUserSecretKey();
   const { estimateGas, createAndSendTransaction } = useSignTransaction();
-  const { maxFee, setGasLimit, error, setEstimating, estimating } = useGasFee();
   const { getTransactions } = useContext(TransactionContext);
   const { debounceGetTransactions, uninscribed, sizeByte } = useTransaction({
     isGetUnInscribedSize: true,
     isSignTransaction: true,
   });
+
+  const { maxFee, setGasLimit, error, setEstimating, estimating } = useGasFee({ defaultGasPrice: request.gasPrice });
+
   const {
     feeRate,
     onChangeFee,
@@ -61,11 +63,13 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     if (!userSecretKey) return;
     try {
       setEstimating(true);
-      const gasLimit = await estimateGas({
-        calldata: request.calldata,
-        from: userSecretKey.address,
-        to: request.to || '',
-      });
+      const gasLimit = request.gasLimit
+        ? Number(request.gasLimit)
+        : await estimateGas({
+            calldata: request.calldata,
+            from: userSecretKey.address,
+            to: request.to || '',
+          });
       setGasLimit(gasLimit);
     } catch (error) {
       const { message } = getErrorMessage(error, 'estimateFee');
@@ -113,6 +117,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         to: request.to || '',
         feeRate: currentRate,
         gasLimit: maxFee.gasLimit,
+        gasPrice: maxFee.gasPrice,
         inscribeable: request.isInscribe,
         uninscribed: uninscribed,
         method: signMethod,
@@ -182,12 +187,20 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
           content={
             <AdvanceWrapper>
               <div className="box">
-                {maxFee.gasLimitText && (
+                {!!maxFee.gasLimitText && (
                   <Row justify="space-between">
                     <Text size="body-large" color="text-highlight">
                       Gas Limit
                     </Text>
                     <Text size="body-large">{maxFee.gasLimitText}</Text>
+                  </Row>
+                )}
+                {!!maxFee.gasPriceText && (
+                  <Row justify="space-between" className="mt-16">
+                    <Text size="body-large" color="text-highlight">
+                      Gas Price
+                    </Text>
+                    <Text size="body-large">{maxFee.gasPriceText} GWEI</Text>
                   </Row>
                 )}
                 {!!functionName && (
