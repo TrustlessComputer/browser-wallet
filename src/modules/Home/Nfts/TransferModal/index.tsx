@@ -3,13 +3,21 @@ import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import { IInscription } from '@/interfaces/api/inscription';
 import { Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Container, ImageContainer, TransferContainer, Title, BackHeader } from './TransferModal.styled';
 import NFTDisplayBox from '@/components/NFTDisplayBox';
 import { ArrowLeftIcon } from '@/components/icons';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
 import { FeeRate } from '@/components/FeeRate';
+import useContractOperation from '@/hooks/useContractOperation';
+import useTransferERC721, { ITransferERC721 } from '@/hooks/contracts-operation.ts/useTransferERC721';
+import { TransactionResponse } from '@ethersproject/abstract-provider';
+import { useUserSecretKey } from '@/state/wallet/hooks';
+import { debounce } from 'lodash';
+import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
+import useGasFee from '@/components/GasFee/useGasFee';
+import GasFee from '@/components/GasFee';
 
 type Props = {
   show: boolean;
@@ -25,6 +33,7 @@ interface IFormValue {
 
 const TransferModal = (props: Props) => {
   const { show = false, handleClose, contractAddress, artifact, onClickBack } = props;
+  const userSecretKey = useUserSecretKey();
 
   const tokenId = artifact.tokenId;
 
@@ -40,6 +49,40 @@ const TransferModal = (props: Props) => {
     isLoading: isLoadingRate,
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
+  const { maxFee, setGasLimit, error, setError, setEstimating, estimating, loading } = useGasFee();
+
+  const { run: onTransferERC721, estimateGas } = useContractOperation<ITransferERC721, TransactionResponse>({
+    operation: useTransferERC721,
+    inscribeable: true,
+    feeRate: currentRate,
+  });
+
+  const onEstimateGas = async (payload: IFormValue) => {
+    try {
+      if (!estimateGas) {
+        throw new WError(ERROR_CODE.INVALID_PARAMS);
+      }
+
+      if (!payload.toAddress) {
+        setGasLimit(undefined);
+        return;
+      }
+      setEstimating(true);
+      const gasLimit = await estimateGas({
+        receiver: payload.toAddress,
+        tokenID: tokenId,
+        tokenAddress: artifact.collectionAddress,
+      });
+      setGasLimit(gasLimit);
+      setError('');
+    } catch (error) {
+      const { message } = getErrorMessage(error, 'estimateGas');
+      setError(message);
+    }
+    setEstimating(false);
+  };
+
+  const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey]);
 
   useEffect(() => {
     if (show) {
@@ -54,28 +97,31 @@ const TransferModal = (props: Props) => {
       errors.toAddress = 'Receiver wallet address is required.';
     }
 
+    if (!errors.toAddress) {
+      debounceEstimateGas(values);
+    }
+
     return errors;
   };
 
-  const handleSubmit = async (): Promise<void> => {
+  const handleSubmit = async (payload: IFormValue): Promise<void> => {
     if (!tokenId || !contractAddress) {
       toast.error('Token information not found');
       setIsProcessing(false);
       return;
     }
-
-    // const { toAddress } = values;
     try {
       setIsProcessing(true);
-      // await run({
-      //   tokenId: tokenId,
-      //   to: toAddress,
-      //   contractAddress: contractAddress,
-      // });
+      await onTransferERC721({
+        receiver: payload.toAddress,
+        tokenID: tokenId,
+        tokenAddress: artifact.collectionAddress,
+      });
       toast.success('Transaction has been created. Please wait for few minutes.');
       handleClose();
     } catch (err) {
-      toast.error((err as Error).message);
+      const { desc } = getErrorMessage(error, 'submitNFT');
+      toast.error(desc);
     } finally {
       setIsProcessing(false);
     }
@@ -124,7 +170,7 @@ const TransferModal = (props: Props) => {
                     placeholder={`Paste TC wallet address here`}
                     errorMsg={errors.toAddress && touched.toAddress ? errors.toAddress : undefined}
                   />
-
+                  <GasFee fee={maxFee.feeText} error={error} />
                   <FeeRate
                     allRate={feeRate}
                     isCustom={true}
@@ -136,7 +182,12 @@ const TransferModal = (props: Props) => {
                     isLoading={isLoadingRate}
                   />
 
-                  <Button disabled={isProcessing} type="submit" className="confirm-btn">
+                  <Button
+                    isLoading={estimating || isProcessing || loading}
+                    disabled={estimating || isProcessing || loading}
+                    type="submit"
+                    className="confirm-btn"
+                  >
                     {isProcessing ? 'Processing...' : 'Transfer'}
                   </Button>
                 </form>

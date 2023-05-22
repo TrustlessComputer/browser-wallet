@@ -18,7 +18,7 @@ export const userAccountInfoSelector = createSelector(getWalletSelector, wallet 
   const tcAccount = wallet?.tcAccount;
   const btcAddress = wallet?.btcAddress;
   if (!tcAccount || !btcAddress) return undefined;
-  return { ...tcAccount, btcAddress } as IUserInfo;
+  return { ...tcAccount, btcAddress, address: '0xDa08dD1c849d8DEC0Da09ec541506CefaD6D8F5c' } as IUserInfo;
 });
 
 export const listAccountsSelector = createSelector(getWalletSelector, wallet => wallet?.accounts || []);

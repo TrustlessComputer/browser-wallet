@@ -19,6 +19,7 @@ import {
   Title,
   WrapContainer,
 } from './CollectionModal.styled';
+import { useCurrentUserInfo } from '@/state/wallet/hooks';
 
 const LIMIT = 6;
 
@@ -31,6 +32,7 @@ type Props = {
 
 const CollectionModal = (props: Props) => {
   const { show = false, handleClose, collection, onClickNFT } = props;
+  const user = useCurrentUserInfo();
 
   const [isFetching, setIsFetching] = useState(false);
   const [inscriptions, setInscriptions] = useState<IInscription[]>([]);
@@ -56,7 +58,7 @@ const CollectionModal = (props: Props) => {
         contractAddress: collection.contract,
         page,
         limit: LIMIT,
-        owner: collection.creator || '',
+        owner: user?.address || '',
       });
       if (page > 1) {
         setInscriptions(prev => [...prev, ...data]);

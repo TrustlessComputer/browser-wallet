@@ -23,13 +23,13 @@ export const getCollectionByWallet = (
     method: 'GET',
   });
 
-// TODO: Add iterface for response
+// TODO: Add interface for response
 export const getCollectionDetail = ({ contractAddress }: { contractAddress: string }): Promise<ICollection> =>
   swrFetcher(`${API_PATH}/collections/${contractAddress}`, {
     method: 'GET',
   });
 
-// TODO: Add iterface for response
+// TODO: Add interface for response
 export const getCollectionNfts = ({
   contractAddress,
   limit = 10,
