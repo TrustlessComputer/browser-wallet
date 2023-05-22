@@ -7,13 +7,15 @@ export const DropDownContainer = styled.div`
   .actions {
     display: flex;
 
-    border-top: ${px2rem(1)} solid ${({ theme }) => theme['text-four']};
-
     padding: ${px2rem(16)};
     padding-bottom: ${px2rem(4)};
     gap: ${px2rem(12)};
     margin-top: ${px2rem(12)};
     width: 100%;
+  }
+
+  .actions-border-top {
+    border-top: ${px2rem(1)} solid ${({ theme }) => theme['text-four']};
   }
 
   .create-btn {
@@ -136,5 +138,5 @@ export const MoreDropdownItem = styled.div`
 
 export const MoreDropdownList = styled.div`
   display: grid;
-  gap: ${px2rem(12)} !important;
+  gap: ${px2rem(16)} !important;
 `;
