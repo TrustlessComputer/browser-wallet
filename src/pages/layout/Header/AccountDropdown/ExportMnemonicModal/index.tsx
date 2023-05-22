@@ -36,7 +36,7 @@ const ExportMnemonic = React.memo((props: Props) => {
   React.useEffect(getAccountPrivateKey, [masterIns]);
 
   return (
-    <SignerModal show={show} onClose={onClose} title="Show Private Key" width={600}>
+    <SignerModal show={show} onClose={onClose} title="Show Mnemonic" width={600}>
       <Container className="mt-24">
         <div className="form-container">
           <div
