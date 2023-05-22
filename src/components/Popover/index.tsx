@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect, useImperativeHandle } from 'react';
 import { PopoverWrapper, OverlayWrapper, Wrapper } from './styled';
 import { CDN_URL_ICONS } from '@/configs';
 import IconSVG from '@/components/IconSVG';
@@ -12,8 +12,15 @@ interface IProps extends PropsWithChildren {
   type?: 'click' | 'hover';
 }
 
-const Dropdown = React.memo(
-  ({ icon, element, width, children, unwrapElement, closeDropdown, type = 'click' }: IProps) => {
+export interface IDropdownRef {
+  onToggle: () => void;
+}
+
+const Dropdown = React.forwardRef(
+  (
+    { icon, element, width, children, unwrapElement, closeDropdown, type = 'click' }: IProps,
+    forwardedRef: React.ForwardedRef<IDropdownRef>,
+  ) => {
     const [show, setShow] = React.useState(false);
     const ref = React.useRef(null);
 
@@ -33,6 +40,10 @@ const Dropdown = React.memo(
         setShow(false);
       }
     }, [closeDropdown]);
+
+    useImperativeHandle(forwardedRef, () => ({
+      onToggle,
+    }));
 
     if (type === 'click') {
       return (

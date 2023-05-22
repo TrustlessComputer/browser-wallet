@@ -17,8 +17,8 @@ const GasFee = React.memo((props: IProps) => {
   return (
     <Container>
       <Row justify="space-between" className="mb-12">
-        <Text size="body-large">TC Balance</Text>
-        <Text size="body-large">
+        <Text size="body">TC Balance</Text>
+        <Text size="body">
           {format.formatAmount({
             originalAmount: new BigNumber(tcBalance).toNumber(),
             decimals: Token.TRUSTLESS.decimal,
@@ -28,14 +28,14 @@ const GasFee = React.memo((props: IProps) => {
         </Text>
       </Row>
       <Row justify="space-between" className="mb-12">
-        <Text size="body-large">
+        <Text size="body">
           Gas <span className="sub-text">(estimated)</span>
         </Text>
-        <Text size="body-large">{props.fee} TC</Text>
+        <Text size="body">{props.fee} TC</Text>
       </Row>
       <Row justify="space-between">
-        <Text size="body-large">BTC Balance</Text>
-        <Text size="body-large">
+        <Text size="body">BTC Balance</Text>
+        <Text size="body">
           {format.formatAmount({
             originalAmount: new BigNumber(btcBalance).toNumber(),
             decimals: Token.BITCOIN.decimal,

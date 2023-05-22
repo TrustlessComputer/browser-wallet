@@ -10,7 +10,13 @@ import useGasFee from '@/components/GasFee/useGasFee';
 import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
 import { FunctionItem } from '@/interfaces/api/signature';
-import { AdvanceWrapper, ButtonGroup, Container } from '@/components/Transactor/DappRequest/styled';
+import {
+  AdvanceWrapper,
+  ButtonGroup,
+  Container,
+  ContentBox,
+  Divider,
+} from '@/components/Transactor/DappRequest/styled';
 import Text from '@/components/Text';
 import GasFee from '@/components/GasFee';
 import { FeeRate } from '@/components/FeeRate';
@@ -18,12 +24,12 @@ import useFeeRate from '@/components/FeeRate/useFeeRate';
 import AccordionComponent from '@/components/Accordion';
 import Button from '@/components/Button';
 import { Row } from '@/components/Row';
-import { ellipsisCenter } from '@/utils';
 import network from '@/lib/network.helpers';
 import throttle from 'lodash/throttle';
 import useTransaction from '@/hooks/useTransaction';
 import Spinner from '@/components/Spinner';
 import { TransactionContext } from '@/contexts/transaction.context';
+import SelectAccount from '@/components/SelectAccount';
 
 interface IProps {
   requestID: string;
@@ -162,25 +168,28 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   useAsyncEffect(getFunctionCall, []);
 
   return (
-    <SignerModal
-      show={!!requestID}
-      onClose={onRejectRequest}
-      title={
-        <Text color="text-highlight" fontWeight="semibold" size="h4">
+    <SignerModal show={!!requestID} onClose={onRejectRequest} title="Sign Transaction">
+      <Container>
+        <Text color="text-highlight" fontWeight="semibold" size="h5" className="function-name">
           {signMethod}
         </Text>
-      }
-    >
-      <Container>
-        <Row justify="space-between" className="mb-12 mt-32">
-          <Text size="body-large">TO</Text>
-          <Text size="body-large">
-            <a href={`${network.current.Explorer}/address/${request.to}`} target="_blank">
-              {ellipsisCenter({ str: request.to || '' })}
-            </a>
-          </Text>
-        </Row>
         <GasFee fee={maxFee.feeText} error={error} />
+        <Divider className="mb-24 mt-24" />
+        <SelectAccount title="TRANSFER FROM" className="mb-16" setLoading={isLoading => setEstimating(isLoading)} />
+        {!!request.to && (
+          <>
+            <Text size="note" color="text-secondary">
+              TRANSFER TO
+            </Text>
+            <ContentBox>
+              <Text size="body">
+                <a href={`${network.current.Explorer}/address/${request.to}`} target="_blank">
+                  {request.to}
+                </a>
+              </Text>
+            </ContentBox>
+          </>
+        )}
         <AccordionComponent
           className="mt-24 mb-24"
           header="Advance"
@@ -189,18 +198,18 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
               <div className="box">
                 {!!maxFee.gasLimitText && (
                   <Row justify="space-between">
-                    <Text size="body-large" color="text-highlight">
+                    <Text size="body" color="text-highlight">
                       Gas Limit
                     </Text>
-                    <Text size="body-large">{maxFee.gasLimitText}</Text>
+                    <Text size="body">{maxFee.gasLimitText}</Text>
                   </Row>
                 )}
                 {!!maxFee.gasPriceText && (
                   <Row justify="space-between" className="mt-16">
-                    <Text size="body-large" color="text-highlight">
+                    <Text size="body" color="text-highlight">
                       Gas Price
                     </Text>
-                    <Text size="body-large">{maxFee.gasPriceText} GWEI</Text>
+                    <Text size="body">{maxFee.gasPriceText} GWEI</Text>
                   </Row>
                 )}
                 {!!functionName && (

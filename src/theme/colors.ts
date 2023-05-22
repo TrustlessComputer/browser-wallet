@@ -108,6 +108,8 @@ export const darkTheme = {
     secondary: colors.dark['110'],
     bns: '#17171a',
   },
+
+  devider: colors.dark['60'],
 };
 
 export const lightTheme = {
@@ -149,4 +151,6 @@ export const lightTheme = {
     secondary: colors.light['80'],
     bns: 'transparent',
   },
+
+  devider: colors.light['60'],
 };

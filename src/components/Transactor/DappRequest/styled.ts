@@ -4,6 +4,9 @@ import styled from 'styled-components';
 const Container = styled.div`
   margin-top: ${px2rem(24)};
   position: relative;
+  .function-name {
+    text-transform: uppercase;
+  }
   .loader {
     position: absolute;
     width: 100%;
@@ -31,4 +34,23 @@ const AdvanceWrapper = styled.div`
   }
 `;
 
-export { Container, ButtonGroup, AdvanceWrapper };
+const ContentBox = styled.div`
+  padding: 12px;
+  background-color: ${({ theme }) => theme.bg.secondary};
+  border-radius: 8px;
+  margin-top: 6px;
+  p {
+    line-break: anywhere;
+  }
+  * {
+    color: ${({ theme }) => theme['text-secondary']};
+  }
+`;
+
+const Divider = styled.div`
+  background-color: ${({ theme }) => theme.devider};
+  height: 1px;
+  width: 100%;
+`;
+
+export { Container, ButtonGroup, AdvanceWrapper, ContentBox, Divider };
