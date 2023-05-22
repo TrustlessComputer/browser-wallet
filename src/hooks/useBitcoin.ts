@@ -126,13 +126,13 @@ const useBitcoin = () => {
       try {
         const res = await window.tcClient.getTCTxByHash(txHash);
         if (res && res.blockHash) {
-          if (res.blockHash === '0x0') {
+          if (res.status === '0x0') {
             return IStatusCode.FAILED;
           }
           return IStatusCode.SUCCESS;
         }
       } catch (e) {
-        // handle error
+        return IStatusCode.FAILED;
       }
     }
     return IStatusCode.PROCESSING;

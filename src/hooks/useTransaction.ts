@@ -65,12 +65,11 @@ const useTransactions = ({ isGetUnInscribedSize, isSignTransaction = false }: IP
         let isRBFable = false;
         let currentSat = 0;
         let minSat = 0;
-        if (!!btcHash && status === IStatusCode.PROCESSING) {
-          // statusCode = await getStatusCode(tcHash, user.address);
+        if (status === IStatusCode.PROCESSING || status === IStatusCode.PENDING) {
           const [txStatus, RBFStatus] = await Promise.all([
             await getStatusCode(tcHash, user.address),
             await getIsRBFable({
-              btcHash: btcHash,
+              btcHash: btcHash || '',
               btcAddress: user.btcAddress,
               tcAddress: user.address,
             }),
