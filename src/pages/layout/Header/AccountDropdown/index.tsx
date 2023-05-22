@@ -1,4 +1,4 @@
-import { ExportIcon, TrashIcon } from '@/components/icons';
+import { ExportKeyIcon, ExportIcon, TrashIcon } from '@/components/icons';
 import IconSVG from '@/components/IconSVG';
 import Dropdown from '@/components/Popover';
 import Text from '@/components/Text';
@@ -59,9 +59,16 @@ const AccountDropdown = React.memo(() => {
 
   const MoreList = [
     {
-      title: 'Export Key',
+      title: 'View account in explorer',
       titleClass: 'text-normal',
       icon: <ExportIcon />,
+      iconClass: 'icon-normal',
+      onClick: () => {},
+    },
+    {
+      title: 'Export Key',
+      titleClass: 'text-normal',
+      icon: <ExportKeyIcon />,
       iconClass: 'icon-normal',
       onClick: (account: IAccount) => {
         setExportAccount(account);
@@ -117,6 +124,7 @@ const AccountDropdown = React.memo(() => {
                 <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
               </div>
             }
+            width={300}
           >
             <MoreDropdownList>
               {MoreList.map(item => {
@@ -147,9 +155,15 @@ const AccountDropdown = React.memo(() => {
     );
   };
 
-  const renderAction = (iconName: string, title: string, onClick: () => void, textClassName?: string) => {
+  const renderAction = (
+    iconName: string,
+    title: string,
+    onClick: () => void,
+    showBorder: boolean = true,
+    textClassName?: string,
+  ) => {
     return (
-      <div className="actions">
+      <div className={`actions ${showBorder ? 'actions-border-top' : ''}`}>
         <div className="create-btn" onClick={onClick}>
           <IconSVG src={`${CDN_URL_ICONS}/${iconName}`} maxWidth="20" />
           <Text color="text-primary" fontWeight="medium" size="body" className={textClassName || 'text'}>
@@ -196,7 +210,9 @@ const AccountDropdown = React.memo(() => {
               )}
           </DropdownList>
           {renderAction('ic-plus-square-dark.svg', 'Create new account', () => setShowCreateModal(true))}
-          {renderAction('ic-logout-dark.svg', 'Sign out', () => dispatch(setIsLockedWallet(true)), 'text-remove')}
+          {renderAction('ic-export-mnemoic-dark.svg', 'Export mnemonic', () => {}, false)}
+          {renderAction('ic-export-key-dark.svg', 'Export BTC private key', () => {}, false)}
+          {renderAction('ic-logout-dark.svg', 'Sign out', () => dispatch(setIsLockedWallet(true)), true, 'text-remove')}
         </DropDownContainer>
       </Dropdown>
       <CreateModal show={showCreateModal} handleClose={() => setShowCreateModal(false)} />
