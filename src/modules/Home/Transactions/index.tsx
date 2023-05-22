@@ -162,13 +162,15 @@ const Transactions = React.memo(() => {
         </div>
       )}
       <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
-      <SpeedUpModal
-        show={!!speedUpTx}
-        onClose={() => {
-          setSpeedUpTx(undefined);
-        }}
-        speedUpTx={speedUpTx}
-      />
+      {!!speedUpTx && (
+        <SpeedUpModal
+          show={!!speedUpTx}
+          onClose={() => {
+            setSpeedUpTx(undefined);
+          }}
+          speedUpTx={speedUpTx}
+        />
+      )}
     </StyledTransaction>
   );
 });
