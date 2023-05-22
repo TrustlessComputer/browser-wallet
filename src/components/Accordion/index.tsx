@@ -27,7 +27,7 @@ const AccordionComponent = ({ header, headerComp, content, className }: Props) =
             {headerComp
               ? headerComp
               : header && (
-                  <Text fontWeight="medium" color="text-secondary">
+                  <Text fontWeight="medium" color="text-primary" size="body-large">
                     {header}
                   </Text>
                 )}

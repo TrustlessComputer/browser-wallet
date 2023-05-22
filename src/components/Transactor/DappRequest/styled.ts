@@ -25,11 +25,13 @@ const ButtonGroup = styled.div`
 
 const AdvanceWrapper = styled.div`
   .box {
-    background-color: ${({ theme }) => theme.bg.secondary};
     padding: 12px;
     border-radius: 8px;
+    margin-top: 6px;
+    background-color: ${({ theme }) => theme.bg.secondary};
     p {
       line-break: anywhere;
+      color: ${({ theme }) => theme['text-secondary']};
     }
   }
 `;

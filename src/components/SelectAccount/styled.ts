@@ -21,7 +21,7 @@ const ContentBox = styled.div`
   }
 
   :hover {
-    opacity: 0.9;
+    opacity: 0.8;
   }
   display: flex;
   justify-content: space-between;

@@ -23,7 +23,6 @@ import { FeeRate } from '@/components/FeeRate';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
 import AccordionComponent from '@/components/Accordion';
 import Button from '@/components/Button';
-import { Row } from '@/components/Row';
 import network from '@/lib/network.helpers';
 import throttle from 'lodash/throttle';
 import useTransaction from '@/hooks/useTransaction';
@@ -62,7 +61,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   } = useFeeRate({ minFeeRate: undefined });
 
   const signMethod = React.useMemo(() => {
-    return request.to ? functionName?.name || 'Unknow' : 'Contract Deployment';
+    return request.to || functionName?.name ? functionName?.name || 'Unknow' : 'Contract Deployment';
   }, [request, functionName?.name]);
 
   const onEstimateGas = async () => {
@@ -88,7 +87,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   const getFunctionCall = async () => {
     if (request.functionName) {
       const method = {
-        name: request.functionName.split('(')[0],
+        name: request?.functionType || request.functionName.split('(')[0],
         function: request.functionName,
       };
       setFunctionName(method);
@@ -190,43 +189,54 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
             </ContentBox>
           </>
         )}
+        <Divider className="mt-24 mb-24" />
         <AccordionComponent
           className="mt-24 mb-24"
           header="Advance"
           content={
             <AdvanceWrapper>
-              <div className="box">
+              <>
                 {!!maxFee.gasLimitText && (
-                  <Row justify="space-between">
-                    <Text size="body" color="text-highlight">
+                  <>
+                    <Text size="note" color="text-secondary">
                       Gas Limit
                     </Text>
-                    <Text size="body">{maxFee.gasLimitText}</Text>
-                  </Row>
+                    <div className="box">
+                      <Text size="body">{maxFee.gasLimitText}</Text>
+                    </div>
+                  </>
                 )}
                 {!!maxFee.gasPriceText && (
-                  <Row justify="space-between" className="mt-16">
-                    <Text size="body" color="text-highlight">
+                  <div className="mt-16">
+                    <Text size="note" color="text-secondary">
                       Gas Price
                     </Text>
-                    <Text size="body">{maxFee.gasPriceText} GWEI</Text>
-                  </Row>
+                    <div className="box">
+                      <Text size="body">{maxFee.gasPriceText} GWEI</Text>
+                    </div>
+                  </div>
                 )}
                 {!!functionName && (
                   <div className="mt-16">
-                    <Text color="text-highlight" fontWeight="semibold">
+                    <Text size="note" color="text-secondary">
                       FUNCTION TYPE
                     </Text>
-                    <Text className="mt-8">{functionName.function}</Text>
+                    <div className="box">
+                      <Text size="body">{functionName.function}</Text>
+                    </div>
                   </div>
                 )}
-                <div className="mt-16">
-                  <Text color="text-highlight" fontWeight="semibold">
-                    HEX DATA: 36 BYTES
-                  </Text>
-                  <Text className="mt-8">{request.calldata}</Text>
-                </div>
-              </div>
+                {!!request.calldata && (
+                  <div className="mt-16">
+                    <Text size="note" color="text-secondary">
+                      HEX DATA: 36 BYTES
+                    </Text>
+                    <div className="box">
+                      <Text size="body">{request.calldata}</Text>
+                    </div>
+                  </div>
+                )}
+              </>
             </AdvanceWrapper>
           }
         />

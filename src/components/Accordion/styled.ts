@@ -13,16 +13,11 @@ const Container = styled.div`
   }
 
   .accordion_header {
-    padding: 8px 12px;
-    background-color: ${({ theme }) => theme.bg.secondary};
+    padding: 0 0 8px 0;
     border-radius: 4px;
 
     :hover {
       opacity: 0.8;
-    }
-
-    p {
-      font-size: ${px2rem(16)};
     }
 
     button {
@@ -48,7 +43,7 @@ const Container = styled.div`
   .accordion_body {
     padding-left: 0;
     padding-right: 0;
-    padding-top ${px2rem(18)};
+    padding-top ${px2rem(6)};
     padding-bottom: ${px2rem(12)};
   }
 `;
