@@ -21,6 +21,7 @@ import CreateModal from './CreateModal';
 import RemoveModal from './RemoveModal';
 import { DropDownContainer, DropdownItem, DropdownList, MoreDropdownItem, MoreDropdownList } from './styled';
 import ExportAccount from '@/pages/layout/Header/AccountDropdown/ExportAccountModal';
+import ToolTip from '@/components/Tooltip';
 import network from '@/lib/network.helpers';
 import ExportMnemonic from '@/pages/layout/Header/AccountDropdown/ExportMnemonicModal';
 import ExportBTCKey from '@/pages/layout/Header/AccountDropdown/ExportBTCKeyModal';
@@ -122,9 +123,17 @@ const AccountDropdown = React.memo(() => {
           </div>
         </div>
         <div className="item-actions">
-          <div className="action" onClick={() => onCopy(address)}>
-            <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
-          </div>
+          <ToolTip
+            unwrapElement={
+              <div className="action" onClick={() => onCopy(address)}>
+                <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
+              </div>
+            }
+            width={300}
+          >
+            <Text size="tini">Copy to clipboard</Text>
+          </ToolTip>
+
           <Dropdown
             unwrapElement={
               <div className="action">

@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import network from '@/lib/network.helpers';
 import { DropdownItem, DropdownList, Element } from './styled';
 import { TransactorContext } from '@/contexts/transactor.context';
+import ToolTip from '@/components/Tooltip';
 
 const AssetDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
@@ -29,6 +30,35 @@ const AssetDropdown = React.memo(() => {
     toast.success('Copied');
   };
 
+  const assets = [
+    {
+      src: `${CDN_URL_ICONS}/${selectNetwork.Icon}`,
+      address: user ? user.address : '',
+      formatAddress: `Trustless (
+        ${ellipsisCenter({
+          str: user ? user.address : '',
+          limit: 4,
+        })}
+        )`,
+      formatBalance: `${formatTcBalance} TC`,
+      titleTransfer: 'Transfer TC',
+      onClickTransfer: onOpenTCModal,
+    },
+    {
+      src: `${CDN_URL_ICONS}/ic-bitcoin.svg`,
+      address: user ? user.btcAddress : '',
+      formatAddress: `Trustless (
+        ${ellipsisCenter({
+          str: user ? user.btcAddress : '',
+          limit: 4,
+        })}
+        )`,
+      formatBalance: `${formatBtcBalance} BTC`,
+      titleTransfer: 'Transfer BTC',
+      onClickTransfer: onOpenBTCModal,
+    },
+  ];
+
   return (
     <Dropdown
       element={
@@ -43,59 +73,46 @@ const AssetDropdown = React.memo(() => {
     >
       {user && (
         <DropdownList>
-          <DropdownItem>
-            <div className="item">
-              <IconSVG src={`${CDN_URL_ICONS}/${selectNetwork.Icon}`} maxWidth="32" />
-              <div>
-                <Text color="text-secondary" fontWeight="light" size="note">
-                  Trustless (
-                  {ellipsisCenter({
-                    str: user.address,
-                    limit: 4,
-                  })}
-                  )
-                </Text>
-                <Text color="button-primary" fontWeight="medium" size="body">
-                  {formatTcBalance} TC
-                </Text>
-              </div>
-            </div>
-            <div className="item-actions">
-              <div className="action" onClick={() => onCopy(user.address)}>
-                <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
-              </div>
-              <div className="action" onClick={onOpenTCModal}>
-                <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="20" />
-              </div>
-            </div>
-          </DropdownItem>
+          {assets.map((asset, index) => {
+            return (
+              <DropdownItem key={index.toString()}>
+                <div className="item">
+                  <IconSVG src={asset.src} maxWidth="32" />
+                  <div>
+                    <Text color="text-secondary" fontWeight="light" size="note">
+                      {asset.formatAddress}
+                    </Text>
+                    <Text color="button-primary" fontWeight="medium" size="body">
+                      {asset.formatBalance}
+                    </Text>
+                  </div>
+                </div>
+                <div className="item-actions">
+                  <ToolTip
+                    unwrapElement={
+                      <div className="action" onClick={() => onCopy(asset.address)}>
+                        <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
+                      </div>
+                    }
+                    width={300}
+                  >
+                    <Text size="tini">Copy to clipboard</Text>
+                  </ToolTip>
 
-          <DropdownItem>
-            <div className="item">
-              <IconSVG src={`${CDN_URL_ICONS}/ic-bitcoin.svg`} maxWidth="32" />
-              <div>
-                <Text color="text-secondary" fontWeight="light" size="note">
-                  Bitcoin (
-                  {ellipsisCenter({
-                    str: user.btcAddress,
-                    limit: 4,
-                  })}
-                  )
-                </Text>
-                <Text color="button-primary" fontWeight="medium" size="body">
-                  {formatBtcBalance} BTC
-                </Text>
-              </div>
-            </div>
-            <div className="item-actions">
-              <div className="action" onClick={() => onCopy(user.btcAddress)}>
-                <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
-              </div>
-              <div className="action" onClick={onOpenBTCModal}>
-                <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="20" />
-              </div>
-            </div>
-          </DropdownItem>
+                  <ToolTip
+                    unwrapElement={
+                      <div className="action" onClick={asset.onClickTransfer}>
+                        <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="20" />
+                      </div>
+                    }
+                    width={300}
+                  >
+                    <Text size="tini">{asset.titleTransfer}</Text>
+                  </ToolTip>
+                </div>
+              </DropdownItem>
+            );
+          })}
         </DropdownList>
       )}
     </Dropdown>
