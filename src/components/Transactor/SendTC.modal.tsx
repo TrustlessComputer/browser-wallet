@@ -174,7 +174,7 @@ const SendTCModal = (props: Props) => {
                 isLoading={isLoadingRate}
               />
               <Button
-                disabled={submitting || estimating}
+                disabled={submitting || estimating || !!error}
                 type="submit"
                 className="confirm-btn"
                 isLoading={submitting || estimating}
