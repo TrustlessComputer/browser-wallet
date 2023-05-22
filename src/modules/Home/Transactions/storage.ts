@@ -9,10 +9,11 @@ import {
 } from '@/interfaces/history';
 import { compareString } from '@/utils';
 import { orderBy } from 'lodash';
+import network from '@/lib/network.helpers';
 
 export class HistoryStorage extends StorageService {
   private getTxsHistoryKey = (tcAddress: string) => {
-    return `transactions-history-${tcAddress.toLowerCase()}`;
+    return `history-${network.current.Name}-${tcAddress.toLowerCase()}`;
   };
   getTransactions = (tcAddress: string): IHistory[] => {
     const key = this.getTxsHistoryKey(tcAddress);
