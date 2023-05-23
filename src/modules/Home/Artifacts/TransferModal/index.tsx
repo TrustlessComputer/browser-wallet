@@ -182,7 +182,7 @@ const TransferModal = (props: Props) => {
                   isLoading={isLoadingRate}
                 />
                 <Button
-                  disabled={estimating || isProcessing || loading}
+                  disabled={estimating || isProcessing || loading || !!error}
                   type="submit"
                   className="confirm-btn"
                   isLoading={estimating || isProcessing || loading}

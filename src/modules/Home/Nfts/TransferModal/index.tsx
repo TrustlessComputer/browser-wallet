@@ -1,4 +1,3 @@
-import BaseModal from '@/components/BaseModal';
 import Button from '@/components/Button';
 import { Input } from '@/components/Inputs';
 import { IInscription } from '@/interfaces/api/inscription';
@@ -18,6 +17,7 @@ import { debounce } from 'lodash';
 import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
 import useGasFee from '@/components/GasFee/useGasFee';
 import GasFee from '@/components/GasFee';
+import SignerModal from '@/components/SignerModal';
 
 type Props = {
   show: boolean;
@@ -128,7 +128,7 @@ const TransferModal = (props: Props) => {
   };
 
   return (
-    <BaseModal show={show} handleClose={handleClose} width={1000}>
+    <SignerModal title="" show={show} onClose={handleClose} width={1000}>
       <div>
         <BackHeader onClick={onClickBack}>
           <ArrowLeftIcon />
@@ -196,7 +196,7 @@ const TransferModal = (props: Props) => {
           </TransferContainer>
         </Container>
       </div>
-    </BaseModal>
+    </SignerModal>
   );
 };
 
