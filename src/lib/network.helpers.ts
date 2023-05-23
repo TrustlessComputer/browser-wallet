@@ -42,6 +42,9 @@ const NETWORKS: Array<INetwork> = [
     BTCExplorer: 'https://blockstream.regtest.trustless.computer/regtest',
     Key: 'Regtest manual',
   },
+];
+
+const ADVANCE_NETWORKS: Array<INetwork> = [
   {
     Name: 'Regtest auto',
     ChainID: 22213,
@@ -85,7 +88,9 @@ class Network {
   }
 
   getListNetworks(): INetwork[] {
-    return NETWORKS;
+    console.log('SANG TEST: ', storageLocal.get(LocalStorageKey.ADVANCE_NETWORK));
+    const advanceNetworks = storageLocal.get(LocalStorageKey.ADVANCE_NETWORK) ? ADVANCE_NETWORKS : [];
+    return [...NETWORKS, ...advanceNetworks];
   }
 
   switchNetwork(network: INetwork) {

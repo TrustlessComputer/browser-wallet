@@ -13,12 +13,15 @@ import AccountDropdown from './AccountDropdown';
 import AssetDropdown from './AssetDropdown';
 import { Container, Wrapper } from './Header.styled';
 import NetworkDropdown from './NetworkDropdown';
+import storageLocal from '@/lib/storage.local';
+import { LocalStorageKey } from '@/enums/storage.keys';
 
 const Header = () => {
   const refMenu = useRef<HTMLDivElement | null>(null);
   const [isOpenMenu] = useState<boolean>(false);
   const user = useCurrentUserInfo();
   const isLocked = useAppSelector(isLockedSelector);
+  const [counter, setCounter] = React.useState(0);
 
   useEffect(() => {
     if (refMenu.current) {
@@ -39,7 +42,15 @@ const Header = () => {
       <Wrapper id={HEADER_ID}>
         <Row gap="80px">
           <Link className="logo" to={ROUTE_PATH.HOME}>
-            <LogoIcon className="ic-logo" />
+            <LogoIcon
+              className="ic-logo"
+              onClick={() => {
+                setCounter(counter => ++counter);
+                if (counter >= 10) {
+                  storageLocal.set(LocalStorageKey.ADVANCE_NETWORK, true);
+                }
+              }}
+            />
           </Link>
           {!!user && !isLocked && (
             <Row gap="36px" className="balance-wrapper">
