@@ -44,6 +44,11 @@ const InputWrapper = styled.div`
     line-height: 140%;
     color: ${({ theme }) => theme['text-primary']};
     height: 100%;
+
+    :-webkit-autofill {
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: ${({ theme }) => theme['text-primary']} !important;
+    }
   }
 
   .icon-container {
