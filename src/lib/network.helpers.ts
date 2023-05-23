@@ -88,7 +88,6 @@ class Network {
   }
 
   getListNetworks(): INetwork[] {
-    console.log('SANG TEST: ', storageLocal.get(LocalStorageKey.ADVANCE_NETWORK));
     const advanceNetworks = storageLocal.get(LocalStorageKey.ADVANCE_NETWORK) ? ADVANCE_NETWORKS : [];
     return [...NETWORKS, ...advanceNetworks];
   }
