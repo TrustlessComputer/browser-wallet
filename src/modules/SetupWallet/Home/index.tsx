@@ -9,8 +9,14 @@ import { ISetAuthStepProps } from '@/modules/SetupWallet/types';
 interface IProps extends ISetAuthStepProps {}
 
 const Home = React.memo(({ setStep }: IProps) => {
-  const setCreate = () => setStep('create');
-  const setImport = () => setStep('import');
+  const setCreate = () => {
+    setStep('create');
+    window.scrollTo(0, 0);
+  };
+  const setImport = () => {
+    setStep('import');
+    window.scrollTo(0, 0);
+  };
 
   return (
     <Container>
