@@ -2,7 +2,7 @@ import BaseModal from '@/components/BaseModal';
 import { IBNS } from '@/interfaces/bns';
 import { Container } from './InfoModal.styled';
 import { shortenAddress } from '@/utils';
-import { CDN_URL } from '@/configs';
+import { BNS_CONTRACT, CDN_URL } from '@/configs';
 import DetailInfoItem from '@/components/DetailInfoItem';
 
 type Props = {
@@ -26,6 +26,12 @@ const BNSInfoModal = (props: Props) => {
             type="address"
             address={bns.owner}
             content={shortenAddress(bns.owner, 4)}
+          />
+          <DetailInfoItem
+            title="Contract"
+            type="link"
+            link={`https://explorer.trustless.computer/address/${BNS_CONTRACT}`}
+            content={shortenAddress(BNS_CONTRACT.toLowerCase(), 4)}
           />
         </div>
 

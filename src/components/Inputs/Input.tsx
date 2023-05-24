@@ -131,6 +131,7 @@ const Input = (props: InputProps) => {
           value={value}
           onChange={onChange}
           onKeyDown={onKeyDown}
+          spellCheck="false"
         />
         {inputTypeInit.current === 'password' && (
           <div className="icon-container" onClick={onClick}>

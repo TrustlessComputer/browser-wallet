@@ -52,13 +52,13 @@ const AccountDropdown = React.memo(() => {
   const onSwitchAccount = React.useCallback(
     throttle((address: string) => {
       try {
-        switchAccountActions.switchAccount(address);
+        switchAccountActions.switchAccount(address, accounts);
       } catch (error) {
         const { message } = getErrorMessage(error, 'switchAccount');
         toast.error(message);
       }
     }, 500),
-    [],
+    [accounts],
   );
 
   const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });

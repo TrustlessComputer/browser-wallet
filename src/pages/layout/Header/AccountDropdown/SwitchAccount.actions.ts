@@ -3,12 +3,10 @@ import WalletStorage from '@/lib/wallet/wallet.storage';
 import { IListAccounts } from '@/state/wallet/types';
 import { compareString } from '@/utils';
 
-interface IComponent {
-  accounts: IListAccounts[];
-}
+interface IComponent {}
 
 export interface ISwitchAccountAction {
-  switchAccount: (address: string) => void;
+  switchAccount: (address: string, accounts: IListAccounts[]) => void;
 }
 
 export class SwitchAccountAction implements ISwitchAccountAction {
@@ -20,8 +18,7 @@ export class SwitchAccountAction implements ISwitchAccountAction {
     this.dispatch = props.dispatch;
   }
 
-  switchAccount = (address: string) => {
-    const accounts = this.component.accounts;
+  switchAccount = (address: string, accounts: IListAccounts[]) => {
     const switchedAccount = accounts.find(account =>
       compareString({ str1: account.address, str2: address, method: 'equal' }),
     );

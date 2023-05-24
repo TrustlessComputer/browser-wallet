@@ -18,6 +18,9 @@ export interface INetwork {
   Icon: string;
   BTCExplorer: string;
   ConnectURL: string;
+  ARTIFACT_CONTRACT: string;
+  BNS_CONTRACT: string;
+  BFS_CONTRACT: string;
 }
 
 const NETWORKS: Array<INetwork> = [
@@ -32,6 +35,9 @@ const NETWORKS: Array<INetwork> = [
     BTCExplorer: 'https://mempool.space',
     Key: 'Mainnet',
     ConnectURL: 'https://wadary.regtest.trustless.computer/relayer',
+    ARTIFACT_CONTRACT: '0x16EfDc6D3F977E39DAc0Eb0E123FefFeD4320Bc0',
+    BNS_CONTRACT: '0x8b46F89BBA2B1c1f9eE196F43939476E79579798',
+    BFS_CONTRACT: '0x8BAA6365028894153DEC048E4F4e5e6D2cE99C58',
   },
   {
     Name: 'Regtest manual',
@@ -44,6 +50,9 @@ const NETWORKS: Array<INetwork> = [
     BTCExplorer: 'https://blockstream.regtest.trustless.computer/regtest',
     Key: 'Regtest manual',
     ConnectURL: 'https://wadary.regtest.trustless.computer/relayer',
+    ARTIFACT_CONTRACT: '0x16EfDc6D3F977E39DAc0Eb0E123FefFeD4320Bc0',
+    BNS_CONTRACT: '0x8b46F89BBA2B1c1f9eE196F43939476E79579798',
+    BFS_CONTRACT: '0x8BAA6365028894153DEC048E4F4e5e6D2cE99C58',
   },
 ];
 
@@ -59,6 +68,9 @@ const ADVANCE_NETWORKS: Array<INetwork> = [
     BTCExplorer: 'https://blockstream.regtest.trustless.computer/regtest',
     Key: 'Regtest auto',
     ConnectURL: 'https://wadary.regtest.trustless.computer/relayer',
+    ARTIFACT_CONTRACT: '0x16EfDc6D3F977E39DAc0Eb0E123FefFeD4320Bc0',
+    BNS_CONTRACT: '0x8b46F89BBA2B1c1f9eE196F43939476E79579798',
+    BFS_CONTRACT: '0x8BAA6365028894153DEC048E4F4e5e6D2cE99C58',
   },
 ];
 

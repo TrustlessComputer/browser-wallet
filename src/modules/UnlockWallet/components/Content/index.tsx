@@ -96,7 +96,7 @@ const UnlockContent = React.memo((props: IProps) => {
               onBlur={handleBlur}
               value={values.password}
               className="mt-32"
-              placeholder="Enter the amount"
+              placeholder="Enter password"
               errorMsg={error || (errors.password && touched.password) ? errors.password : undefined}
             />
             <Button sizes="stretch" className="mt-48" type="submit">

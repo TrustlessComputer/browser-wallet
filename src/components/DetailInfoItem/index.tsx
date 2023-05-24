@@ -25,16 +25,10 @@ const DetailInfoItem = (props: Props) => {
           </>
         )}
         {type === 'link' && link && (
-          <>
-            <a href={link} target="_blank">
-              {content}
-            </a>
-            <img
-              className="ic-copy"
-              src={`${CDN_URL}/icons/ic-export.svg`}
-              onClick={() => window.open(link, '_blank')}
-            />
-          </>
+          <a className="link" href={link} target={'_blank'}>
+            {content}
+            <img className="ic-explore" src={`${CDN_URL}/icons/ic-export.svg`} />
+          </a>
         )}
       </Styled>
     </Container>
