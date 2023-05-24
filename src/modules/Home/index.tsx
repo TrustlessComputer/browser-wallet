@@ -13,9 +13,11 @@ import Transactions from './Transactions';
 import { StyledProfile, TabContainer } from './Home.styled';
 import { CDN_URL } from '@/configs';
 import { MDContainer } from '@/modules/styled';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.TRANSACTION);
 
@@ -50,7 +52,10 @@ const Home = () => {
           <Tabs
             defaultActiveKey={activeTab}
             id="uncontrolled-tab"
-            onSelect={key => setActiveTab(key || DappsTabs.NFT)}
+            onSelect={key => {
+              setActiveTab(key || DappsTabs.NFT);
+              navigate(`/?tab=${key || DappsTabs.NFT}`);
+            }}
             activeKey={activeTab}
           >
             <Tab
