@@ -63,7 +63,7 @@ const PasswordStatus = (props: PasswordStatusProps) => {
       }
       if (passwordLength >= 8) {
         type = PasswordStatusType.strong;
-        message = 'Strong!';
+        message = 'Valid!';
         props.onPasswordStrong && props.onPasswordStrong();
       }
     }
