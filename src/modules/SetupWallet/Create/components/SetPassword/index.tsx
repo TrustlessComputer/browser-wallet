@@ -1,5 +1,5 @@
 import { Content } from '@/modules/SetupWallet/Create/components/SetPassword/styled';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Input } from '@/components/Inputs';
 import Text from '@/components/Text';
 import Button from '@/components/Button';
@@ -43,9 +43,24 @@ const SetPassword = (props: SetPasswordProps) => {
     if (password.length !== confirmPassword.length || password !== confirmPassword) {
       setMisMatch(true);
     } else {
-      props.onConfirmPassword(password);
+      if (isStrongPassRef.current) {
+        props.onConfirmPassword(password);
+      }
     }
   };
+
+  useEffect(() => {
+    const keyDownHandler = (event: { key: string; preventDefault: () => void }) => {
+      if (event.key === 'Enter' && isStrongPassRef.current) {
+        event.preventDefault();
+        continueOnClick();
+      }
+    };
+    document.addEventListener('keydown', keyDownHandler);
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, []);
 
   return (
     <Content>
@@ -80,13 +95,13 @@ const SetPassword = (props: SetPasswordProps) => {
           onChange={onChangeConfirmPassword}
         />
 
-        {isStrongPassRef.current && (isMissMatch || props.errorMess) && (
+        {(isMissMatch || props.errorMess) && (
           <AlertMessage
             type={AlertMessageType.error}
             message={props.errorMess || 'Password and Confirm Password does not match!'}
           />
         )}
-        <Button className="mt-32" sizes="stretch" onClick={continueOnClick} disabled={!isStrongPassRef.current}>
+        <Button className="mt-32" sizes="stretch" onClick={continueOnClick}>
           Continue
         </Button>
       </div>

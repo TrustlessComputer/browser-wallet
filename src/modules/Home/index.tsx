@@ -22,6 +22,10 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.TRANSACTION);
 
   useEffect(() => {
+    navigate(`/?tab=${activeTab}`);
+  }, []);
+
+  useEffect(() => {
     if (tab) {
       setActiveTab(tab);
     }
