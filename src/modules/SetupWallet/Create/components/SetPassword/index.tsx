@@ -60,7 +60,7 @@ const SetPassword = (props: SetPasswordProps) => {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, []);
+  }, [isStrongPassRef, password, confirmPassword]);
 
   return (
     <Content>
