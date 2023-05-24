@@ -134,9 +134,16 @@ const AssetDropdown = React.memo(() => {
 
                   <Dropdown
                     unwrapElement={
-                      <div className="action">
-                        <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
-                      </div>
+                      <ToolTip
+                        unwrapElement={
+                          <div className="action">
+                            <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
+                          </div>
+                        }
+                        width={300}
+                      >
+                        <Text size="tini">More</Text>
+                      </ToolTip>
                     }
                     width={300}
                   >

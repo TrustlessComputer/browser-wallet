@@ -32,7 +32,7 @@ const ToolTip = React.memo(({ icon, element, width, children, unwrapElement }: I
       show={show}
     >
       {unwrapElement ? (
-        <div ref={ref} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+        <div ref={ref} onClick={handleOnMouseLeave} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
           {unwrapElement}
         </div>
       ) : (
