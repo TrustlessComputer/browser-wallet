@@ -3,7 +3,7 @@ import { LocalStorageKey } from '@/enums/storage.keys';
 import { compareString } from '@/utils';
 
 const ENVS = import.meta.env;
-const DEFAULT_NETWORK_NAME: string = ENVS.VITE_DEFAULT_NETWORK_NAME;
+const DEFAULT_NETWORK_KEY: string = ENVS.VITE_DEFAULT_NETWORK_KEY;
 
 export type IBTCNetwork = 'mainnet' | 'testnet' | 'regtest';
 
@@ -65,25 +65,25 @@ class Network {
   }
 
   getSelectedNetwork(): INetwork {
-    const key = LocalStorageKey.SELECTED_NETWORK_NAME;
+    const key = LocalStorageKey.SELECTED_NETWORK_KEY;
     const networks = this.getListNetworks();
-    const defaultName = DEFAULT_NETWORK_NAME || networks[0].Name;
-    let selectedName = storageLocal.get(key) || defaultName;
+    const defaultKey = DEFAULT_NETWORK_KEY || networks[0].Key;
+    let selectedKey = storageLocal.get(key) || defaultKey;
     const isExist = networks.some(network =>
       compareString({
-        str1: network.Name,
-        str2: selectedName,
+        str1: network.Key,
+        str2: selectedKey,
         method: 'equal',
       }),
     );
 
     if (!isExist) {
-      selectedName = networks[0].Name;
+      selectedKey = networks[0].Key;
     }
 
-    const network = networks.find(network => network.Name.toLowerCase() === selectedName.toLowerCase()) as INetwork;
+    const network = networks.find(network => network.Key.toLowerCase() === selectedKey.toLowerCase()) as INetwork;
     this.current = network;
-    storageLocal.set(key, network.Name);
+    storageLocal.set(key, network.Key);
     return network;
   }
 
@@ -93,8 +93,8 @@ class Network {
   }
 
   switchNetwork(network: INetwork) {
-    const key = LocalStorageKey.SELECTED_NETWORK_NAME;
-    storageLocal.set(key, network.Name);
+    const key = LocalStorageKey.SELECTED_NETWORK_KEY;
+    storageLocal.set(key, network.Key);
   }
 }
 
