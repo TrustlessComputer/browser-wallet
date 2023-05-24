@@ -10,6 +10,9 @@ const Container = styled.div`
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
+  .form {
+    width: 100%;
+  }
 `;
 
 export { Container };
