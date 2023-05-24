@@ -5,6 +5,8 @@ import * as TC_CONNECT from 'tc-connect';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import Text from '@/components/Text';
 import Button from '@/components/Button';
+import { useAppSelector } from '@/state/hooks';
+import { listAccountsSelector } from '@/state/wallet/selector';
 
 interface IProps {
   requestID: string;
@@ -15,6 +17,7 @@ interface IProps {
 const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   const userInfo = useCurrentUserInfo();
   const [loading, setLoading] = React.useState(false);
+  const accounts = useAppSelector(listAccountsSelector);
 
   const onRejectRequest = async () => {
     if (!requestID || !userInfo) return;
@@ -26,6 +29,7 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
         tcAddress: '',
         isCancel: true,
         method: TC_CONNECT.RequestMethod.account,
+        accounts: [],
       });
     } catch (e) {
       setLoading(false);
@@ -37,10 +41,15 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   const onAcceptRequest = async () => {
     if (!requestID || !userInfo) return;
     const connection = new TC_CONNECT.WalletConnect('', requestID);
+    const listAccounts = accounts.map(account => ({
+      tcAddress: account.address,
+      btcAddress: userInfo.btcAddress,
+    }));
     await connection.postResultAccount({
       btcAddress: userInfo.btcAddress,
       method: TC_CONNECT.RequestMethod.account,
       tcAddress: userInfo.address,
+      accounts: listAccounts,
     });
     onClose();
   };
