@@ -121,7 +121,7 @@ const BNSTransferModal = (props: Props) => {
   return (
     <SignerModal show={show} onClose={handleClose} title={bns.name} subTitle={`Name #${bns.id}`}>
       <Container>
-        <p className="name-detail">Name details</p>
+        <p className="name-detail">Transfer Name</p>
         <Formik
           key="transfer"
           initialValues={{
