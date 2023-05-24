@@ -123,7 +123,7 @@ const ArtifactsProfile = () => {
           onClickTransfer={onClickTransfer}
         />
       )}
-      {selectArtifact && (
+      {selectArtifact && showTransferModal && (
         <ArtifactTransferModal
           show={showTransferModal}
           handleClose={() => setShowTransferModal(false)}
