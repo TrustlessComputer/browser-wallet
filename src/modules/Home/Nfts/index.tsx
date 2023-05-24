@@ -163,7 +163,7 @@ const NftsProfile = () => {
           onClickBack={onClickBackToCollection}
         />
       )}
-      {selectNFT && (
+      {selectNFT && showTransferModal && (
         <NFTTransferModal
           show={showTransferModal}
           handleClose={() => setShowTransferModal(false)}

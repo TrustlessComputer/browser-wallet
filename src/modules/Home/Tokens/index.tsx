@@ -160,7 +160,7 @@ const Tokens = () => {
           <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
         </InfiniteScroll>
       )}
-      {!!selectedToken && (
+      {!!selectedToken && showTransferModal && (
         <TransferModal
           show={showTransferModal}
           handleClose={handleCloseTransferModal}

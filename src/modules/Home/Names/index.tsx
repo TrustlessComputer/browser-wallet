@@ -115,7 +115,7 @@ const Names = () => {
             onClickTransfer={onClickTransfer}
           />
         )}
-        {selectBNS && (
+        {selectBNS && showTransferModal && (
           <BNSTransferModal bns={selectBNS} show={showTransferModal} handleClose={() => setShowTransferModal(false)} />
         )}
       </div>

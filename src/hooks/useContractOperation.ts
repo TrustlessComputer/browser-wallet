@@ -12,6 +12,7 @@ import { TransactionResponse } from '@ethersproject/abstract-provider';
 import historyStorage, { HistoryStorage } from '@/modules/Home/Transactions/storage';
 import { IHistory } from '@/interfaces/history';
 import { COEFFICIENT_GAS_LIMIT } from '@/configs';
+import { TransactionContext } from '@/contexts/transaction.context';
 
 interface IParams<P, R> {
   operation: ContractOperationHook<P, R>;
@@ -29,8 +30,15 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
   const { inscribeable, operation, feeRate, isSignTransaction = false } = args;
   const userSecretKey = useUserSecretKey();
   const { btcBalance } = useContext(AssetsContext);
+  const { getTransactions } = useContext(TransactionContext);
   const { createInscribeTx, getUnInscribedTransactions } = useBitcoin();
   const { call, estimateGas, txSize, transactionType, eventType } = operation();
+
+  const getLastestTransactionHistory = () => {
+    setTimeout(() => {
+      getTransactions();
+    }, 3000);
+  };
 
   const getHistoryBuilder = (tx: R, btcHash?: string): IHistory | undefined => {
     if ('hash' in tx && !isSignTransaction) {
@@ -100,10 +108,12 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
       history = getHistoryBuilder(tx, btcTx.revealTxID);
       if (history) {
         historyStorage.setTransaction(userSecretKey.address, history);
+        getLastestTransactionHistory();
       }
     } catch (error) {
       if (history) {
         historyStorage.setTransaction(userSecretKey.address, history);
+        getLastestTransactionHistory();
       }
       throw error;
     }
