@@ -23,7 +23,7 @@ const GasFee = React.memo((props: IProps) => {
             originalAmount: new BigNumber(tcBalance).toNumber(),
             decimals: Token.TRUSTLESS.decimal,
             maxDigits: 7,
-          })}
+          })}{' '}
           TC
         </Text>
       </Row>
@@ -40,7 +40,7 @@ const GasFee = React.memo((props: IProps) => {
             originalAmount: new BigNumber(btcBalance).toNumber(),
             decimals: Token.BITCOIN.decimal,
             maxDigits: 7,
-          })}
+          })}{' '}
           BTC
         </Text>
       </Row>
