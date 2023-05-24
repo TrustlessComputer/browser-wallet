@@ -42,6 +42,8 @@ export const DropdownList = styled.div`
   overflow: auto;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
+  margin-top: ${px2rem(8)};
+  margin-bottom: ${px2rem(16)};
 
   ::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */

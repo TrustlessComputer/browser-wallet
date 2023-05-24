@@ -1,5 +1,5 @@
 import { validate, getAddressInfo, AddressType } from 'bitcoin-address-validation';
-import { ethers } from 'ethers';
+import { ethers, Wallet } from 'ethers';
 
 export const validateWalletAddress = (address: string): boolean => {
   return /^0x[a-fA-F0-9]{40}$/.test(address);
@@ -24,4 +24,13 @@ export const validateEVMAddress = (_address: string): boolean => {
 
 export const validateTwitterUrl = (url: string): boolean => {
   return url.startsWith('https://twitter.com/');
+};
+
+export const verifyEtherPrivateKey = (privateKey: string) => {
+  try {
+    new Wallet(privateKey);
+  } catch (e) {
+    return false;
+  }
+  return true;
 };

@@ -20,8 +20,13 @@ const restoreMasterWallet = async (password: string): Promise<TC_SDK.MasterWalle
 };
 
 const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
-  const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
-  const nodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
+  const hdWalletIns: TC_SDK.HDWallet = masterIns.getHDWallet();
+  const masterlessIns: TC_SDK.Masterless = masterIns.getMasterless();
+
+  const hdWalletNodes: TC_SDK.IDeriveKey[] = hdWalletIns.nodes || [];
+  const masterlessNodes: TC_SDK.IMasterless[] = masterlessIns.nodes || [];
+
+  const nodes = [...hdWalletNodes, ...masterlessNodes];
 
   // check storage current TC account
   let { address } = WalletStorage.getCurrentTCAccount() || {};
@@ -33,7 +38,7 @@ const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
     });
     address = node0.address;
   }
-  const btcPrivateKey = hdWallet.btcPrivateKey;
+  const btcPrivateKey = hdWalletIns.btcPrivateKey;
   if (address && nodes && nodes.length && btcPrivateKey) {
     const account = nodes.find(node => compareString({ str1: node.address, str2: address, method: 'equal' }));
     if (account) {
@@ -52,14 +57,27 @@ const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
 
 const getListAccounts = (masterIns: TC_SDK.MasterWallet): IListAccounts[] => {
   const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
-  const nodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
-  if (!nodes) return [];
-  return nodes.map(node => ({
-    name: node.name,
-    index: node.index,
-    address: node.address,
-    isImport: false,
-  }));
+  const masterlessIns: TC_SDK.HDWallet = masterIns.getMasterless();
+
+  const hdWalletNodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
+  const masterlessNodes: TC_SDK.IMasterless[] = masterlessIns.nodes || [];
+
+  if (!hdWalletNodes) return [];
+  const nodes = [
+    ...hdWalletNodes.map(node => ({
+      name: node.name,
+      index: node.index,
+      address: node.address,
+      isImport: false,
+    })),
+    ...masterlessNodes.map(node => ({
+      name: node.name,
+      index: node.index,
+      address: node.address,
+      isImport: true,
+    })),
+  ];
+  return nodes;
 };
 
 export { randomMnemonic, saveNewHDWallet, restoreMasterWallet, getUserSecretKey, getListAccounts };

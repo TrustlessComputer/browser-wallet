@@ -15,11 +15,11 @@ interface IComponent {
   accounts: IListAccounts[];
 }
 
-export interface ICreateAccountAction {
-  createAccount: (name: string) => void;
+export interface IImportKeyAction {
+  importKey: (name: string, privateKey: string) => void;
 }
 
-export class CreateAccountAction implements ICreateAccountAction {
+export class ImportKeyAction implements IImportKeyAction {
   protected component: IComponent;
   protected dispatch: any;
 
@@ -28,14 +28,16 @@ export class CreateAccountAction implements ICreateAccountAction {
     this.dispatch = props.dispatch;
   }
 
-  createAccount = async (name: string) => {
+  importKey = async (name: string, privateKey: string) => {
     const { masterIns, password } = this.component;
     if (!masterIns || !password) throw new WError(ERROR_CODE.INVALID_PARAMS);
-    const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
-    if (hdWallet) {
-      const newAccount: TC_SDK.IDeriveKey = await hdWallet.createNewAccount({
+    const masterlessIns: TC_SDK.Masterless = masterIns.getMasterless();
+    if (masterlessIns) {
+      const newAccount: TC_SDK.IMasterless = await masterlessIns.importNewAccount({
         password,
         name,
+        privateKey,
+        nodes: this.component.accounts,
       });
       WalletStorage.setCurrentTCAddress({
         name: newAccount.name,
