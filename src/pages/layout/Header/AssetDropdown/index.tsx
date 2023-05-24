@@ -1,5 +1,5 @@
 import IconSVG from '@/components/IconSVG';
-import Dropdown from '@/components/Popover';
+import Dropdown, { IDropdownRef } from '@/components/Popover';
 import Text from '@/components/Text';
 import { CDN_URL_ICONS } from '@/configs';
 import Token from '@/constants/token';
@@ -19,6 +19,10 @@ import { ExportIcon } from '@/components/icons';
 const AssetDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
   const selectNetwork = network.getSelectedNetwork();
+
+  const dropdownRef = React.useRef<IDropdownRef>({
+    onToggle: () => undefined,
+  });
 
   const { tcBalance, btcBalance } = useContext(AssetsContext);
   const { onOpenBTCModal, onOpenTCModal } = useContext(TransactorContext);
@@ -103,6 +107,7 @@ const AssetDropdown = React.memo(() => {
       }
       width={384}
       type="hover"
+      ref={dropdownRef}
     >
       {user && (
         <DropdownList>
@@ -154,6 +159,7 @@ const AssetDropdown = React.memo(() => {
                             key={item.title}
                             onClick={() => {
                               item.onClick();
+                              dropdownRef.current.onToggle();
                             }}
                           >
                             <div className={item.iconClass}>{item.icon}</div>

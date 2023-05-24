@@ -81,7 +81,7 @@ const Dropdown = React.forwardRef(
         placement="bottom-start"
         overlay={
           <PopoverWrapper width={width} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
-            {children}
+            {show && children}
           </PopoverWrapper>
         }
         container={ref}
