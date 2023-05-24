@@ -97,6 +97,7 @@ const UnlockContent = React.memo((props: IProps) => {
               value={values.password}
               className="mt-32"
               placeholder="Enter password"
+              autoFocus={true}
               errorMsg={error || (errors.password && touched.password) ? errors.password : undefined}
             />
             <Button sizes="stretch" className="mt-48" type="submit">
