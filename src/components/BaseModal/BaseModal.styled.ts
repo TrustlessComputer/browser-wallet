@@ -51,8 +51,8 @@ export const StyledModal = styled(Modal)<{ width?: number }>`
 
 export const Title = styled.p`
   font-weight: 600;
-  font-size: ${px2rem(28)};
-  line-height: ${px2rem(38)};
+  font-size: ${px2rem(24)};
+  /* line-height: ${px2rem(36)}; */
   color: ${({ theme }) => theme['text-primary']};
   :first-letter {
     text-transform: uppercase;
