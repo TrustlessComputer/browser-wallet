@@ -9,6 +9,7 @@ export type IBTCNetwork = 'mainnet' | 'testnet' | 'regtest';
 
 export interface INetwork {
   Name: string;
+  Key: string;
   ChainID: number | string;
   TCNode: string;
   BTCNetwork: IBTCNetwork;
@@ -16,7 +17,7 @@ export interface INetwork {
   BE_API: string;
   Icon: string;
   BTCExplorer: string;
-  Key: string;
+  ConnectURL: string;
 }
 
 const NETWORKS: Array<INetwork> = [
@@ -30,6 +31,7 @@ const NETWORKS: Array<INetwork> = [
     Icon: 'ic-penguin-currency-dark.svg',
     BTCExplorer: 'https://mempool.space',
     Key: 'Mainnet',
+    ConnectURL: 'https://wadary.regtest.trustless.computer/relayer',
   },
   {
     Name: 'Regtest manual',
@@ -41,6 +43,7 @@ const NETWORKS: Array<INetwork> = [
     Icon: 'ic-penguin-regtest-dark.svg',
     BTCExplorer: 'https://blockstream.regtest.trustless.computer/regtest',
     Key: 'Regtest manual',
+    ConnectURL: 'https://wadary.regtest.trustless.computer/relayer',
   },
 ];
 
@@ -55,6 +58,7 @@ const ADVANCE_NETWORKS: Array<INetwork> = [
     Icon: 'ic-penguin-regtest-dark.svg',
     BTCExplorer: 'https://blockstream.regtest.trustless.computer/regtest',
     Key: 'Regtest auto',
+    ConnectURL: 'https://wadary.regtest.trustless.computer/relayer',
   },
 ];
 
