@@ -38,6 +38,7 @@ interface IProps {
 }
 
 const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
+  console.log('SANG TEST: ', request);
   const [functionName, setFunctionName] = React.useState<FunctionItem | undefined>(undefined);
   const [submitting, setSubmitting] = React.useState(false);
   const userSecretKey = useUserSecretKey();
@@ -48,7 +49,9 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     isSignTransaction: true,
   });
 
-  const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({ defaultGasPrice: undefined });
+  const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({
+    defaultGasPrice: request.gasPrice || undefined,
+  });
 
   const {
     feeRate,
@@ -206,18 +209,8 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
           content={
             <AdvanceWrapper>
               <>
-                {!!maxFee.gasLimitText && (
-                  <>
-                    <Text size="note" color="text-secondary">
-                      Gas Limit
-                    </Text>
-                    <div className="box">
-                      <Text size="body">{maxFee.gasLimitText}</Text>
-                    </div>
-                  </>
-                )}
                 {!!maxFee.gasPriceText && (
-                  <div className="mt-16">
+                  <div>
                     <Text size="note" color="text-secondary">
                       Gas Price
                     </Text>
@@ -225,6 +218,16 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
                       <Text size="body">{maxFee.gasPriceText} GWEI</Text>
                     </div>
                   </div>
+                )}
+                {!!maxFee.gasLimitText && (
+                  <>
+                    <Text size="note" color="text-secondary" className="mt-16">
+                      Gas Limit
+                    </Text>
+                    <div className="box">
+                      <Text size="body">{maxFee.gasLimitText}</Text>
+                    </div>
+                  </>
                 )}
                 {!!functionName && (
                   <div className="mt-16">
@@ -273,7 +276,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         )}
       </Container>
       <ButtonGroup className="mt-32">
-        <Button sizes="stretch" variants="outline">
+        <Button sizes="stretch" variants="outline" onClick={onRejectRequest}>
           Cancel
         </Button>
         <Button
