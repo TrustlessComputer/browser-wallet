@@ -28,18 +28,17 @@ const ResetWalletModal = React.memo((props: Props) => {
             <Row justify="space-between">
               <Text size="body" fontWeight="regular" color="button-primary">
                 <p>
-                  Trustless Wallet does not keep a copy of your password. If you’re having trouble unlocking your
-                  account, you will need to reset your wallet. You can do this by providing the Secret Recovery Phrase
-                  you used when you set up your wallet.
+                  Trustless Wallet does not save a copy of your password. If you’re having trouble unlocking your
+                  account, you’ll need to reset your wallet. You can do this by entering the Secret Recovery Phrase you
+                  used to set up your wallet.
                   <br></br>
                   <br></br>
-                  This action will delete your current wallet and Secret Recovery Phrase from this device, along with
-                  the list of accounts you’ve curated. After resetting with a Secret Recovery Phrase, you’ll see a list
-                  of accounts based on the Secret Recovery Phrase you use to reset.
+                  This action will delete your current wallet and Secret Recovery Phrase from this device, as well as
+                  the list of accounts you’ve curated.
                   <br></br>
                   <br></br>
-                  Make sure you’re using the correct Secret Recovery Phrase before proceeding. You will not be able to
-                  undo this.
+                  Please double-check that you’re using the correct Secret Recovery Phrase before proceeding. You will
+                  be unable to undo this.
                 </p>
               </Text>
             </Row>
