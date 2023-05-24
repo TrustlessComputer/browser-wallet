@@ -12,7 +12,7 @@ const UnlockWallet = React.memo(() => {
   };
   return (
     <LayoutContent>
-      <UnlockContent onSuccess={onSuccess} />
+      <UnlockContent className="mt-48" showForgotPassword onSuccess={onSuccess} />
     </LayoutContent>
   );
 });

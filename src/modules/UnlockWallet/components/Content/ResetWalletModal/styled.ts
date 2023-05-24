@@ -12,10 +12,6 @@ const Container = styled.div`
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding: ${px2rem(16)} ${px2rem(20)};
-      gap: ${px2rem(6)};
-      background: ${({ theme }) => theme.bg.secondary};
-      border-radius: ${px2rem(8)};
     }
 
     .actions {

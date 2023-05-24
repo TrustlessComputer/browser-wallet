@@ -29,6 +29,7 @@ import useTransaction from '@/hooks/useTransaction';
 import Spinner from '@/components/Spinner';
 import { TransactionContext } from '@/contexts/transaction.context';
 import SelectAccount from '@/components/SelectAccount';
+import { getConnector } from '@/lib/connector.helper';
 
 interface IProps {
   requestID: string;
@@ -110,8 +111,8 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
 
   const onRejectRequest = async () => {
     if (!requestID || !userSecretKey) return;
-    const connection = new TC_CONNECT.WalletConnect('', requestID);
-    await connection.postResultSign({
+    const connector = getConnector(requestID);
+    await connector.postResultSign({
       hash: '',
       nonce: 0,
       method: TC_CONNECT.RequestMethod.sign,
@@ -123,7 +124,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   const onSignRequest = throttle(async () => {
     if (!requestID || !userSecretKey) return;
     setSubmitting(true);
-    const connection = new TC_CONNECT.WalletConnect('', requestID);
+    const connector = getConnector(requestID);
     try {
       const transaction = await createAndSendTransaction({
         calldata: request.calldata,
@@ -139,7 +140,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
       if (!transaction) {
         throw new WError(ERROR_CODE.INVALID_PARAMS);
       }
-      await connection.postResultSign({
+      await connector.postResultSign({
         hash: transaction.hash,
         nonce: transaction.nonce,
         method: TC_CONNECT.RequestMethod.sign,
@@ -148,7 +149,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     } catch (error) {
       const { desc } = getErrorMessage(error, 'onSignRequest');
       toast.error(desc);
-      await connection.postResultSign({
+      await connector.postResultSign({
         hash: '',
         nonce: 0,
         method: TC_CONNECT.RequestMethod.sign,

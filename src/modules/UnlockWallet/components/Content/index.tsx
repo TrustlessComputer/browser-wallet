@@ -13,6 +13,7 @@ import { MOCKUP_PASSWORD } from '@/configs';
 import { Formik } from 'formik';
 import { getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
+import ResetWalletModal from './ResetWalletModal';
 
 interface IFormValue {
   password: string;
@@ -20,12 +21,16 @@ interface IFormValue {
 
 interface IProps {
   onSuccess: (data: ISetMasterCreated) => Promise<void>;
+  className?: string;
+  showForgotPassword?: boolean;
 }
 
 const UnlockContent = React.memo((props: IProps) => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
+
+  const [showResetModal, setShowResetModal] = React.useState(false);
 
   const unlockWalletActions = new UnlockWalletAction({
     component: {
@@ -34,6 +39,10 @@ const UnlockContent = React.memo((props: IProps) => {
     },
     dispatch,
   });
+
+  const onClickForgotPassword = () => {
+    setShowResetModal(true);
+  };
 
   const onSubmit = async (payload: IFormValue) => {
     try {
@@ -60,12 +69,12 @@ const UnlockContent = React.memo((props: IProps) => {
   };
 
   return (
-    <Container>
+    <Container className={props.className}>
       <Logo className="mt-32" />
-      <Text className="mt-16" size="h4" fontWeight="medium">
+      <Text className="mt-24 mb-8" size="h4" fontWeight="semibold">
         Unlock your wallet
       </Text>
-      <Text color="text-secondary" size="h5" align="center" className="">
+      <Text color="text-secondary" size="h6" align="center" className="mb-16">
         Enter your password to unlock your wallet.
       </Text>
       <Formik
@@ -96,7 +105,14 @@ const UnlockContent = React.memo((props: IProps) => {
           </form>
         )}
       </Formik>
+
+      {props.showForgotPassword && (
+        <Button variants="underline" sizes="stretch" className="mt-32" onClick={onClickForgotPassword}>
+          Forgot password?
+        </Button>
+      )}
       <LoadingContainer loaded={!loading} opacity={60} />
+      <ResetWalletModal show={showResetModal} handleClose={() => setShowResetModal(false)} />
     </Container>
   );
 });
