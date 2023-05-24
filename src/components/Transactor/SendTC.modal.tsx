@@ -145,6 +145,7 @@ const SendTCModal = (props: Props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.toAddress}
+                autoFocus={true}
                 className="input"
                 placeholder={`Paste TC wallet address here`}
                 errorMsg={errors.toAddress && touched.toAddress ? errors.toAddress : undefined}
