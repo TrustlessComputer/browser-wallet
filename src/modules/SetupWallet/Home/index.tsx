@@ -14,8 +14,8 @@ const Home = React.memo(({ setStep }: IProps) => {
 
   return (
     <Container>
-      <Logo className="mt-60" />
-      <Text size="h4" className="mt-48">
+      <Logo className="mt-48" />
+      <Text size="h4" className="mt-32">
         Create your wallet
       </Text>
       <Text size="h6" className="mt-16" color="text-secondary" align="center">
@@ -25,7 +25,7 @@ const Home = React.memo(({ setStep }: IProps) => {
       <Button variants="primary" sizes="stretch" className="mt-60" onClick={setCreate}>
         Create
       </Button>
-      <Row className="mt-60 mb-60">
+      <Row className="mt-48 mb-48">
         <Dash />
         <Text size="h5" className="ml-12 mr-12">
           OR
@@ -36,7 +36,7 @@ const Home = React.memo(({ setStep }: IProps) => {
       <Text size="h6" className="mt-16" color="text-secondary" align="center">
         Import your existing wallet using a 12 word seed phrase.
       </Text>
-      <Button variants="outline" sizes="stretch" className="mt-60" onClick={setImport}>
+      <Button variants="outline" sizes="stretch" className="mt-48" onClick={setImport}>
         Import
       </Button>
     </Container>
