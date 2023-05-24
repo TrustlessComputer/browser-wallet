@@ -128,7 +128,7 @@ const TransferModal = (props: Props) => {
   };
 
   return (
-    <SignerModal title="" show={show} onClose={handleClose} width={1000}>
+    <SignerModal title="" show={show} onClose={handleClose} width={1200}>
       <div>
         <BackHeader onClick={onClickBack}>
           <ArrowLeftIcon />

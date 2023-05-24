@@ -67,6 +67,9 @@ export const Styled = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    :hover {
+      opacity: 0.9;
+    }
   }
 
   a {

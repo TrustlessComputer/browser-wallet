@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { getNFTDetail } from '@/services/nft-explorer';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { ArrowLeftIcon } from '@/components/icons';
+import network from '@/lib/network.helpers';
 
 type Props = {
   show: boolean;
@@ -97,7 +98,7 @@ const NFTInfoModal = (props: Props) => {
               <DetailInfoItem
                 title="Contract"
                 type="link"
-                link={`https://explorer.trustless.computer/address/${artifact.collectionAddress}`}
+                link={`${network.current.Explorer}/address/${artifact.collectionAddress}`}
                 content={shortenAddress(artifact.collectionAddress.toLowerCase(), 4)}
               />
               <DetailInfoItem title="Content type" type="string" content={artifact.contentType} />

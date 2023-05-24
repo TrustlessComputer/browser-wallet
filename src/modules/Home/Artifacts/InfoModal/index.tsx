@@ -8,6 +8,7 @@ import NFTDisplayBox from '@/components/NFTDisplayBox';
 import { formatTimeStamp } from '@/utils/time';
 import { useEffect, useState } from 'react';
 import { getNFTDetail } from '@/services/nft-explorer';
+import network from '@/lib/network.helpers';
 
 type Props = {
   show: boolean;
@@ -61,7 +62,7 @@ const ArtifactInfoModal = (props: Props) => {
             <DetailInfoItem
               title="Contract"
               type="link"
-              link={`https://explorer.trustless.computer/address/${ARTIFACT_CONTRACT}`}
+              link={`${network.current.Explorer}/address/${ARTIFACT_CONTRACT}`}
               content={shortenAddress(ARTIFACT_CONTRACT.toLowerCase(), 4)}
             />
             <DetailInfoItem title="Content type" type="string" content={artifact.contentType} />
