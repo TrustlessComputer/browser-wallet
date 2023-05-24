@@ -9,6 +9,7 @@ import { debounce } from 'lodash';
 import RequestAccountModal from '@/components/Transactor/DappRequest/RequestAccount.modal';
 import { getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
+import { getConnector } from '@/lib/connector.helper';
 
 const DappRequest = React.memo(() => {
   const userInfo = useCurrentUserInfo();
@@ -23,8 +24,8 @@ const DappRequest = React.memo(() => {
   const getRequestData = async () => {
     if (!requestID || !userInfo) return;
     try {
-      const connection = new TC_CONNECT.WalletConnect();
-      const request = await connection.getRequest(requestID);
+      const connector = getConnector();
+      const request = await connector.getRequest(requestID);
       setRequest(request);
     } catch (error) {
       const { message } = getErrorMessage(error, 'requestData');

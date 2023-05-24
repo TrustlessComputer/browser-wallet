@@ -32,6 +32,7 @@ const Content = styled.div`
       backdrop-filter: blur(1px);
       background-color: ${({ theme }) => theme.bg['secondary']};
       border-radius: ${px2rem(8)};
+      cursor: pointer;
     }
   }
 

@@ -7,6 +7,7 @@ import Text from '@/components/Text';
 import Button from '@/components/Button';
 import { useAppSelector } from '@/state/hooks';
 import { listAccountsSelector } from '@/state/wallet/selector';
+import { getConnector } from '@/lib/connector.helper';
 
 interface IProps {
   requestID: string;
@@ -22,9 +23,9 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   const onRejectRequest = async () => {
     if (!requestID || !userInfo) return;
     setLoading(true);
-    const connection = new TC_CONNECT.WalletConnect('', requestID);
+    const connector = getConnector(requestID);
     try {
-      await connection.postResultAccount({
+      await connector.postResultAccount({
         btcAddress: '',
         tcAddress: '',
         isCancel: true,
@@ -40,12 +41,12 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
 
   const onAcceptRequest = async () => {
     if (!requestID || !userInfo) return;
-    const connection = new TC_CONNECT.WalletConnect('', requestID);
+    const connector = getConnector(requestID);
     const listAccounts = accounts.map(account => ({
       tcAddress: account.address,
       btcAddress: userInfo.btcAddress,
     }));
-    await connection.postResultAccount({
+    await connector.postResultAccount({
       btcAddress: userInfo.btcAddress,
       method: TC_CONNECT.RequestMethod.account,
       tcAddress: userInfo.address,
