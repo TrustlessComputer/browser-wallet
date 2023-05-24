@@ -37,6 +37,30 @@ export const Styled = styled.div`
 
   .ic-copy {
     cursor: pointer;
+    width: ${px2rem(22)};
+    height: ${px2rem(22)};
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    :hover {
+      opacity: 0.8;
+    }
+  }
+
+  .link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    cursor: pointer;
+    gap: ${px2rem(6)};
+    :hover {
+      opacity: 0.8;
+    }
+  }
+
+  .ic-explore {
     width: ${px2rem(20)};
     height: ${px2rem(20)};
     margin-top: 0;
@@ -47,6 +71,5 @@ export const Styled = styled.div`
 
   a {
     text-decoration: underline !important;
-    cursor: pointer;
   }
 `;

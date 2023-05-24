@@ -1,7 +1,6 @@
 import { Container, Styled } from './DetailInfoItem.styled';
 import { CDN_URL } from '@/configs';
 import CopyIcon from '@/components/icons/Copy';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {
   type: 'address' | 'link' | 'string';
@@ -13,7 +12,6 @@ type Props = {
 
 const DetailInfoItem = (props: Props) => {
   const { title, type, content, link, address } = props;
-  const navigate = useNavigate();
 
   return (
     <Container>
@@ -27,12 +25,10 @@ const DetailInfoItem = (props: Props) => {
           </>
         )}
         {type === 'link' && link && (
-          <>
-            <a href={link} target={'_blank'}>
-              {content}
-            </a>
-            <img className="ic-copy" src={`${CDN_URL}/icons/ic-export.svg`} onClick={() => navigate(link)} />
-          </>
+          <a className="link" href={link} target={'_blank'}>
+            {content}
+            <img className="ic-explore" src={`${CDN_URL}/icons/ic-export.svg`} />
+          </a>
         )}
       </Styled>
     </Container>
