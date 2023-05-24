@@ -84,7 +84,9 @@ const AssetDropdown = React.memo(() => {
           titleClass: 'text-normal',
           icon: <ExportIcon />,
           iconClass: 'icon-normal',
-          onClick: () => {},
+          onClick: () => {
+            user && window.open(`${network.current.BTCExplorer}/address/${user.btcAddress}`);
+          },
         },
       ],
     },

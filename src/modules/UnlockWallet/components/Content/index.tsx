@@ -10,8 +10,7 @@ import { UnlockWalletAction } from '@/modules/UnlockWallet/Unlock.actions';
 import { useAppDispatch } from '@/state/hooks';
 import { ISetMasterCreated } from '@/state/wallet/types';
 import LoadingContainer from '@/components/Loader';
-import { isKeepSign, MOCKUP_MNEMONIC, MOCKUP_PASSWORD } from '@/configs';
-import useAsyncEffect from 'use-async-effect';
+import { MOCKUP_PASSWORD } from '@/configs';
 
 interface IProps {
   onSuccess: (data: ISetMasterCreated) => Promise<void>;
@@ -21,7 +20,7 @@ const UnlockContent = React.memo((props: IProps) => {
   const dispatch = useAppDispatch();
   const [password, setPassword] = React.useState(MOCKUP_PASSWORD);
   const [touched, setTouched] = React.useState(false);
-  const [loading, setLoading] = React.useState(isKeepSign || false);
+  const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
 
   const unlockWalletActions = new UnlockWalletAction({
@@ -58,12 +57,6 @@ const UnlockContent = React.memo((props: IProps) => {
     }
   };
 
-  useAsyncEffect(() => {
-    if (isKeepSign && MOCKUP_PASSWORD && MOCKUP_MNEMONIC) {
-      onUnlock().then().catch();
-    }
-  }, []);
-
   return (
     <Container>
       <Logo className="mt-32" />
@@ -96,7 +89,7 @@ const UnlockContent = React.memo((props: IProps) => {
       <Button sizes="stretch" className="mt-48" disabled={!isEnableButton || loading} onClick={onUnlock}>
         Unlock Wallet
       </Button>
-      <LoadingContainer loaded={!loading} opacity={isKeepSign ? 100 : 60} />
+      <LoadingContainer loaded={!loading} opacity={60} />
     </Container>
   );
 });
