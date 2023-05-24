@@ -68,3 +68,41 @@ export const DropdownItem = styled.div`
     }
   }
 `;
+
+export const MoreDropdownItem = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${px2rem(12)};
+
+  :hover {
+    opacity: 0.8;
+    * {
+      text-decoration: underline;
+    }
+  }
+
+  .icon-remove {
+    padding: ${px2rem(4)};
+    background-color: ${({ theme }) => theme.red.C};
+    border-radius: ${px2rem(4)};
+  }
+
+  .text-remove {
+    color: ${({ theme }) => theme.red.C};
+  }
+
+  .icon-normal {
+    padding: ${px2rem(4)};
+    background-color: ${({ theme }) => theme.bg.third};
+    border-radius: ${px2rem(4)};
+  }
+
+  .text-normal {
+  }
+`;
+
+export const MoreDropdownList = styled.div`
+  display: grid;
+  gap: ${px2rem(16)} !important;
+`;

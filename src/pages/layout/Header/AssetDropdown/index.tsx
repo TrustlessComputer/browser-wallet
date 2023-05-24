@@ -11,9 +11,10 @@ import copy from 'copy-to-clipboard';
 import React, { useContext } from 'react';
 import toast from 'react-hot-toast';
 import network from '@/lib/network.helpers';
-import { DropdownItem, DropdownList, Element } from './styled';
+import { DropdownItem, DropdownList, Element, MoreDropdownItem, MoreDropdownList } from './styled';
 import { TransactorContext } from '@/contexts/transactor.context';
 import ToolTip from '@/components/Tooltip';
+import { ExportIcon } from '@/components/icons';
 
 const AssetDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
@@ -41,8 +42,24 @@ const AssetDropdown = React.memo(() => {
         })}
         )`,
       formatBalance: `${formatTcBalance} TC`,
-      titleTransfer: 'Transfer TC',
-      onClickTransfer: onOpenTCModal,
+      moreItems: [
+        {
+          title: 'Transfer TC',
+          titleClass: 'text-normal',
+          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="18" />,
+          iconClass: 'icon-normal',
+          onClick: onOpenTCModal,
+        },
+        {
+          title: 'View account in explorer',
+          titleClass: 'text-normal',
+          icon: <ExportIcon />,
+          iconClass: 'icon-normal',
+          onClick: () => {
+            user && window.open(`${network.current.Explorer}/address/${user.address}`);
+          },
+        },
+      ],
     },
     {
       src: `${CDN_URL_ICONS}/ic-bitcoin.svg`,
@@ -54,8 +71,22 @@ const AssetDropdown = React.memo(() => {
         })}
         )`,
       formatBalance: `${formatBtcBalance} BTC`,
-      titleTransfer: 'Transfer BTC',
-      onClickTransfer: onOpenBTCModal,
+      moreItems: [
+        {
+          title: 'Transfer BTC',
+          titleClass: 'text-normal',
+          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="18" />,
+          iconClass: 'icon-normal',
+          onClick: onOpenBTCModal,
+        },
+        {
+          title: 'View account in explorer',
+          titleClass: 'text-normal',
+          icon: <ExportIcon />,
+          iconClass: 'icon-normal',
+          onClick: () => {},
+        },
+      ],
     },
   ];
 
@@ -99,16 +130,32 @@ const AssetDropdown = React.memo(() => {
                     <Text size="tini">Copy to clipboard</Text>
                   </ToolTip>
 
-                  <ToolTip
+                  <Dropdown
                     unwrapElement={
-                      <div className="action" onClick={asset.onClickTransfer}>
-                        <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="20" />
+                      <div className="action">
+                        <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
                       </div>
                     }
                     width={300}
                   >
-                    <Text size="tini">{asset.titleTransfer}</Text>
-                  </ToolTip>
+                    <MoreDropdownList>
+                      {asset.moreItems.map(item => {
+                        return (
+                          <MoreDropdownItem
+                            key={item.title}
+                            onClick={() => {
+                              item.onClick();
+                            }}
+                          >
+                            <div className={item.iconClass}>{item.icon}</div>
+                            <Text className={item.titleClass} size="note">
+                              {item.title}
+                            </Text>
+                          </MoreDropdownItem>
+                        );
+                      })}
+                    </MoreDropdownList>
+                  </Dropdown>
                 </div>
               </DropdownItem>
             );
