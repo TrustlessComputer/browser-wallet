@@ -15,6 +15,7 @@ import { InitialProvider } from '@/contexts/initial.context';
 import { TransactorProvider } from '@/contexts/transactor.context';
 import { TransactionProvider } from '@/contexts/transaction.context';
 import DappRequest from '@/components/Transactor/DappRequest';
+import { LoaderProvider } from '@/contexts/loader.context';
 
 let persistor = persistStore(store);
 const App: React.FC = (): React.ReactElement => {
@@ -24,16 +25,18 @@ const App: React.FC = (): React.ReactElement => {
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
           <ThemedGlobalStyle />
-          <InitialProvider>
-            <AssetsProvider>
-              <TransactionProvider>
-                <TransactorProvider>
-                  {element}
-                  <DappRequest />
-                </TransactorProvider>
-              </TransactionProvider>
-            </AssetsProvider>
-          </InitialProvider>
+          <LoaderProvider>
+            <InitialProvider>
+              <AssetsProvider>
+                <TransactionProvider>
+                  <TransactorProvider>
+                    {element}
+                    <DappRequest />
+                  </TransactorProvider>
+                </TransactionProvider>
+              </AssetsProvider>
+            </InitialProvider>
+          </LoaderProvider>
           <Toaster position="top-center" reverseOrder={false} />
         </ThemeProvider>
       </PersistGate>

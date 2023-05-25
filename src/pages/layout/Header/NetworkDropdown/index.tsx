@@ -8,16 +8,19 @@ import network, { INetwork } from '@/lib/network.helpers';
 import { SwitchNetworkAction } from '@/pages/layout/Header/NetworkDropdown/SwitchNetwork.actions';
 import { useAppDispatch } from '@/state/hooks';
 import { InitialContext } from '@/contexts/initial.context';
+import { LoaderContext } from '@/contexts/loader.context';
 
 const NetworkDropdown = React.memo(() => {
   const networks = network.getListNetworks();
   const selectNetwork = network.getSelectedNetwork();
   const dispatch = useAppDispatch();
   const { onPreloader } = useContext(InitialContext);
+  const { setLoading } = useContext(LoaderContext);
 
   const switchNetworkActions = new SwitchNetworkAction({
     component: {
       onPreloader,
+      setLoading,
     },
     dispatch,
   });

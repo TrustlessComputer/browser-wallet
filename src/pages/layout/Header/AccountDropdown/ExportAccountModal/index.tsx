@@ -9,11 +9,10 @@ import { Row } from '@/components/Row';
 import useProvider from '@/hooks/useProvider';
 import format from '@/utils/amount';
 import Token from '@/constants/token';
-import * as TC_SDK from 'trustless-computer-sdk';
-import { compareString } from '@/utils';
 import copy from 'copy-to-clipboard';
 import AlertMessage from '@/components/AlertMessage';
 import { AlertMessageType } from '@/components/AlertMessage/AlertMessage';
+import { getPrivateKeyByAddress } from '@/lib/wallet';
 
 interface Props {
   show: boolean;
@@ -41,15 +40,14 @@ const ExportAccount = React.memo((props: Props) => {
 
   const getAccountPrivateKey = () => {
     if (!masterIns) return;
-    const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
-    const nodes: TC_SDK.IDeriveKey[] = hdWallet.nodes || [];
-    const selected = nodes?.find(node => compareString({ str1: node.address, str2: address, method: 'equal' }));
-    if (selected) {
-      let privateKey = selected.privateKey;
-      if (selected.privateKey.startsWith('0x')) {
-        privateKey = selected.privateKey.slice(2);
+    let pvKey = getPrivateKeyByAddress(masterIns, address);
+    if (pvKey) {
+      if (pvKey.startsWith('0x')) {
+        pvKey = pvKey.slice(2);
       }
-      setPrivateKey(privateKey);
+      setPrivateKey(pvKey);
+    } else {
+      toast.error('Could not find your account.');
     }
   };
 

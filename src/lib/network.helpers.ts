@@ -104,7 +104,7 @@ class Network {
   }
 
   getListNetworks(): INetwork[] {
-    const advanceNetworks = storageLocal.get(LocalStorageKey.ADVANCE_NETWORK) ? ADVANCE_NETWORKS : [];
+    const advanceNetworks = storageLocal.get(LocalStorageKey.ADVANCE_USER) ? ADVANCE_NETWORKS : [];
     return [...NETWORKS, ...advanceNetworks];
   }
 

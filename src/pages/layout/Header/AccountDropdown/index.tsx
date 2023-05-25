@@ -25,6 +25,9 @@ import ToolTip from '@/components/Tooltip';
 import network from '@/lib/network.helpers';
 import ExportMnemonic from '@/pages/layout/Header/AccountDropdown/ExportMnemonicModal';
 import ExportBTCKey from '@/pages/layout/Header/AccountDropdown/ExportBTCKeyModal';
+import ImportKey from '@/pages/layout/Header/AccountDropdown/ImportKeyModal';
+import storageLocal from '@/lib/storage.local';
+import { LocalStorageKey } from '@/enums/storage.keys';
 
 interface IAccount {
   name: string;
@@ -42,12 +45,13 @@ const AccountDropdown = React.memo(() => {
     dispatch: dispatch,
   });
   const { tcBalance } = useContext(AssetsContext);
-
+  const [showImportKey, setShowImportKey] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [removeAccount, setRemoveAccount] = useState<IAccount | undefined>(undefined);
   const [exportAccount, setExportAccount] = useState<IAccount | undefined>(undefined);
   const [exportMnemonic, setExportMnemonic] = useState<boolean>(false);
   const [exportBTCKey, setExportBTCKey] = useState<boolean>(false);
+  const [showImportModal, setShowImportModal] = useState<boolean>(false);
 
   const onSwitchAccount = React.useCallback(
     throttle((address: string) => {
@@ -197,6 +201,12 @@ const AccountDropdown = React.memo(() => {
     );
   };
 
+  React.useEffect(() => {
+    if (storageLocal.get(LocalStorageKey.ADVANCE_USER)) {
+      setShowImportKey(true);
+    }
+  }, []);
+
   return (
     <>
       <Dropdown
@@ -209,7 +219,9 @@ const AccountDropdown = React.memo(() => {
           </Text>
         }
         width={384}
-        closeDropdown={!!removeAccount || showCreateModal || !!exportAccount || exportMnemonic || exportBTCKey}
+        closeDropdown={
+          !!removeAccount || showCreateModal || !!exportAccount || exportMnemonic || exportBTCKey || showImportModal
+        }
       >
         <DropDownContainer>
           <DropdownList>
@@ -233,6 +245,8 @@ const AccountDropdown = React.memo(() => {
               )}
           </DropdownList>
           {renderAction('ic-plus-square-dark.svg', 'Create new account', () => setShowCreateModal(true))}
+          {showImportKey &&
+            renderAction('ic-plus-square-dark.svg', 'Import Private Key', () => setShowImportModal(true), false)}
           {renderAction('ic-export-mnemoic-dark.svg', 'Export mnemonic', () => setExportMnemonic(true), false)}
           {renderAction('ic-export-key-dark.svg', 'Export BTC private key', () => setExportBTCKey(true), false)}
           {renderAction('ic-logout-dark.svg', 'Sign out', () => dispatch(setIsLockedWallet(true)), true, 'text-remove')}
@@ -257,6 +271,7 @@ const AccountDropdown = React.memo(() => {
       )}
       {exportMnemonic && <ExportMnemonic show={exportMnemonic} handleClose={() => setExportMnemonic(false)} />}
       {exportBTCKey && <ExportBTCKey show={exportBTCKey} handleClose={() => setExportBTCKey(false)} />}
+      {showImportModal && <ImportKey show={showImportModal} handleClose={() => setShowImportModal(false)} />}
     </>
   );
 });

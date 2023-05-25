@@ -38,11 +38,20 @@ export class RemoveAccountAction implements IRemoveAccountAction {
     if (!removedAccount) {
       throw new Error('Can not find account.');
     }
-    const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
-    await hdWallet.deletedAccount({
-      password: this.component.password,
-      address: address,
-    });
+    const hdWalletIns: TC_SDK.HDWallet = masterIns.getHDWallet();
+    const masterlessIns: TC_SDK.Masterless = masterIns.getMasterless();
+    if (removedAccount.isImport) {
+      await masterlessIns.deletedMasterless({
+        password: this.component.password,
+        address: address,
+      });
+    } else {
+      await hdWalletIns.deletedAccount({
+        password: this.component.password,
+        address: address,
+      });
+    }
+
     const newAccounts = accounts.filter(account =>
       compareString({ str1: account.address, str2: address, method: 'diff' }),
     );

@@ -5,14 +5,15 @@ import { Formik } from 'formik';
 import React from 'react';
 import toast from 'react-hot-toast';
 import Container from './styled';
-import { CreateAccountAction } from '@/pages/layout/Header/AccountDropdown/CreateAccount.actions';
+import { ImportKeyAction } from '@/pages/layout/Header/AccountDropdown/ImportKey.actions';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { listAccountsSelector, masterWalletSelector, passwordSelector } from '@/state/wallet/selector';
 import { getErrorMessage } from '@/utils/error';
-import throttle from 'lodash/throttle';
+import { verifyEtherPrivateKey } from '@/utils';
 
 type IFormValue = {
   name: string;
+  privateKey: string;
 };
 
 interface Props {
@@ -20,7 +21,7 @@ interface Props {
   handleClose: () => void;
 }
 
-const CreateAccount = React.memo((props: Props) => {
+const ImportKey = React.memo((props: Props) => {
   const { show, handleClose } = props;
   const [loading, setLoading] = React.useState(false);
   const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ const CreateAccount = React.memo((props: Props) => {
   const password = useAppSelector(passwordSelector);
   const accounts = useAppSelector(listAccountsSelector);
 
-  const createAccountActions = new CreateAccountAction({
+  const importKeyActions = new ImportKeyAction({
     component: {
       setLoading,
       password,
@@ -45,28 +46,35 @@ const CreateAccount = React.memo((props: Props) => {
       errors.name = 'Account name is required.';
     }
 
+    if (!values.privateKey) {
+      errors.privateKey = 'Private key is required.';
+    } else if (!verifyEtherPrivateKey(values.privateKey)) {
+      errors.privateKey = 'Invalid private key.';
+    }
+
     return errors;
   };
 
-  const handleSubmit = throttle(async (params: IFormValue): Promise<void> => {
+  const handleSubmit = async (params: IFormValue): Promise<void> => {
     try {
-      await createAccountActions.createAccount(params.name);
-      toast.success('Create account successfully');
+      await importKeyActions.importKey(params.name, params.privateKey);
+      toast.success('Import account successfully');
       handleClose();
     } catch (err) {
       const { message } = getErrorMessage(err, 'submitCreateAccount');
       toast.error(message);
     }
-  }, 1000);
+  };
 
   return (
-    <SignerModal show={show} onClose={handleClose} title="Create Account" width={600}>
+    <SignerModal show={show} onClose={handleClose} title="Import Private Key" width={600}>
       <Container>
         <div className="form-container">
           <Formik
             key="transfer"
             initialValues={{
               name: `Account ${accounts.length + 1}`,
+              privateKey: '',
             }}
             validate={validateForm}
             onSubmit={handleSubmit}
@@ -82,13 +90,26 @@ const CreateAccount = React.memo((props: Props) => {
                   onBlur={handleBlur}
                   value={values.name}
                   className="input"
-                  autoFocus={true}
                   placeholder={`Account name`}
                   errorMsg={errors.name && touched.name ? errors.name : undefined}
                 />
+                <Input
+                  title="PRIVATE KEY"
+                  id="privateKey"
+                  type="text"
+                  name="privateKey"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.privateKey}
+                  classContainer="mt-24"
+                  className="input"
+                  autoFocus={true}
+                  placeholder="Enter private key"
+                  errorMsg={errors.privateKey && touched.privateKey ? errors.privateKey : undefined}
+                />
                 <div className="actions">
                   <Button disabled={loading || isSubmitting} sizes="stretch" type="submit" className="confirm-btn">
-                    {loading ? 'Creating...' : 'Create'}
+                    {loading ? 'Importing...' : 'Import'}
                   </Button>
                 </div>
               </form>
@@ -100,4 +121,4 @@ const CreateAccount = React.memo((props: Props) => {
   );
 });
 
-export default CreateAccount;
+export default ImportKey;

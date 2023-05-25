@@ -100,6 +100,7 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
                 id="toAddress"
                 type="text"
                 name="toAddress"
+                autoFocus={true}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.toAddress}

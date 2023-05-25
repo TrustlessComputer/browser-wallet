@@ -2,7 +2,7 @@ import sleep from '@/utils/sleep';
 import { setCurrentTCAccount, setListAccounts } from '@/state/wallet/reducer';
 import { MasterWallet } from 'trustless-computer-sdk';
 import WError, { ERROR_CODE } from '@/utils/error';
-import { getListAccounts, getUserSecretKey, getInstanceAndNodes } from '@/lib/wallet';
+import { getListAccounts, getUserSecretKey } from '@/lib/wallet';
 import { batch } from 'react-redux';
 import WalletStorage from '@/lib/wallet/wallet.storage';
 import { TC_SDK } from '@/lib';
@@ -15,11 +15,11 @@ interface IComponent {
   accounts: IListAccounts[];
 }
 
-export interface ICreateAccountAction {
-  createAccount: (name: string) => void;
+export interface IImportKeyAction {
+  importKey: (name: string, privateKey: string) => void;
 }
 
-export class CreateAccountAction implements ICreateAccountAction {
+export class ImportKeyAction implements IImportKeyAction {
   protected component: IComponent;
   protected dispatch: any;
 
@@ -28,16 +28,16 @@ export class CreateAccountAction implements ICreateAccountAction {
     this.dispatch = props.dispatch;
   }
 
-  createAccount = async (name: string) => {
+  importKey = async (name: string, privateKey: string) => {
     const { masterIns, password } = this.component;
     if (!masterIns || !password) throw new WError(ERROR_CODE.INVALID_PARAMS);
-    const { seedWalletIns, seedNodes, importedNodes } = getInstanceAndNodes(masterIns);
-    const nodes = [...seedNodes, ...importedNodes];
-    if (seedWalletIns) {
-      const newAccount: TC_SDK.IDeriveKey = await seedWalletIns.createNewAccount({
+    const masterlessIns: TC_SDK.Masterless = masterIns.getMasterless();
+    if (masterlessIns) {
+      const newAccount: TC_SDK.IMasterless = await masterlessIns.importNewAccount({
         password,
         name,
-        accounts: nodes,
+        privateKey,
+        nodes: this.component.accounts,
       });
       WalletStorage.setCurrentTCAddress({
         name: newAccount.name,
