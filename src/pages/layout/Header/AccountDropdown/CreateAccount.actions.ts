@@ -2,7 +2,7 @@ import sleep from '@/utils/sleep';
 import { setCurrentTCAccount, setListAccounts } from '@/state/wallet/reducer';
 import { MasterWallet } from 'trustless-computer-sdk';
 import WError, { ERROR_CODE } from '@/utils/error';
-import { getListAccounts, getUserSecretKey } from '@/lib/wallet';
+import { getListAccounts, getUserSecretKey, getInstanceAndNodes } from '@/lib/wallet';
 import { batch } from 'react-redux';
 import WalletStorage from '@/lib/wallet/wallet.storage';
 import { TC_SDK } from '@/lib';
@@ -31,11 +31,13 @@ export class CreateAccountAction implements ICreateAccountAction {
   createAccount = async (name: string) => {
     const { masterIns, password } = this.component;
     if (!masterIns || !password) throw new WError(ERROR_CODE.INVALID_PARAMS);
-    const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
-    if (hdWallet) {
-      const newAccount: TC_SDK.IDeriveKey = await hdWallet.createNewAccount({
+    const { seedWalletIns, seedNodes, importedNodes } = getInstanceAndNodes(masterIns);
+    const nodes = [...seedNodes, ...importedNodes];
+    if (seedWalletIns) {
+      const newAccount: TC_SDK.IDeriveKey = await seedWalletIns.createNewAccount({
         password,
         name,
+        accounts: nodes,
       });
       WalletStorage.setCurrentTCAddress({
         name: newAccount.name,

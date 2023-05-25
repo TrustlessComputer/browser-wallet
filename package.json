@@ -67,7 +67,7 @@
     "styled-components": "^5.3.9",
     "swr": "^2.1.2",
     "tc-connect": "https://github.com/TrustlessComputer/tc-connect#v0.0.0.51_test",
-    "trustless-computer-sdk": "https://github.com/TrustlessComputer/tc-sdk#v0.1.36.10_test",
+    "trustless-computer-sdk": "https://github.com/TrustlessComputer/tc-sdk#v0.1.36.11_test",
     "unzipit": "^1.4.2",
     "use-async-effect": "^2.2.7"
   },

@@ -9,6 +9,7 @@ import { CreateAccountAction } from '@/pages/layout/Header/AccountDropdown/Creat
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { listAccountsSelector, masterWalletSelector, passwordSelector } from '@/state/wallet/selector';
 import { getErrorMessage } from '@/utils/error';
+import throttle from 'lodash/throttle';
 
 type IFormValue = {
   name: string;
@@ -47,7 +48,7 @@ const CreateAccount = React.memo((props: Props) => {
     return errors;
   };
 
-  const handleSubmit = async (params: IFormValue): Promise<void> => {
+  const handleSubmit = throttle(async (params: IFormValue): Promise<void> => {
     try {
       await createAccountActions.createAccount(params.name);
       toast.success('Create account successfully');
@@ -56,7 +57,7 @@ const CreateAccount = React.memo((props: Props) => {
       const { message } = getErrorMessage(err, 'submitCreateAccount');
       toast.error(message);
     }
-  };
+  }, 1000);
 
   return (
     <SignerModal show={show} onClose={handleClose} title="Create Account" width={600}>
@@ -70,7 +71,7 @@ const CreateAccount = React.memo((props: Props) => {
             validate={validateForm}
             onSubmit={handleSubmit}
           >
-            {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
               <form className="form" onSubmit={handleSubmit}>
                 <Input
                   title="ACCOUNT NAME"
@@ -81,11 +82,12 @@ const CreateAccount = React.memo((props: Props) => {
                   onBlur={handleBlur}
                   value={values.name}
                   className="input"
+                  autoFocus={true}
                   placeholder={`Account name`}
                   errorMsg={errors.name && touched.name ? errors.name : undefined}
                 />
                 <div className="actions">
-                  <Button disabled={loading} sizes="stretch" type="submit" className="confirm-btn">
+                  <Button disabled={loading || isSubmitting} sizes="stretch" type="submit" className="confirm-btn">
                     {loading ? 'Creating...' : 'Create'}
                   </Button>
                 </div>

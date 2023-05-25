@@ -79,7 +79,7 @@ const ImportKey = React.memo((props: Props) => {
             validate={validateForm}
             onSubmit={handleSubmit}
           >
-            {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
               <form className="form" onSubmit={handleSubmit}>
                 <Input
                   title="ACCOUNT NAME"
@@ -108,7 +108,7 @@ const ImportKey = React.memo((props: Props) => {
                   errorMsg={errors.privateKey && touched.privateKey ? errors.privateKey : undefined}
                 />
                 <div className="actions">
-                  <Button disabled={loading} sizes="stretch" type="submit" className="confirm-btn">
+                  <Button disabled={loading || isSubmitting} sizes="stretch" type="submit" className="confirm-btn">
                     {loading ? 'Importing...' : 'Import'}
                   </Button>
                 </div>
