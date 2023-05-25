@@ -118,7 +118,8 @@ export const TabContainer = styled.div`
   }
 
   .tab-content {
-    min-height: ${px2rem(300)};
+    min-height: 50vh;
+    height: 100%;
     position: relative;
 
     .empty {

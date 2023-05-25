@@ -16,17 +16,17 @@ import { MDContainer } from '@/modules/styled';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const { tab } = queryString.parse(location.search) as { tab: string };
+  const { tab, requestID } = queryString.parse(location.search) as { tab: string; requestID: string };
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.TRANSACTION);
 
-  useEffect(() => {
-    navigate(`/?tab=${activeTab}`);
-  }, []);
+  // useEffect(() => {
+  //   navigate(`/?tab=${activeTab}`);
+  // }, []);
 
   useEffect(() => {
-    if (tab) {
+    if (tab && !requestID) {
       setActiveTab(tab);
     }
   }, [tab]);

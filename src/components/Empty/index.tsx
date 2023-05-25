@@ -1,22 +1,33 @@
 import { StyledEmpty } from './Empty.styled';
 import { CDN_URL } from '@/configs';
+import Text from '@/components/Text';
 
 export type TEmpty = {
   infoText?: string;
+  link?: string;
   isTable?: boolean;
 };
 
-const Empty = ({ infoText = '', isTable = false }: TEmpty) => {
+const Empty = ({ infoText = '', link = '', isTable = false }: TEmpty) => {
   return (
     <StyledEmpty className={'notFound'} isTable={isTable}>
       <img
-        width={95}
-        height={95}
+        width={110}
+        height={110}
         src={`${CDN_URL}/icons/ic-empty.svg`}
         alt="Not found item"
         className={'notFound_image'}
       />
-      <h5 className="content">{infoText}</h5>
+      <Text className="mt-32" fontWeight="semibold" size="h5">
+        {infoText}
+      </Text>
+      {link && (
+        <Text className="mt-12 link" fontWeight="semibold" size="body">
+          <a href={link} target="_blank">
+            Learn more
+          </a>
+        </Text>
+      )}
     </StyledEmpty>
   );
 };

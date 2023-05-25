@@ -96,7 +96,7 @@ const NftsProfile = () => {
   if (!collections || collections.length === 0)
     return (
       <Container>
-        <Empty />
+        <Empty infoText="No NFTs yet" link="https://trustlessnfts.com/" />
       </Container>
     );
 

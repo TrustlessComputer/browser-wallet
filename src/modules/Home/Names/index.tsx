@@ -60,7 +60,9 @@ const Names = () => {
     }
   }, [account]);
 
-  if (!collections || collections.length === 0) return <Empty />;
+  if (!collections || collections.length === 0) {
+    return <Empty infoText="No Names yet" link="https://trustless.domains/" />;
+  }
 
   const onClickBNS = (bns: IBNS) => {
     setSelectBNS(bns);
