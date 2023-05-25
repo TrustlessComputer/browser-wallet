@@ -21,6 +21,13 @@ const Container = styled.div`
       gap: ${px2rem(12)};
       margin-top: ${px2rem(24)};
     }
+
+    .loader {
+      margin: ${px2rem(32)} auto auto;
+      left: 0;
+      right: 0;
+      width: fit-content;
+    }
   }
 `;
 
