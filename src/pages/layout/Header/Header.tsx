@@ -46,8 +46,11 @@ const Header = () => {
               className="ic-logo"
               onClick={() => {
                 setCounter(counter => ++counter);
-                if (counter >= 10) {
-                  storageLocal.set(LocalStorageKey.ADVANCE_NETWORK, true);
+                if (counter >= 20) {
+                  storageLocal.set(LocalStorageKey.ADVANCE_USER, true);
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 500);
                 }
               }}
             />
