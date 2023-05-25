@@ -38,7 +38,6 @@ interface IProps {
 }
 
 const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
-  console.log('SANG TEST: ', request);
   const [functionName, setFunctionName] = React.useState<FunctionItem | undefined>(undefined);
   const [submitting, setSubmitting] = React.useState(false);
   const userSecretKey = useUserSecretKey();

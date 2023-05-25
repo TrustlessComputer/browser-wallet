@@ -22,7 +22,7 @@ export const StyledTable = styled.div`
       &_item {
         font-weight: 500;
         line-height: ${px2rem(24)};
-        color: #b6b6b6;
+        color: ${({ theme }) => theme['text-primary']};
         position: sticky;
         top: 0;
         /* background-color: ${({ theme }: { theme: DefaultTheme }) => theme.white}; */
@@ -61,13 +61,12 @@ export const StyledTable = styled.div`
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      margin-top: ${px2rem(50)};
-
+      margin-top: ${px2rem(100)};
       .content {
         margin-top: ${px2rem(16)};
       }
 
-      tr > div {
+      min-height: 1000px tr > div {
         position: absolute;
         top: 80px;
       }

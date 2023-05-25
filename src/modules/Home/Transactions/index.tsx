@@ -14,6 +14,7 @@ import { TransactionContext } from '@/contexts/transaction.context';
 import { Row } from '@/components/Row';
 import SpeedUpModal from '@/components/Transactor/SpeedUp.modal';
 import { ISpeedUpTx } from '@/interfaces/transaction';
+import { EMPTY_LINK } from '@/modules/Home/constant';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
@@ -161,7 +162,13 @@ const Transactions = React.memo(() => {
           <Spinner />
         </div>
       )}
-      <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
+      <Table
+        tableHead={TABLE_HEADINGS}
+        data={transactionsData}
+        className="transaction-table"
+        emptyLabel={EMPTY_LINK.TRANSACTIONS.label}
+        emptyLink={EMPTY_LINK.TRANSACTIONS.link}
+      />
       {!!speedUpTx && (
         <SpeedUpModal
           show={!!speedUpTx}

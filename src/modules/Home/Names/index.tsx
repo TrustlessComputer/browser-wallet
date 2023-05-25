@@ -12,6 +12,7 @@ import BNSCard from './Card';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import BNSTransferModal from './TransferModal';
 import BNSInfoModal from './InfoModal';
+import { EMPTY_LINK } from '@/modules/Home/constant';
 
 const LIMIT_PAGE = 12;
 
@@ -61,7 +62,7 @@ const Names = () => {
   }, [account]);
 
   if (!collections || collections.length === 0) {
-    return <Empty infoText="No Names yet" link="https://trustless.domains/" />;
+    return <Empty infoText={EMPTY_LINK.NAMES.label} link={EMPTY_LINK.NAMES.link} />;
   }
 
   const onClickBNS = (bns: IBNS) => {

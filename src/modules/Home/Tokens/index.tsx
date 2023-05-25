@@ -15,6 +15,7 @@ import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import Button from '@/components/Button';
 import network from '@/lib/network.helpers';
 import Text from '@/components/Text';
+import { EMPTY_LINK } from '@/modules/Home/constant';
 
 const LIMIT_PAGE = 50;
 
@@ -134,7 +135,7 @@ const Tokens = () => {
   }, [profileWallet]);
 
   if (!tokensList || tokensList.length === 0 || !profileWallet) {
-    return <Empty />;
+    return <Empty infoText={EMPTY_LINK.TOKENS.label} link={EMPTY_LINK.TOKENS.link} />;
   }
 
   return (

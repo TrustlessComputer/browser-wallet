@@ -13,6 +13,7 @@ import NFTCard from '@/components/NFTCard';
 import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import ArtifactInfoModal from './InfoModal';
 import ArtifactTransferModal from './TransferModal';
+import { EMPTY_LINK } from '@/modules/Home/constant';
 
 const LIMIT_PAGE = 32;
 
@@ -66,7 +67,8 @@ const ArtifactsProfile = () => {
     if (profileWallet) fetchInscriptions();
   }, [profileWallet]);
 
-  if (!inscriptions || inscriptions.length === 0) return <Empty />;
+  if (!inscriptions || inscriptions.length === 0)
+    return <Empty infoText={EMPTY_LINK.ARTIFACTS.label} link={EMPTY_LINK.ARTIFACTS.link} />;
 
   const onClickArtifact = (item: IInscription) => {
     setSelectArtifact(item);

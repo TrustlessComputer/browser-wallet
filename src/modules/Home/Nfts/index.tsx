@@ -15,6 +15,7 @@ import CollectionModal from './CollectionModal';
 import { IInscription } from '@/interfaces/api/inscription';
 import NFTInfoModal from './NFTInfoModal';
 import NFTTransferModal from './TransferModal';
+import { EMPTY_LINK } from '@/modules/Home/constant';
 
 const LIMIT_PAGE = 64;
 
@@ -93,12 +94,13 @@ const NftsProfile = () => {
     if (profileWallet) fetchCollections();
   }, [profileWallet]);
 
-  if (!collections || collections.length === 0)
+  if (!collections || collections.length === 0) {
     return (
       <Container>
-        <Empty infoText="No NFTs yet" link="https://trustlessnfts.com/" />
+        <Empty infoText={EMPTY_LINK.NFT.label} link={EMPTY_LINK.NFT.link} />
       </Container>
     );
+  }
 
   const showCollections = collections.filter(
     item => ![ARTIFACT_CONTRACT.toLowerCase(), BNS_CONTRACT.toLowerCase()].includes(item.contract.toLowerCase()),

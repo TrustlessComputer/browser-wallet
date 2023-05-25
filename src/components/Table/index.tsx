@@ -21,6 +21,8 @@ interface IProps extends TableProps {
   classTableData?: string;
   classWrapper?: string;
   isLoading?: boolean;
+  emptyLabel?: string;
+  emptyLink?: string;
 }
 
 const Table = ({
@@ -30,6 +32,8 @@ const Table = ({
   classTableData,
   classWrapper,
   isLoading,
+  emptyLabel,
+  emptyLink,
   ...delegatedProps
 }: IProps) => {
   const TableHeads = useMemo((): React.ReactNode => {
@@ -66,10 +70,9 @@ const Table = ({
         {!isLoading && (
           <BSTable bordered className={cs('table', className)} {...delegatedProps}>
             {TableHeads}
-
             {!data || data.length === 0 ? (
-              <tbody className={'empty'}>
-                <Empty isTable={true} />
+              <tbody className="empty">
+                <Empty isTable={true} infoText={emptyLabel} link={emptyLink} />
               </tbody>
             ) : (
               <tbody>
