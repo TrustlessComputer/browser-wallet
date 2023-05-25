@@ -19,14 +19,26 @@ const restoreMasterWallet = async (password: string): Promise<TC_SDK.MasterWalle
   return masterWallet;
 };
 
+const getInstanceAndNodes = (masterIns: TC_SDK.MasterWallet) => {
+  const seedWalletIns: TC_SDK.HDWallet = masterIns.getHDWallet();
+  const importedWalletIns: TC_SDK.Masterless = masterIns.getMasterless();
+
+  const seedNodes: TC_SDK.IDeriveKey[] = seedWalletIns.nodes || [];
+  const importedNodes: TC_SDK.IMasterless[] = importedWalletIns.nodes || [];
+
+  return {
+    seedWalletIns,
+    importedWalletIns,
+
+    seedNodes,
+    importedNodes,
+  };
+};
+
 const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
-  const hdWalletIns: TC_SDK.HDWallet = masterIns.getHDWallet();
-  const masterlessIns: TC_SDK.Masterless = masterIns.getMasterless();
+  const { seedWalletIns, seedNodes, importedNodes } = getInstanceAndNodes(masterIns);
 
-  const hdWalletNodes: TC_SDK.IDeriveKey[] = hdWalletIns.nodes || [];
-  const masterlessNodes: TC_SDK.IMasterless[] = masterlessIns.nodes || [];
-
-  const nodes = [...hdWalletNodes, ...masterlessNodes];
+  const nodes = [...seedNodes, ...importedNodes];
 
   // check storage current TC account
   let { address } = WalletStorage.getCurrentTCAccount() || {};
@@ -38,7 +50,7 @@ const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
     });
     address = node0.address;
   }
-  const btcPrivateKey = hdWalletIns.btcPrivateKey;
+  const btcPrivateKey = seedWalletIns.btcPrivateKey;
   if (address && nodes && nodes.length && btcPrivateKey) {
     const account = nodes.find(node => compareString({ str1: node.address, str2: address, method: 'equal' }));
     if (account) {
@@ -56,21 +68,15 @@ const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
 };
 
 const getListAccounts = (masterIns: TC_SDK.MasterWallet): IListAccounts[] => {
-  const hdWallet: TC_SDK.HDWallet = masterIns.getHDWallet();
-  const masterlessIns: TC_SDK.HDWallet = masterIns.getMasterless();
-
-  const hdWalletNodes: TC_SDK.IDeriveKey[] | undefined = hdWallet.nodes;
-  const masterlessNodes: TC_SDK.IMasterless[] = masterlessIns.nodes || [];
-
-  if (!hdWalletNodes) return [];
+  const { seedNodes, importedNodes } = getInstanceAndNodes(masterIns);
   const nodes = [
-    ...hdWalletNodes.map(node => ({
+    ...seedNodes.map(node => ({
       name: node.name,
       index: node.index,
       address: node.address,
       isImport: false,
     })),
-    ...masterlessNodes.map(node => ({
+    ...importedNodes.map(node => ({
       name: node.name,
       index: node.index,
       address: node.address,
@@ -80,4 +86,22 @@ const getListAccounts = (masterIns: TC_SDK.MasterWallet): IListAccounts[] => {
   return nodes;
 };
 
-export { randomMnemonic, saveNewHDWallet, restoreMasterWallet, getUserSecretKey, getListAccounts };
+const getPrivateKeyByAddress = (masterIns: TC_SDK.MasterWallet, address: string): string | undefined => {
+  const { seedNodes, importedNodes } = getInstanceAndNodes(masterIns);
+  const nodes = [...seedNodes, ...importedNodes];
+  const account = nodes.find(item => compareString({ str1: item.address, str2: address, method: 'equal' }));
+  if (account) {
+    return account.privateKey;
+  }
+  return undefined;
+};
+
+export {
+  randomMnemonic,
+  saveNewHDWallet,
+  restoreMasterWallet,
+  getUserSecretKey,
+  getListAccounts,
+  getInstanceAndNodes,
+  getPrivateKeyByAddress,
+};
