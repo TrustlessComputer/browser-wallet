@@ -37,7 +37,15 @@ const App: React.FC = (): React.ReactElement => {
               </AssetsProvider>
             </InitialProvider>
           </LoaderProvider>
-          <Toaster position="top-center" reverseOrder={false} />
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            toastOptions={{
+              style: {
+                maxWidth: '550px',
+              },
+            }}
+          />
         </ThemeProvider>
       </PersistGate>
     </Provider>
