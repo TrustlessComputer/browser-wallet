@@ -67,7 +67,7 @@ const ImportKey = React.memo((props: Props) => {
   };
 
   return (
-    <SignerModal show={show} onClose={handleClose} title="Import Private Key" width={600}>
+    <SignerModal show={show} onClose={handleClose} title="Import TC Private Key" width={600}>
       <Container>
         <div className="form-container">
           <Formik

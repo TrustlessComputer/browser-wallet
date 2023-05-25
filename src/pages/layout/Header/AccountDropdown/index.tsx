@@ -246,7 +246,7 @@ const AccountDropdown = React.memo(() => {
           </DropdownList>
           {renderAction('ic-plus-square-dark.svg', 'Create new account', () => setShowCreateModal(true))}
           {showImportKey &&
-            renderAction('ic-plus-square-dark.svg', 'Import Private Key', () => setShowImportModal(true), false)}
+            renderAction('ic-plus-square-dark.svg', 'Import TC Private Key', () => setShowImportModal(true), false)}
           {renderAction('ic-export-mnemoic-dark.svg', 'Export mnemonic', () => setExportMnemonic(true), false)}
           {renderAction('ic-export-key-dark.svg', 'Export BTC private key', () => setExportBTCKey(true), false)}
           {renderAction('ic-logout-dark.svg', 'Sign out', () => dispatch(setIsLockedWallet(true)), true, 'text-remove')}
