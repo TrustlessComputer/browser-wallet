@@ -118,7 +118,8 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     if (!requestID || !userSecretKey) return;
     const connector = getConnector(requestID);
     await connector.postResultSign({
-      hash: '',
+      tcHash: '',
+      btcHash: '',
       nonce: 0,
       method: TC_CONNECT.RequestMethod.sign,
       isReject: true,
@@ -156,7 +157,8 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         throw new WError(ERROR_CODE.INVALID_PARAMS);
       }
       await connector.postResultSign({
-        hash: transaction.hash,
+        tcHash: transaction.hash,
+        btcHash: transaction.btcHash || '',
         nonce: transaction.nonce,
         method: TC_CONNECT.RequestMethod.sign,
       });
@@ -165,7 +167,8 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
       const { desc } = getErrorMessage(error, 'onSignRequest');
       toast.error(desc);
       await connector.postResultSign({
-        hash: '',
+        tcHash: '',
+        btcHash: '',
         nonce: 0,
         method: TC_CONNECT.RequestMethod.sign,
         errMsg: desc,
