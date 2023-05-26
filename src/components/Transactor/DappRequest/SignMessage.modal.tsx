@@ -18,7 +18,7 @@ interface IProps {
   onClose: () => void;
 }
 
-const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
+const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
   const userInfo = useCurrentUserInfo();
   const [loading, setLoading] = React.useState(false);
   const accounts = useAppSelector(listAccountsSelector);
@@ -26,17 +26,17 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   const userSecretKey = useUserSecretKey();
 
   const onRejectRequest = async () => {
-    if (!requestID || !userInfo || !userSecretKey || !provider) return;
+    if (!requestID || !userInfo) return;
     setLoading(true);
     const connector = getConnector(requestID);
     try {
-      await connector.postResultAccount({
+      await connector.postResultSignMessage({
         btcAddress: '',
         tcAddress: '',
         isReject: true,
-        method: TC_CONNECT.RequestMethod.account,
+        method: TC_CONNECT.RequestMethod.signMessage,
         accounts: [],
-        signature: undefined,
+        signature: '',
       });
     } catch (e) {
       setLoading(false);
@@ -46,24 +46,21 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   };
 
   const onAcceptRequest = async () => {
-    if (!requestID || !userInfo || !userSecretKey || !provider) return;
+    if (!requestID || !userInfo || !userSecretKey || !provider || !request.signMessage) return;
     if (userInfo.address.toLowerCase() !== userSecretKey.address.toLowerCase()) {
       return;
     }
+    const walletSigner = getWalletSigner(userSecretKey.privateKey, provider);
+    const signature = await walletSigner.signMessage(request.signMessage);
     const connector = getConnector(requestID);
     const listAccounts = accounts.map(account => ({
       tcAddress: account.address,
       btcAddress: userInfo.btcAddress,
     }));
-    let signature = '';
-    if (request.signMessage) {
-      const walletSigner = getWalletSigner(userSecretKey.privateKey, provider);
-      signature = await walletSigner.signMessage(request.signMessage);
-    }
     await connector.postResultAccount({
       btcAddress: userInfo.btcAddress,
+      method: TC_CONNECT.RequestMethod.signMessage,
       tcAddress: userInfo.address,
-      method: TC_CONNECT.RequestMethod.account,
       accounts: listAccounts,
       signature,
     });
@@ -71,20 +68,8 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   };
 
   return (
-    <SignerModal
-      show={!!requestID}
-      onClose={onRejectRequest}
-      title={request.signMessage ? 'Connect and Signature request' : 'Connect'}
-      width={600}
-    >
+    <SignerModal show={!!requestID} onClose={onRejectRequest} title="Signature request" width={600}>
       <Container>
-        <Text size="body-large">
-          Approve this request to prove you have access to this wallet and you can start to use{' '}
-          <a href={request.site} target="_blank">
-            {request.site}
-          </a>
-          .
-        </Text>
         <SelectAccount
           title="Account"
           className="mt-16 mb-16"
@@ -109,7 +94,7 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
             Reject
           </Button>
           <Button disabled={loading} sizes="stretch" onClick={onAcceptRequest}>
-            Sure
+            Sign
           </Button>
         </ButtonGroup>
       </Container>
@@ -117,4 +102,4 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   );
 };
 
-export default RequestAccountModal;
+export default SignMessageModal;

@@ -118,7 +118,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
       hash: '',
       nonce: 0,
       method: TC_CONNECT.RequestMethod.sign,
-      isCancel: true,
+      isReject: true,
     });
     onClose();
   };

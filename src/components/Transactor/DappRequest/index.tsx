@@ -10,6 +10,7 @@ import RequestAccountModal from '@/components/Transactor/DappRequest/RequestAcco
 import { getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
 import { getConnector } from '@/lib/connector.helper';
+import SignMessageModal from '@/components/Transactor/DappRequest/SignMessage.modal';
 
 const DappRequest = React.memo(() => {
   const userInfo = useCurrentUserInfo();
@@ -46,6 +47,10 @@ const DappRequest = React.memo(() => {
 
   if (request.method === TC_CONNECT.RequestMethod.sign) {
     return <SignTransactionModal request={request} requestID={requestID} onClose={onClose} />;
+  }
+
+  if (request.method === TC_CONNECT.RequestMethod.signMessage) {
+    return <SignMessageModal request={request} requestID={requestID} onClose={onClose} />;
   }
 
   return <></>;
