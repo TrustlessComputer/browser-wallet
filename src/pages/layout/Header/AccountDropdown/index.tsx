@@ -106,7 +106,14 @@ const AccountDropdown = React.memo(() => {
     return <></>;
   }
 
-  const renderItem = (isChecked: boolean, name: string, formatAddress: string, balance: string, address: string) => {
+  const renderItem = (
+    isChecked: boolean,
+    name: string,
+    formatAddress: string,
+    balance: string,
+    address: string,
+    isImported: boolean,
+  ) => {
     return (
       <DropdownItem key={`${address}-${isChecked}`}>
         <div
@@ -155,7 +162,7 @@ const AccountDropdown = React.memo(() => {
           >
             <MoreDropdownList>
               {MoreList.map(item => {
-                if (accounts.length <= 1 && item.title === 'Remove Account') {
+                if (!isImported && item.title === 'Remove Account') {
                   return <></>;
                 }
                 return (
@@ -241,6 +248,7 @@ const AccountDropdown = React.memo(() => {
                   })}`,
                   `${formatTcBalance} TC`,
                   account.address,
+                  account.isImport,
                 ),
               )}
           </DropdownList>
