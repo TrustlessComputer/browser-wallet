@@ -11,6 +11,9 @@ import SelectAccount from '@/components/SelectAccount';
 import SignerModal from '@/components/SignerModal';
 import { getWalletSigner } from '@/utils/contract.signer';
 import useProvider from '@/hooks/useProvider';
+import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
+import { getErrorMessage } from '@/utils/error';
+import toast from 'react-hot-toast';
 
 interface IProps {
   requestID: string;
@@ -25,7 +28,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
 
-  const onRejectRequest = async () => {
+  const onHide = async () => {
     if (!requestID || !userInfo) return;
     setLoading(true);
     const connector = getConnector(requestID);
@@ -42,31 +45,48 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
     onClose();
     setLoading(false);
   };
+  const onRequestEnd = () => {
+    handleRequestEnd({
+      target: request.target,
+      redirectURL: request.redirectURL || '',
+    });
+  };
+  const onRejectRequest = async () => {
+    await onHide();
+    onRequestEnd();
+  };
 
   const onAcceptRequest = async () => {
-    if (!requestID || !userInfo || !userSecretKey || !provider || !request.signMessage) return;
-    if (userInfo.address.toLowerCase() !== userSecretKey.address.toLowerCase()) {
-      return;
+    try {
+      if (!requestID || !userInfo || !userSecretKey || !provider || !request.signMessage) return;
+      if (userInfo.address.toLowerCase() !== userSecretKey.address.toLowerCase()) {
+        return;
+      }
+      const walletSigner = getWalletSigner(userSecretKey.privateKey, provider);
+      const signature = await walletSigner.signMessage(request.signMessage);
+      const connector = getConnector(requestID);
+      const listAccounts = accounts.map(account => ({
+        tcAddress: account.address,
+        btcAddress: userInfo.btcAddress,
+      }));
+      await connector.postResultAccount({
+        btcAddress: userInfo.btcAddress,
+        method: TC_CONNECT.RequestMethod.signMessage,
+        tcAddress: userInfo.address,
+        accounts: listAccounts,
+        signature,
+      });
+      onClose();
+    } catch (error) {
+      const { message } = getErrorMessage(error, 'SignMessage');
+      toast.error(message);
+    } finally {
+      onRequestEnd();
     }
-    const walletSigner = getWalletSigner(userSecretKey.privateKey, provider);
-    const signature = await walletSigner.signMessage(request.signMessage);
-    const connector = getConnector(requestID);
-    const listAccounts = accounts.map(account => ({
-      tcAddress: account.address,
-      btcAddress: userInfo.btcAddress,
-    }));
-    await connector.postResultAccount({
-      btcAddress: userInfo.btcAddress,
-      method: TC_CONNECT.RequestMethod.signMessage,
-      tcAddress: userInfo.address,
-      accounts: listAccounts,
-      signature,
-    });
-    onClose();
   };
 
   return (
-    <SignerModal show={!!requestID} onClose={onRejectRequest} title="Signature request" width={600}>
+    <SignerModal show={!!requestID} onClose={onHide} title="Signature request" width={600}>
       <Container>
         <SelectAccount className="mt-16 mb-16" />
         <Divider className="mb-24 mt-24" />

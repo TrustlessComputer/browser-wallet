@@ -30,6 +30,7 @@ import Spinner from '@/components/Spinner';
 import { TransactionContext } from '@/contexts/transaction.context';
 import SelectAccount from '@/components/SelectAccount';
 import { getConnector } from '@/lib/connector.helper';
+import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
 
 interface IProps {
   requestID: string;
@@ -113,7 +114,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
 
   const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey]);
 
-  const onRejectRequest = async () => {
+  const onHide = async () => {
     if (!requestID || !userSecretKey) return;
     const connector = getConnector(requestID);
     await connector.postResultSign({
@@ -123,6 +124,16 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
       isReject: true,
     });
     onClose();
+  };
+  const onRequestEnd = () => {
+    handleRequestEnd({
+      target: request.target,
+      redirectURL: request.redirectURL || '',
+    });
+  };
+  const onRejectRequest = async () => {
+    await onHide();
+    onRequestEnd();
   };
 
   const onSignRequest = throttle(async () => {
@@ -165,6 +176,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         getTransactions();
       }, 3000);
       onClose();
+      onRequestEnd();
     }
   }, 300);
 
@@ -181,7 +193,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   useAsyncEffect(getFunctionCall, []);
 
   return (
-    <SignerModal show={!!requestID} onClose={onRejectRequest} title="Sign Transaction">
+    <SignerModal show={!!requestID} onClose={onHide} title="Sign Transaction">
       <Container>
         <Text color="text-highlight" fontWeight="semibold" size="h5" className="function-name">
           {signMethod}
