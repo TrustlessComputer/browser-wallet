@@ -186,7 +186,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         </Text>
         <GasFee fee={maxFee.feeText} error={error} />
         <Divider className="mb-24 mt-24" />
-        <SelectAccount title="TRANSFER FROM" className="mb-16" setLoading={isLoading => setEstimating(isLoading)} />
+        <SelectAccount className="mb-16" />
         {!!request.to && (
           <>
             <Text size="note" color="text-secondary">

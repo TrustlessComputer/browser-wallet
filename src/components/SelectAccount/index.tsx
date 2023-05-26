@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Text from '@/components/Text';
 import { Container, ContentBox, DropDownContainer, DropdownItem, DropdownList } from './styled';
-import { useUserSecretKey } from '@/state/wallet/hooks';
+import { useCurrentUserInfo, useUserSecretKey } from '@/state/wallet/hooks';
 import { ArrowDownIcon } from '@/components/icons';
 import Dropdown, { IDropdownRef } from '@/components/Popover';
 import { compareString, ellipsisCenter } from '@/utils';
@@ -15,14 +15,13 @@ import { AssetsContext } from '@/contexts/assets.context';
 import { SelectAccountAction } from '@/components/SelectAccount/SelectAccount.actions';
 
 interface IProps {
-  title: string;
   className?: string;
-  setLoading: (loading: boolean) => void;
 }
 
 const SelectAccount = React.memo((props: IProps) => {
-  const { title, className = '', setLoading } = props;
+  const { className = '' } = props;
   const userSecretKey = useUserSecretKey();
+  const userInfo = useCurrentUserInfo();
   const accounts = useAppSelector(listAccountsSelector);
   const password = useAppSelector(passwordSelector);
   const masterIns = useAppSelector(masterWalletSelector);
@@ -38,7 +37,6 @@ const SelectAccount = React.memo((props: IProps) => {
       accounts: accounts,
       password,
       masterIns,
-      setLoading,
     },
     dispatch: dispatch,
   });
@@ -75,7 +73,7 @@ const SelectAccount = React.memo((props: IProps) => {
   return (
     <Container className={className}>
       <Text size="note" color="text-secondary" className="title">
-        {title}
+        {userInfo?.name || ''}
       </Text>
       {!!userSecretKey && (
         <Dropdown
@@ -105,7 +103,7 @@ const SelectAccount = React.memo((props: IProps) => {
                     account.name,
                     `${ellipsisCenter({
                       str: account.address,
-                      limit: 4,
+                      limit: 5,
                     })}`,
                     `${formatTcBalance} TC`,
                     account.address,

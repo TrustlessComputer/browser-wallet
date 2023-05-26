@@ -9,7 +9,6 @@ interface IComponent {
   accounts: IListAccounts[];
   masterIns?: MasterWallet;
   password?: string;
-  setLoading: (loading: boolean) => void;
 }
 
 export interface ISelectAccountAction {
@@ -26,7 +25,6 @@ export class SelectAccountAction implements ISelectAccountAction {
   }
 
   switchAccount = async (address: string) => {
-    this.component.setLoading(true);
     const accounts = this.component.accounts;
     const switchedAccount = accounts.find(account =>
       compareString({ str1: account.address, str2: address, method: 'equal' }),
@@ -62,9 +60,5 @@ export class SelectAccountAction implements ISelectAccountAction {
         password: password,
       }),
     );
-
-    setTimeout(() => {
-      this.component.setLoading(false);
-    }, 500);
   };
 }

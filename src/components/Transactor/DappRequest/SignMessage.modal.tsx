@@ -38,9 +38,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
         accounts: [],
         signature: '',
       });
-    } catch (e) {
-      setLoading(false);
-    }
+    } catch (e) {}
     onClose();
     setLoading(false);
   };
@@ -70,13 +68,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
   return (
     <SignerModal show={!!requestID} onClose={onRejectRequest} title="Signature request" width={600}>
       <Container>
-        <SelectAccount
-          title="Account"
-          className="mt-16 mb-16"
-          setLoading={isLoading => {
-            console.log(isLoading);
-          }}
-        />
+        <SelectAccount className="mt-16 mb-16" />
         <Divider className="mb-24 mt-24" />
         <AdvanceWrapper className="mt-24">
           <Text size="body" color="text-primary" align="center" className="mb-16 mt-16">
