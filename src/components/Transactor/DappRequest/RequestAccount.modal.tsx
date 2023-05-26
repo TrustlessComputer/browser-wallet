@@ -105,19 +105,23 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
           </a>
           .
         </Text>
-        <SelectAccount className="mt-16 mb-16" />
-        <Divider className="mb-24 mt-24" />
-        <AdvanceWrapper className="mt-24">
-          <Text size="body" color="text-primary" align="center" className="mb-16 mt-16">
-            You only sign this message if you fully understand the content and trust the requesting site.
-          </Text>
-          <Text size="body" color="text-secondary">
-            You are signing:
-          </Text>
-          <div className="box">
-            <Text size="body">{request.signMessage}</Text>
-          </div>
-        </AdvanceWrapper>
+        {!!request.signMessage && (
+          <>
+            <SelectAccount className="mt-16 mb-16" />
+            <Divider className="mb-24 mt-24" />
+            <AdvanceWrapper className="mt-24">
+              <Text size="body" color="text-primary" align="center" className="mb-16 mt-16">
+                You only sign this message if you fully understand the content and trust the requesting site.
+              </Text>
+              <Text size="body" color="text-secondary">
+                You are signing:
+              </Text>
+              <div className="box">
+                <Text size="body">{request.signMessage}</Text>
+              </div>
+            </AdvanceWrapper>
+          </>
+        )}
         <ButtonGroup className="mt-32">
           <Button disabled={loading} variants="outline" sizes="stretch" onClick={onRejectRequest}>
             Reject
