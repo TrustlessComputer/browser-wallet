@@ -19,11 +19,11 @@ interface IProps {
 }
 
 const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
-  const userInfo = useCurrentUserInfo();
   const [loading, setLoading] = React.useState(false);
   const accounts = useAppSelector(listAccountsSelector);
-  const provider = useProvider();
+  const userInfo = useCurrentUserInfo();
   const userSecretKey = useUserSecretKey();
+  const provider = useProvider();
 
   const onRejectRequest = async () => {
     if (!requestID || !userInfo) return;
