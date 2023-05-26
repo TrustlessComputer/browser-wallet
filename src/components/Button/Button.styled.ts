@@ -8,11 +8,19 @@ export const StyledButton = styled.button`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 12px;
 
   &.underline {
     background-color: transparent;
     text-decoration: underline;
-    border: none;
+    border: 1px solid transparent;
+    color: ${({ theme }) => theme['button-primary']};
+  }
+
+  &.ghost {
+    background-color: transparent;
+    text-decoration: none;
+    border: 1px solid transparent;
     color: ${({ theme }) => theme['button-primary']};
   }
 
@@ -63,6 +71,6 @@ export const StyledButton = styled.button`
   }
 
   .spinner {
-    margin-left: 24px;
+    margin-left: 12px;
   }
 `;

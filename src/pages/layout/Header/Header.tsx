@@ -63,13 +63,13 @@ const Header = () => {
             </Row>
           )}
         </Row>
-        <Row gap="32px" className="external-wrapper">
-          <Button variants="outline">
+        <Row className="buttons">
+          <Button sizes="small" variants="ghost" isArrowRight={true}>
             <a href="https://trustlessfaucet.io/" target="_blank">
               Faucet
             </a>
           </Button>
-          <Button>
+          <Button sizes="small" variants="ghost" isArrowRight={true}>
             <a href="https://trustless.computer/" target="_blank">
               Explore Dapp Store
             </a>

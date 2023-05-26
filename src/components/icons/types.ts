@@ -1,9 +1,11 @@
+import { ColorsTheme } from '@/theme/colors';
+
 interface IWrapSVGProps {
   className?: string;
   maxWidth?: string;
   maxHeight?: string;
   type?: string;
-  color?: string;
+  color?: keyof ColorsTheme;
   onClick?: () => void;
 }
 

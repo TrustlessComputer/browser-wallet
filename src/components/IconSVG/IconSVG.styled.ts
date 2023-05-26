@@ -21,13 +21,16 @@ export const StyledIconSVG = styled.div<any>`
       `
     );
   }};
-  ${props =>
-    props.type === 'stroke' &&
-    css`
-      svg path,
-      svg rect {
-        stroke: ${({ color, theme }: { color: string; theme: DefaultTheme }) =>
-          (theme as any)[color] || 'currentColor'};
-      }
-    `};
+  ${props => {
+    return (
+      props.type === 'stroke' &&
+      css`
+        svg path,
+        svg rect {
+          stroke: ${({ color, theme }: { color: string; theme: DefaultTheme }) =>
+            (theme as any)[color] || 'currentColor'} !important;
+        }
+      `
+    );
+  }};
 `;

@@ -10,7 +10,7 @@ const MediaLarge = css`
 `;
 
 const MediaXl = css`
-  .external-wrapper {
+  .buttons {
     display: none;
   }
 `;
@@ -39,7 +39,7 @@ const Wrapper = styled(LayoutPadding)`
     height: ${px2rem(48)};
   }
 
-  .external-wrapper {
+  .buttons {
     max-width: 30vw;
     display: flex;
     justify-content: end;
