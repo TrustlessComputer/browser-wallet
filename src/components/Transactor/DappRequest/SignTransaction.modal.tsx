@@ -48,10 +48,6 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     isSignTransaction: true,
   });
 
-  const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({
-    defaultGasPrice: request.gasPrice || undefined,
-  });
-
   const {
     feeRate,
     onChangeFee,
@@ -62,6 +58,12 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     isLoading: isLoadingRate,
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
+
+  const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({
+    defaultGasPrice: request.gasPrice || undefined,
+    btcFeeRate: request.isInscribe ? currentRate : undefined,
+    sizeByte: request.isInscribe ? sizeByte : undefined,
+  });
 
   const signMethod = React.useMemo(() => {
     return functionName?.name ? functionName?.name : request.to ? 'Contract Deployment' : 'Unknow';

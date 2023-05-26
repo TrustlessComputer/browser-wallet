@@ -3,10 +3,10 @@ import React, { useRef } from 'react';
 import Text from '@/components/Text';
 import { FeeRateName, IFeeRate } from '@/interfaces/api/bitcoin';
 import * as TC_SDK from 'trustless-computer-sdk';
-import BigNumber from 'bignumber.js';
-import { formatBTCPrice } from '@/utils/format';
 import Spinner from '@/components/Spinner';
 import { TRANSFER_TX_SIZE } from '@/configs';
+import format from '@/utils/amount';
+import Token from '@/constants/token';
 
 interface IProps {
   isLoading: boolean;
@@ -48,7 +48,10 @@ const FeeRate = React.memo((props: IProps) => {
       tcTxSizeByte: txSize,
     });
     return {
-      amount: formatBTCPrice(estimatedFee.totalFee.integerValue(BigNumber.ROUND_CEIL).toNumber()),
+      amount: format.shorterAmount({
+        decimals: Token.BITCOIN.decimal,
+        originalAmount: estimatedFee.totalFee.toString(),
+      }),
       symbol: 'BTC',
     };
   };

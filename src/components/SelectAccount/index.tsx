@@ -86,8 +86,7 @@ const SelectAccount = React.memo((props: IProps) => {
             </ContentBox>
           }
           ref={dropdownRef}
-          width={500}
-          // closeDropdown={false}
+          width={400}
         >
           <DropDownContainer>
             <DropdownList>

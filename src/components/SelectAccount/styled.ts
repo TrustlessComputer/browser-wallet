@@ -28,7 +28,7 @@ const ContentBox = styled.div`
 `;
 
 const DropDownContainer = styled.div`
-  width: 350px;
+  width: 250px;
 `;
 
 const DropdownList = styled.div`

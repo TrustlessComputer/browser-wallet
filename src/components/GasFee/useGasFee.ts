@@ -6,14 +6,17 @@ import BigNumber from 'bignumber.js';
 import format from '@/utils/amount';
 import Token from '@/constants/token';
 import { AssetsContext } from '@/contexts/assets.context';
+import { TC_SDK } from '@/lib';
 
 interface IProps {
   defaultGasPrice?: string;
+  sizeByte?: number;
+  btcFeeRate?: number;
 }
 
-const useGasFee = (props: IProps = { defaultGasPrice: undefined }) => {
-  const { defaultGasPrice } = props;
-  const { tcBalance } = useContext(AssetsContext);
+const useGasFee = (props: IProps = { defaultGasPrice: undefined, sizeByte: undefined, btcFeeRate: undefined }) => {
+  const { defaultGasPrice, sizeByte, btcFeeRate } = props;
+  const { tcBalance, btcBalance } = useContext(AssetsContext);
   const [gasLimit, setGasLimit] = React.useState<number | undefined>(undefined);
   const [error, setError] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -60,7 +63,23 @@ const useGasFee = (props: IProps = { defaultGasPrice: undefined }) => {
     if (error) return error;
     if (!maxFee.feeOriginal.toNumber()) return '';
     if (maxFee.feeOriginal.gt(tcBalance)) {
-      return 'You do not have enough TC in your account to pay for transaction fees on Trustless Computer network.';
+      return `Your TC balance is insufficient. Please top up at least ${format.shorterAmount({
+        decimals: Token.TRUSTLESS.decimal,
+        originalAmount: maxFee.feeOriginal.toString(),
+      })} TC to pay transaction fee.`;
+    }
+    if (sizeByte && btcFeeRate) {
+      const btcFee = TC_SDK.estimateInscribeFee({
+        tcTxSizeByte: sizeByte,
+        feeRatePerByte: btcFeeRate,
+      });
+      const balanceInBN = new BigNumber(btcBalance);
+      if (balanceInBN.isLessThan(btcFee.totalFee)) {
+        return `Your BTC balance is insufficient. Please top up at least ${format.shorterAmount({
+          decimals: Token.BITCOIN.decimal,
+          originalAmount: btcFee.totalFee.toString(),
+        })} BTC to pay network fee.`;
+      }
     }
     return '';
   }, [maxFee.feeOriginal, tcBalance, error]);
