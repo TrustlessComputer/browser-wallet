@@ -84,10 +84,15 @@ const useSignTransaction = () => {
     });
     let inscribeTx: ISignResp | undefined;
     for (const submited of batchInscribeTxResp) {
-      historyStorage.updateBTCHash(userSecretKey?.address || '', {
+      historyStorage.createInscribeTransactions(userSecretKey?.address || '', {
         tcHashs: submited.tcTxIDs,
         btcHash: submited.revealTxID,
         status: IStatusCode.PROCESSING,
+        // remove sign transaction
+        // the sign transaction will be updated by storage latter
+        uninscribed: uninscribedBatchTxs.filter(
+          item => !compareString({ str1: item.Hash, str2: newTx.Hash, method: 'equal' }),
+        ),
       });
       const isExist = submited.tcTxIDs.some(tcTxID =>
         compareString({ str1: tcTxID, str2: transaction.hash, method: 'equal' }),

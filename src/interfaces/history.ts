@@ -51,6 +51,7 @@ interface IUpdatedBTCHashPayload {
   status: IStatusCode;
   btcHash: string;
   tcHashs: string[];
+  uninscribed: ITCTxDetail[];
 }
 
 export type {

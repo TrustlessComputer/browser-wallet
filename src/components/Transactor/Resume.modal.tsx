@@ -62,10 +62,11 @@ const ResumeModal = React.memo(({ show, onClose }: IProps) => {
       });
 
       for (const submited of batchInscribeTxResp) {
-        historyStorage.updateBTCHash(user?.address || '', {
+        historyStorage.createInscribeTransactions(user?.address || '', {
           tcHashs: submited.tcTxIDs,
           btcHash: submited.revealTxID,
           status: IStatusCode.PROCESSING,
+          uninscribed,
         });
       }
       onClose();

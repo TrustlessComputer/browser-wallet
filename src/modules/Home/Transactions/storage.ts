@@ -40,10 +40,37 @@ export class HistoryStorage extends StorageService {
     this.set(key, newTransactions);
   };
 
-  updateBTCHash = (tcAddress: string, payload: IUpdatedBTCHashPayload) => {
-    const { btcHash, status, tcHashs } = payload;
+  createInscribeTransactions = (tcAddress: string, payload: IUpdatedBTCHashPayload) => {
+    const { btcHash, status, tcHashs, uninscribed } = payload;
     const key = this.getTxsHistoryKey(tcAddress);
     const transactions = this.getTransactions(tcAddress);
+    const unknowTxs = HistoryStorage.UnInscribedTransactionBuilder({
+      tcAddress: tcAddress,
+      transactions: uninscribed.filter(
+        uninscribe =>
+          !transactions.some(transaction =>
+            compareString({
+              str1: uninscribe.Hash,
+              str2: transaction.tcHash,
+              method: 'equal',
+            }),
+          ) &&
+          payload.tcHashs.some(tcHash =>
+            compareString({
+              str1: uninscribe.Hash,
+              str2: tcHash,
+              method: 'equal',
+            }),
+          ),
+      ),
+    }).map(unknowTx => ({
+      ...unknowTx,
+      btcHash: btcHash,
+      statusCode: IStatusCode.PROCESSING,
+      time: new Date().getTime(),
+      type: 'Unknown',
+    }));
+
     const newTransactions = transactions.map(trans => {
       const { tcHash } = trans;
       const isExist = tcHashs.some(hash => compareString({ str1: hash, str2: tcHash, method: 'equal' }));
@@ -54,7 +81,8 @@ export class HistoryStorage extends StorageService {
         btcHash,
       };
     });
-    this.set(key, newTransactions);
+
+    this.set(key, [...unknowTxs, ...newTransactions]);
   };
 
   updateSpeedUpBTCHash = (newBTCHash: string, oldBTCHash: string, tcAddress: string) => {
