@@ -121,7 +121,7 @@ const AccountDropdown = React.memo(() => {
             <Text color="text-primary" fontWeight="light" size="body">
               {name}
             </Text>
-            <Text color="button-primary" fontWeight="medium" size="note" className="mt-8">
+            <Text color="text-highlight" fontWeight="medium" size="note" className="mt-8">
               {formatAddress}
             </Text>
           </div>
@@ -135,7 +135,7 @@ const AccountDropdown = React.memo(() => {
             }
             width={300}
           >
-            <Text size="tini">Copy to clipboard</Text>
+            <Text size="tini">Copy address</Text>
           </ToolTip>
 
           <Dropdown

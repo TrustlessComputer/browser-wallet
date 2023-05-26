@@ -41,7 +41,7 @@ const Wrapper = styled.div<{ show?: boolean }>`
   align-items: center;
   justify-content: center;
 
-  background: ${({ theme, show }) => (show ? theme.yellow.A : 'transparent')};
+  background: ${({ theme, show }) => (show ? theme['button-primary'] : 'transparent')};
   border: 1px solid ${({ theme }) => theme['border-primary']};
   padding: ${px2rem(0)} ${px2rem(12)};
   border-radius: ${px2rem(8)};
@@ -54,7 +54,7 @@ const Wrapper = styled.div<{ show?: boolean }>`
     align-items: center;
     gap: ${px2rem(12)};
     p {
-      color: ${({ theme, show }) => (show ? theme.dark[100] : theme['button-primary'])};
+      color: ${({ theme, show }) => (show ? theme['text-parallel'] : theme['text-highlight'])};
     }
   }
 

@@ -68,7 +68,7 @@ const AssetDropdown = React.memo(() => {
     {
       src: `${CDN_URL_ICONS}/ic-bitcoin.svg`,
       address: user ? user.btcAddress : '',
-      formatAddress: `Trustless (
+      formatAddress: `Bitcoin (
         ${ellipsisCenter({
           str: user ? user.btcAddress : '',
           limit: 4,
@@ -120,7 +120,7 @@ const AssetDropdown = React.memo(() => {
                     <Text color="text-secondary" fontWeight="light" size="note">
                       {asset.formatAddress}
                     </Text>
-                    <Text color="button-primary" fontWeight="medium" size="body">
+                    <Text color="text-highlight" fontWeight="medium" size="body">
                       {asset.formatBalance}
                     </Text>
                   </div>
@@ -134,7 +134,7 @@ const AssetDropdown = React.memo(() => {
                     }
                     width={300}
                   >
-                    <Text size="tini">Copy to clipboard</Text>
+                    <Text size="tini">Copy address</Text>
                   </ToolTip>
 
                   <Dropdown
