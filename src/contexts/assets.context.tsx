@@ -62,8 +62,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   );
 
   const btcBalance = React.useMemo(() => {
-    return '0';
-    // return assets ? assets?.availableBalance.toString() : '0';
+    return assets ? assets?.availableBalance.toString() : '0';
   }, [assets]);
 
   useEffect(() => {
