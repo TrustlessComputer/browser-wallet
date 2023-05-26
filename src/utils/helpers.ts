@@ -1,5 +1,7 @@
 import { getAddress } from '@ethersproject/address';
 import camelCase from 'lodash/camelCase';
+import Web3 from 'web3';
+import BigNumber from 'bignumber.js';
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -34,4 +36,12 @@ export const camelCaseKeys = (obj: any): any => {
     );
   }
   return obj;
+};
+
+export const convertHexToNumber = (value: string): number => {
+  if (value.startsWith('0x')) {
+    const number = Web3.utils.hexToNumber(value);
+    return new BigNumber(number).toNumber();
+  }
+  return new BigNumber(value || 0).toNumber();
 };

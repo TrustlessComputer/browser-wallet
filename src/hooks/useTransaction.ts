@@ -23,12 +23,12 @@ const useTransactions = ({ isGetUnInscribedSize, isSignTransaction = false }: IP
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
 
-  const { getUnInscribedTransactionDetails, getTCTransactionByHash, getStatusCode, getIsRBFable } = useBitcoin();
+  const { getUnInscribedTransactionDetails, getTCTransactionHex, getStatusCode, getIsRBFable } = useBitcoin();
 
   const getTransactionSize = async (uninscribed: ITCTxDetail[]) => {
     const Hexs = await Promise.all(
       uninscribed.map(({ Hash }) => {
-        return getTCTransactionByHash(Hash);
+        return getTCTransactionHex(Hash);
       }),
     );
 

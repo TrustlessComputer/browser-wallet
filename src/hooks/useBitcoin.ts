@@ -5,6 +5,8 @@ import {
   ICreateSpeedUpBTCParams,
   IIsSpeedUpBTCParams,
   ISendBTCParams,
+  ITCTxByHash,
+  ITCTxByHashResp,
 } from '@/interfaces/use-bitcoin';
 import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets.context';
@@ -16,6 +18,7 @@ import Token from '@/constants/token';
 import BigNumber from 'bignumber.js';
 import convert from '@/utils/convert';
 import { IStatusCode } from '@/interfaces/history';
+import { convertHexToNumber } from '@/utils';
 
 const useBitcoin = () => {
   const { getAssetsCreateTx } = useContext(AssetsContext);
@@ -115,7 +118,22 @@ const useBitcoin = () => {
     return revealTxID;
   };
 
-  const getTCTransactionByHash = async (tcTxID: string): Promise<string> => {
+  const getTCTransactionByHash = async (tcTxID: string): Promise<ITCTxByHash> => {
+    if (!tcTxID) throw Error('TC Hash not found');
+    const resp: ITCTxByHashResp = (await window.tcClient.getTCTxByHash(tcTxID)) as any;
+    return {
+      hex: resp.Hex,
+      hash: resp.hash,
+      from: resp.from,
+      gas: convertHexToNumber(resp.gas),
+      gasPrice: convertHexToNumber(resp.gasPrice),
+      input: resp.input,
+      nonce: convertHexToNumber(resp.nonce),
+      value: resp.value,
+    };
+  };
+
+  const getTCTransactionHex = async (tcTxID: string): Promise<string> => {
     if (!tcTxID) throw Error('TC Hash not found');
     const { Hex } = (await window.tcClient.getTCTxByHash(tcTxID)) as any;
     return Hex;
@@ -170,6 +188,7 @@ const useBitcoin = () => {
     getUnInscribedTransactions,
     getUnInscribedTransactionDetails,
     getTCTransactionByHash,
+    getTCTransactionHex,
     getStatusCode,
     getIsRBFable,
   };

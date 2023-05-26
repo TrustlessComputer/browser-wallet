@@ -2,7 +2,7 @@ import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import Table from '@/components/Table';
 import Text from '@/components/Text';
-import { capitalizeFirstLetter, formatLongAddress } from '@/utils';
+import { capitalizeFirstLetter, compareString, formatLongAddress } from '@/utils';
 import { formatUnixDateTime } from '@/utils/time';
 import React, { useContext } from 'react';
 import { HashWrapper, StyledTransaction } from './styled';
@@ -15,6 +15,9 @@ import { Row } from '@/components/Row';
 import SpeedUpModal from '@/components/Transactor/SpeedUp.modal';
 import { ISpeedUpTx } from '@/interfaces/transaction';
 import { EMPTY_LINK } from '@/modules/Home/constant';
+import CancelTCModal from '@/components/Transactor/CancelTC.modal';
+import storageLocal from '@/lib/storage.local';
+import { LocalStorageKey } from '@/enums/storage.keys';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
@@ -22,6 +25,7 @@ const Transactions = React.memo(() => {
   const { onOpenResumeModal } = useContext(TransactorContext);
   const { history, isLoading, uninscribed } = useContext(TransactionContext);
   const [speedUpTx, setSpeedUpTx] = React.useState<ISpeedUpTx | undefined>(undefined);
+  const [cancelTx, setCancelTx] = React.useState<string | undefined>(undefined);
 
   const numbPending = React.useMemo(() => {
     return uninscribed.length;
@@ -61,6 +65,9 @@ const Transactions = React.memo(() => {
     }
     const transactionType = capitalizeFirstLetter(trans.type || '-');
     const btcExplorer = `${network.current.BTCExplorer}/tx/${trans.btcHash}`;
+    const isCancelTC =
+      uninscribed.some(item => compareString({ str1: item.Hash, str2: trans.tcHash, method: 'equal' })) &&
+      storageLocal.get(LocalStorageKey.ADVANCE_USER);
     return {
       id: trans.tcHash,
       render: {
@@ -129,14 +136,27 @@ const Transactions = React.memo(() => {
             >
               {status}
             </Text>
+          </div>
+        ),
+        action: (
+          <div className="actions">
             {!!trans.isRBFable && !!trans.btcHash && (
               <Button
-                variants="outline"
                 onClick={() => {
                   handleSpeedUp(trans.btcHash || '');
                 }}
               >
                 Speed up
+              </Button>
+            )}
+            {isCancelTC && (
+              <Button
+                variants="outline"
+                onClick={() => {
+                  setCancelTx(trans.tcHash || '');
+                }}
+              >
+                Cancel
               </Button>
             )}
           </div>
@@ -176,6 +196,14 @@ const Transactions = React.memo(() => {
             setSpeedUpTx(undefined);
           }}
           speedUpTx={speedUpTx}
+        />
+      )}
+      {!!cancelTx && (
+        <CancelTCModal
+          tcHash={cancelTx}
+          onClose={() => {
+            setCancelTx(undefined);
+          }}
         />
       )}
     </StyledTransaction>

@@ -30,3 +30,25 @@ export interface ICreateSpeedUpBTCParams {
   tcAddress: string;
   btcAddress: string;
 }
+
+export interface ITCTxByHashResp {
+  Hex: string;
+  from: string;
+  gas: string;
+  gasPrice: string;
+  hash: string;
+  input: string;
+  nonce: string;
+  value: string;
+}
+
+export interface ITCTxByHash {
+  hex: string;
+  from: string;
+  gas: number;
+  gasPrice: number;
+  hash: string;
+  input: string;
+  nonce: number;
+  value: string;
+}
