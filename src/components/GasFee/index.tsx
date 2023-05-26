@@ -6,6 +6,7 @@ import { AssetsContext } from '@/contexts/assets.context';
 import format from '@/utils/amount';
 import BigNumber from 'bignumber.js';
 import Token from '@/constants/token';
+import { upperFirst } from 'lodash';
 
 interface IProps {
   fee: string;
@@ -46,7 +47,7 @@ const GasFee = React.memo((props: IProps) => {
       </Row>
       {!!props.error && (
         <Text className="error-text" size="note">
-          {props.error}
+          {upperFirst(props.error)}
         </Text>
       )}
     </Container>
