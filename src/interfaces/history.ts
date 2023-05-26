@@ -35,11 +35,19 @@ interface INormaTxBuilderPayload {
   transaction: TransactionResponse;
   btcHash?: string;
   type: string;
+  site?: string;
 }
 
 interface IUnInscribedTxBuilderPayload {
   transactions: ITCTxDetail[];
   tcAddress: string;
+}
+
+interface ICreateTxBuilderPayload {
+  tx: TransactionResponse;
+  btcHash?: string;
+  methodType?: string;
+  site?: string;
 }
 
 interface IUpdatedStatusPayload {
@@ -58,6 +66,7 @@ export type {
   IHistory,
   INormaTxBuilderPayload,
   IUnInscribedTxBuilderPayload,
+  ICreateTxBuilderPayload,
   IUpdatedStatusPayload,
   IUpdatedBTCHashPayload,
 };

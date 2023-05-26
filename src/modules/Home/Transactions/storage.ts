@@ -1,5 +1,6 @@
 import { StorageService } from '@/lib/storage.local';
 import {
+  ICreateTxBuilderPayload,
   IHistory,
   INormaTxBuilderPayload,
   IStatusCode,
@@ -10,6 +11,7 @@ import {
 import { compareString } from '@/utils';
 import { orderBy } from 'lodash';
 import network from '@/lib/network.helpers';
+import { TransactionResponse } from '@ethersproject/abstract-provider';
 
 export class HistoryStorage extends StorageService {
   private getTxsHistoryKey = (tcAddress: string) => {
@@ -104,7 +106,7 @@ export class HistoryStorage extends StorageService {
   // transaction inside wallet
   // send ERC20, ERC721, TC
   static NormalTransactionBuilder = (payload: INormaTxBuilderPayload): IHistory => {
-    const { transaction, btcHash, type } = payload;
+    const { transaction, btcHash, type, site } = payload;
     return {
       tcHash: transaction.hash,
       btcHash: btcHash,
@@ -112,7 +114,7 @@ export class HistoryStorage extends StorageService {
       to: transaction.to || '',
       status: btcHash ? IStatusCode.PROCESSING : IStatusCode.PENDING,
       type: type,
-      dappURL: window.location.origin,
+      dappURL: site || window.location.origin,
       isRBFable: false,
       nonce: transaction.nonce,
       time: new Date().getTime(),
@@ -146,6 +148,19 @@ export class HistoryStorage extends StorageService {
       [],
     );
     return pendingTransactions;
+  };
+  static HistoryCreateTransactionBuilder = (payload: ICreateTxBuilderPayload): IHistory | undefined => {
+    const { tx, site, btcHash, methodType } = payload;
+    if ('hash' in tx && 'nonce' in tx) {
+      const history = HistoryStorage.NormalTransactionBuilder({
+        transaction: tx as TransactionResponse,
+        type: methodType || '',
+        btcHash,
+        site,
+      });
+      return history;
+    }
+    return undefined;
   };
 }
 

@@ -9,7 +9,7 @@ import useBitcoin from '@/hooks/useBitcoin';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import BigNumber from 'bignumber.js';
 import Web3 from 'web3';
-import { IHistory, IStatusCode } from '@/interfaces/history';
+import { IStatusCode } from '@/interfaces/history';
 import historyStorage, { HistoryStorage } from '@/modules/Home/Transactions/storage';
 import sleep from '@/utils/sleep';
 
@@ -27,6 +27,7 @@ export interface ISignTransactionPayload extends IEstimateGasPayload {
   uninscribed: ITCTxDetail[];
   feeRate: number;
   method: string;
+  site: string;
 }
 
 export interface ISignResp extends TransactionResponse {
@@ -38,17 +39,6 @@ const useSignTransaction = () => {
   const userSecretKey = useUserSecretKey();
   const { createBatchInscribeTxs } = useBitcoin();
 
-  const getHistoryBuilder = (tx: TransactionResponse, btcHash?: string, methodType?: string): IHistory | undefined => {
-    if ('hash' in tx) {
-      const history = HistoryStorage.NormalTransactionBuilder({
-        transaction: tx as TransactionResponse,
-        type: methodType || '',
-        btcHash,
-      });
-      return history;
-    }
-    return undefined;
-  };
   const estimateGas = async (payload: IEstimateGasPayload) => {
     if (!provider) {
       throw new WError(ERROR_CODE.ACCOUNT_EMPTY);
@@ -129,7 +119,13 @@ const useSignTransaction = () => {
       nonce: nonce,
     });
 
-    let history = getHistoryBuilder(transaction, undefined, payload.method);
+    let history = HistoryStorage.HistoryCreateTransactionBuilder({
+      methodType: payload.method,
+      site: payload.site,
+      tx: transaction,
+      btcHash: undefined,
+    });
+
     if (!inscribeable) {
       if (history) {
         historyStorage.setTransaction(userSecretKey.address, history);
@@ -144,7 +140,13 @@ const useSignTransaction = () => {
     try {
       await sleep(1);
       const inscribeTx = await createInscribeTransaction(transaction, payload);
-      history = getHistoryBuilder(transaction, inscribeTx?.btcHash, payload.method);
+      history = HistoryStorage.HistoryCreateTransactionBuilder({
+        btcHash: inscribeTx?.btcHash,
+        methodType: payload.method,
+        site: payload.site,
+        tx: transaction,
+      });
+
       if (history) {
         historyStorage.setTransaction(userSecretKey.address, history);
       }

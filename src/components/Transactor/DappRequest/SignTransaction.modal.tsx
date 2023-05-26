@@ -152,6 +152,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         inscribeable: request.isInscribe,
         uninscribed: uninscribed,
         method: signMethod,
+        site: request.site,
       });
       if (!transaction) {
         throw new WError(ERROR_CODE.INVALID_PARAMS);
