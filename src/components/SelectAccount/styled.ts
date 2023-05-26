@@ -8,7 +8,7 @@ const Container = styled.div`
 `;
 
 const ContentBox = styled.div`
-  border: 1px solid ${({ theme }) => theme.bg.secondary};
+  border: 1px solid ${({ theme }) => theme['border-primary']};
   border-radius: 8px;
   cursor: pointer;
   padding: 12px 16px 12px 12px;
@@ -21,7 +21,7 @@ const ContentBox = styled.div`
   }
 
   :hover {
-    opacity: 0.8;
+    border-color: ${({ theme }) => theme['border-secondary']};
   }
   display: flex;
   justify-content: space-between;
