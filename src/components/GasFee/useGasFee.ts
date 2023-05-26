@@ -82,7 +82,7 @@ const useGasFee = (props: IProps = { defaultGasPrice: undefined, sizeByte: undef
       }
     }
     return '';
-  }, [maxFee.feeOriginal, tcBalance, error]);
+  }, [maxFee.feeOriginal, tcBalance, error, btcFeeRate, btcBalance, sizeByte]);
 
   return {
     loading,
