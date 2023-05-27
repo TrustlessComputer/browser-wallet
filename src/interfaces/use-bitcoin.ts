@@ -34,6 +34,7 @@ export interface ICreateSpeedUpBTCParams {
 export interface ITCTxByHashResp {
   Hex: string;
   from: string;
+  to: string;
   gas: string;
   gasPrice: string;
   hash: string;
@@ -45,8 +46,11 @@ export interface ITCTxByHashResp {
 export interface ITCTxByHash {
   hex: string;
   from: string;
+  to: string;
   gas: number;
   gasPrice: number;
+  gasHex: string;
+  gasPriceHex: string;
   hash: string;
   input: string;
   nonce: number;

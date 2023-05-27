@@ -11,6 +11,7 @@ import { upperFirst } from 'lodash';
 interface IProps {
   fee: string;
   error: string;
+  nonce?: number;
 }
 
 const GasFee = React.memo((props: IProps) => {
@@ -34,6 +35,12 @@ const GasFee = React.memo((props: IProps) => {
         </Text>
         <Text size="body">{props.fee} TC</Text>
       </Row>
+      {!!props.nonce && (
+        <Row justify="space-between" className="mb-12">
+          <Text size="body">Nonce</Text>
+          <Text size="body">{props.nonce}</Text>
+        </Row>
+      )}
       <Row justify="space-between">
         <Text size="body">BTC Balance</Text>
         <Text size="body">

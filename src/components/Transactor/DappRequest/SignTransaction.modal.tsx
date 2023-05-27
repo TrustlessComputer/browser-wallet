@@ -61,7 +61,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   } = useFeeRate({ minFeeRate: undefined });
 
   const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({
-    defaultGasPrice: request.gasPrice || undefined,
+    defaultGasPrice: request.gasPrice ? Number(request.gasPrice) : undefined,
     btcFeeRate: request.isInscribe ? currentRate : undefined,
     sizeByte: request.isInscribe ? sizeByte : undefined,
   });

@@ -9,19 +9,27 @@ import { AssetsContext } from '@/contexts/assets.context';
 import { TC_SDK } from '@/lib';
 
 interface IProps {
-  defaultGasPrice?: string;
+  defaultGasPrice?: number;
+  defaultGasLimit?: number;
   sizeByte?: number;
   btcFeeRate?: number;
 }
 
-const useGasFee = (props: IProps = { defaultGasPrice: undefined, sizeByte: undefined, btcFeeRate: undefined }) => {
-  const { defaultGasPrice, sizeByte, btcFeeRate } = props;
+const useGasFee = (
+  props: IProps = {
+    defaultGasPrice: undefined,
+    defaultGasLimit: undefined,
+    sizeByte: undefined,
+    btcFeeRate: undefined,
+  },
+) => {
+  const { defaultGasPrice, sizeByte, btcFeeRate, defaultGasLimit } = props;
   const { tcBalance, btcBalance } = useContext(AssetsContext);
-  const [gasLimit, setGasLimit] = React.useState<number | undefined>(undefined);
-  const [error, setError] = React.useState<string>('');
-  const [loading, setLoading] = React.useState<boolean>(false);
   const [gasPrice, setGasPrice] = React.useState<number | undefined>(0);
+  const [gasLimit, setGasLimit] = React.useState<number | undefined>(defaultGasLimit);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [estimating, setEstimating] = useState(false);
+  const [error, setError] = React.useState<string>('');
 
   const provider = useProvider();
 
@@ -36,8 +44,6 @@ const useGasFee = (props: IProps = { defaultGasPrice: undefined, sizeByte: undef
       throw new Error('Get gas price error.');
     }
   };
-
-  useAsyncEffect(onGetGasPrice, [provider]);
 
   const maxFee = React.useMemo(() => {
     const feeOriginal = new BigNumber(gasPrice || 0).multipliedBy(gasLimit || 0);
@@ -84,10 +90,13 @@ const useGasFee = (props: IProps = { defaultGasPrice: undefined, sizeByte: undef
     return '';
   }, [maxFee.feeOriginal, tcBalance, error, btcFeeRate, btcBalance, sizeByte]);
 
+  useAsyncEffect(onGetGasPrice, [provider]);
+
   return {
     loading,
     maxFee,
     setGasLimit,
+    setGasPrice,
     error: customError,
     setError,
     estimating,
