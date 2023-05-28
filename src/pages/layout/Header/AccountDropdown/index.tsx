@@ -163,7 +163,7 @@ const AccountDropdown = React.memo(() => {
             <MoreDropdownList>
               {MoreList.map(item => {
                 if (!isImported && item.title === 'Remove Account') {
-                  return <></>;
+                  return undefined;
                 }
                 return (
                   <MoreDropdownItem
