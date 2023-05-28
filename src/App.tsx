@@ -38,12 +38,12 @@ const App: React.FC = (): React.ReactElement => {
             </InitialProvider>
           </LoaderProvider>
           <Toaster
-            position="top-center"
+            position="top-right"
             reverseOrder={false}
             toastOptions={{
               style: {
                 lineBreak: 'anywhere',
-                maxWidth: 380,
+                maxWidth: 400,
               },
             }}
           />
