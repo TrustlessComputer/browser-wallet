@@ -46,7 +46,7 @@ const SignerModal = ({ show, onClose, children, title, subTitle, width = 800 }: 
       handleClose={onClose}
       title={isLocked ? '' : title}
       subTitle={isLocked ? '' : subTitle}
-      width={isLocked ? 800 : width}
+      width={isLocked ? 700 : width}
     >
       <>{renderContent()}</>
     </BaseModal>
