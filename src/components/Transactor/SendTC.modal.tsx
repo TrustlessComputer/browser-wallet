@@ -115,9 +115,9 @@ const SendTCModal = (props: Props) => {
         toast.success('Transaction has been created. Please wait for few minutes.');
       }
       onClose();
-    } catch (err) {
-      toast.error((err as Error).message);
-      console.log(err);
+    } catch (error) {
+      const { message } = getErrorMessage(error, 'SendTC');
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
