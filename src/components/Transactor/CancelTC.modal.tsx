@@ -50,10 +50,9 @@ const CancelTCModal = ({ onClose, tcHash }: IProps) => {
       const newTx = await signer.sendTransaction({
         nonce: cancelTx.nonce,
         to: cancelTx.to,
-        data: cancelTx.hex,
+        data: '0x',
         gasLimit: Web3.utils.toHex(new BigNumber(maxFee.gasLimit || 0).toFixed()),
         gasPrice: Web3.utils.toHex(new BigNumber(maxFee.gasPrice || 0).toFixed()),
-        value: cancelTx.value,
       });
       toast.success('Transaction cancel successfully.');
       onClose();
