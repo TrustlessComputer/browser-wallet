@@ -57,7 +57,7 @@ const Transactions = React.memo(() => {
     let status = StatusMesg.PROCESSING;
     switch (trans.status) {
       case IStatusCode.FAILED:
-        status = StatusMesg.FAILED;
+        status = isCanceled ? StatusMesg.CANCELED : StatusMesg.FAILED;
         break;
       case IStatusCode.PENDING:
         status = isCanceled ? StatusMesg.CANCELING : StatusMesg.PENDING;
