@@ -42,7 +42,8 @@ const App: React.FC = (): React.ReactElement => {
             reverseOrder={false}
             toastOptions={{
               style: {
-                lineBreak: 'auto',
+                lineBreak: 'anywhere',
+                maxWidth: 380,
               },
             }}
           />
