@@ -6,15 +6,16 @@ import thunk from 'redux-thunk';
 import reducer from './reducer';
 import { createFilter } from 'redux-persist-transform-filter';
 
-const saveIsLockedWallet = createFilter('wallet', ['isLocked', 'btcAddress', 'accounts']);
+const saveWallet = createFilter('wallet', ['isLocked', 'btcAddress', 'accounts']);
+const saveTransaction = createFilter('transaction', ['canceled']);
 
 const reducers = combineReducers(reducer);
 
 const persistConfig = {
   key: 'browser-wallet',
   storage,
-  whitelist: ['wallet', 'application'],
-  transforms: [saveIsLockedWallet],
+  whitelist: ['application', 'wallet', 'transaction'],
+  transforms: [saveWallet, saveTransaction],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -47,13 +47,6 @@ export const StyledTransaction = styled.div`
     justify-content: flex-end;
   }
 
-  .status-wrapper {
-    gap: ${px2rem(12)};
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
   .actions {
     gap: ${px2rem(12)};
     display: flex;
@@ -120,26 +113,6 @@ export const StyledTransaction = styled.div`
       text-align: right;
     }
   }
-  .pending {
-    color: ${({ theme }) => theme['text-highlight']};
-  }
-  .success {
-    color: ${({ theme }) => theme.green.B};
-  }
-  .failed {
-    color: ${({ theme }) => theme.red.A};
-  }
-  .waiting {
-    color: ${({ theme }) => theme.blue.B};
-    text-decoration: underline;
-    cursor: pointer;
-    :hover {
-      opacity: 0.8;
-    }
-  }
-  .processing {
-    color: ${({ theme }) => theme.blue.B};
-  }
   a {
     font-weight: 500 !important;
   }
@@ -175,4 +148,37 @@ const HashWrapper = styled.div`
   }
 `;
 
-export { HashWrapper };
+const Status = styled.div`
+  gap: ${px2rem(12)};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  .pending {
+    color: ${({ theme }) => theme['text-highlight']};
+  }
+  .canceling {
+    color: ${({ theme }) => theme['text-highlight']};
+  }
+  .success {
+    color: ${({ theme }) => theme.green.B};
+  }
+  .failed {
+    color: ${({ theme }) => theme.red.A};
+  }
+  .canceled {
+    color: ${({ theme }) => theme.red.A};
+  }
+  .waiting {
+    color: ${({ theme }) => theme.blue.B};
+    text-decoration: underline;
+    cursor: pointer;
+    :hover {
+      opacity: 0.8;
+    }
+  }
+  .processing {
+    color: ${({ theme }) => theme.blue.B};
+  }
+`;
+
+export { HashWrapper, Status };

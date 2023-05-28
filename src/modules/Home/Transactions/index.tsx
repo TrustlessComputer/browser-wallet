@@ -5,7 +5,7 @@ import Text from '@/components/Text';
 import { capitalizeFirstLetter, compareString, formatLongAddress } from '@/utils';
 import { formatUnixDateTime } from '@/utils/time';
 import React, { useContext } from 'react';
-import { HashWrapper, StyledTransaction } from './styled';
+import { HashWrapper, Status, StyledTransaction } from './styled';
 import network from '@/lib/network.helpers';
 import { TransactorContext } from '@/contexts/transactor.context';
 import CopyIcon from '@/components/icons/Copy';
@@ -18,6 +18,8 @@ import { EMPTY_LINK } from '@/modules/Home/constant';
 import CancelTCModal from '@/components/Transactor/CancelTC.modal';
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
+import { useAppSelector } from '@/state/hooks';
+import { getTransactionCanceled } from '@/state/transaction/selector';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'To', 'Time', 'Status'];
 
@@ -26,6 +28,7 @@ const Transactions = React.memo(() => {
   const { history, isLoading, uninscribed } = useContext(TransactionContext);
   const [speedUpTx, setSpeedUpTx] = React.useState<ISpeedUpTx | undefined>(undefined);
   const [cancelTx, setCancelTx] = React.useState<string | undefined>(undefined);
+  const transactionCanceled = useAppSelector(getTransactionCanceled);
 
   const numbPending = React.useMemo(() => {
     return uninscribed.length;
@@ -48,16 +51,19 @@ const Transactions = React.memo(() => {
           dateTime: Number(trans.time) / 1000,
         })
       : '-';
+
+    const isCanceled = transactionCanceled[trans.tcHash.toLowerCase()];
+
     let status = StatusMesg.PROCESSING;
     switch (trans.status) {
       case IStatusCode.FAILED:
         status = StatusMesg.FAILED;
         break;
       case IStatusCode.PENDING:
-        status = StatusMesg.PENDING;
+        status = isCanceled ? StatusMesg.CANCELING : StatusMesg.PENDING;
         break;
       case IStatusCode.SUCCESS:
-        status = StatusMesg.SUCCESS;
+        status = isCanceled ? StatusMesg.CANCELED : StatusMesg.SUCCESS;
         break;
       case IStatusCode.PROCESSING:
         status = trans.btcHash ? StatusMesg.WAITING : StatusMesg.PROCESSING;
@@ -65,9 +71,10 @@ const Transactions = React.memo(() => {
     }
     const transactionType = capitalizeFirstLetter(trans.type || '-');
     const btcExplorer = `${network.current.BTCExplorer}/tx/${trans.btcHash}`;
-    const isCancelTC =
+    const isCancelable =
       uninscribed.some(item => compareString({ str1: item.Hash, str2: trans.tcHash, method: 'equal' })) &&
       storageLocal.get(LocalStorageKey.ADVANCE_USER);
+
     return {
       id: trans.tcHash,
       render: {
@@ -124,7 +131,7 @@ const Transactions = React.memo(() => {
           </div>
         ),
         status: (
-          <div className="status-wrapper">
+          <Status>
             <Text
               size="h6"
               className={status.toLowerCase().split(' ')[0]}
@@ -136,7 +143,7 @@ const Transactions = React.memo(() => {
             >
               {status}
             </Text>
-          </div>
+          </Status>
         ),
         action: (
           <div className="actions">
@@ -149,7 +156,7 @@ const Transactions = React.memo(() => {
                 Speed up
               </Button>
             )}
-            {isCancelTC && (
+            {isCancelable && !isCanceled && (
               <Button
                 variants="outline"
                 onClick={() => {

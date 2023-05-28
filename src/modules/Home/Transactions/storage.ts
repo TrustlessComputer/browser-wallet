@@ -41,6 +41,20 @@ export class HistoryStorage extends StorageService {
     });
     this.set(key, newTransactions);
   };
+  cancelTransaction = (tcAddress: string, newTCHash: string, oldTCHash: string) => {
+    const key = this.getTxsHistoryKey(tcAddress);
+    const transactions = this.getTransactions(tcAddress);
+    const newTransactions = transactions.map(trans => {
+      const { tcHash } = trans;
+      const isCanceled = compareString({ str1: oldTCHash, str2: tcHash, method: 'equal' });
+      if (!isCanceled) return trans;
+      return {
+        ...trans,
+        tcHash: newTCHash,
+      };
+    });
+    this.set(key, newTransactions);
+  };
 
   createInscribeTransactions = (tcAddress: string, payload: IUpdatedBTCHashPayload) => {
     const { btcHash, status, tcHashs, uninscribed } = payload;

@@ -14,6 +14,8 @@ export const StatusMesg = {
   PROCESSING: 'Processing',
   WAITING: 'Waiting in the mempool',
   FAILED: 'Failed',
+  CANCELING: 'Canceling',
+  CANCELED: 'Canceled',
 };
 
 interface IHistory {

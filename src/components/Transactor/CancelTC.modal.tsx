@@ -1,7 +1,7 @@
 import SignerModal from '@/components/SignerModal';
 import useAsyncEffect from 'use-async-effect';
 import useBitcoin from '@/hooks/useBitcoin';
-import React from 'react';
+import React, { useContext } from 'react';
 import { ITCTxByHash } from '@/interfaces/use-bitcoin';
 import { Container } from '@/components/Transactor/styled';
 import useGasFee from '@/components/GasFee/useGasFee';
@@ -14,6 +14,10 @@ import { useUserSecretKey } from '@/state/wallet/hooks';
 import useProvider from '@/hooks/useProvider';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
+import { useAppDispatch } from '@/state/hooks';
+import { setTransactionCanceled } from '@/state/transaction/reducer';
+import historyStorage from '@/modules/Home/Transactions/storage';
+import { TransactionContext } from '@/contexts/transaction.context';
 
 type IProps = {
   tcHash: string;
@@ -26,10 +30,12 @@ const DEFAULT_GAS_LIMIT = new BigNumber(21000).multipliedBy(COEFFICIENT).toNumbe
 
 const CancelTCModal = ({ onClose, tcHash }: IProps) => {
   const { getTCTransactionByHash } = useBitcoin();
+  const dispatch = useAppDispatch();
   const [cancelTx, setCancelTx] = React.useState<ITCTxByHash | undefined>(undefined);
   const [submitting, setSubmitting] = React.useState<boolean>(false);
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
+  const { getTransactions } = useContext(TransactionContext);
 
   const { maxFee, error, setEstimating, estimating, setError, setGasLimit, setGasPrice } = useGasFee({
     defaultGasPrice: DEFAULT_GAS_PRICE,
@@ -41,7 +47,7 @@ const CancelTCModal = ({ onClose, tcHash }: IProps) => {
     const signer = getWalletSigner(userSecretKey.privateKey, provider);
     try {
       setSubmitting(true);
-      await signer.sendTransaction({
+      const newTx = await signer.sendTransaction({
         nonce: cancelTx.nonce,
         to: cancelTx.to,
         data: cancelTx.hex,
@@ -51,6 +57,15 @@ const CancelTCModal = ({ onClose, tcHash }: IProps) => {
       });
       toast.success('Transaction cancel successfully.');
       onClose();
+      dispatch(
+        setTransactionCanceled({
+          tcHashs: [newTx.hash, cancelTx.hash],
+        }),
+      );
+      historyStorage.cancelTransaction(userSecretKey.address, newTx.hash, cancelTx.hash);
+      setTimeout(() => {
+        getTransactions();
+      }, 3000);
     } catch (error) {
       const { message } = getErrorMessage(error, 'onSave');
       toast.error(message);
