@@ -86,7 +86,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
             to: request.to || '',
           });
 
-      if (request.gasLimit) {
+      if (request.gasLimit && !request.isExecuteTransaction) {
         await estimateGas({
           calldata: request.calldata,
           from: userSecretKey.address,
