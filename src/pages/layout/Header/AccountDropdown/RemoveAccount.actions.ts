@@ -27,9 +27,16 @@ export class RemoveAccountAction implements IRemoveAccountAction {
   }
   removeAccount = async (address: string) => {
     const accounts = this.component.accounts;
-    const unImportAccounts = accounts.filter(account => !account.isImport);
+    const isImported = accounts.some(
+      account =>
+        compareString({
+          str1: account.address,
+          str2: address,
+          method: 'equal',
+        }) && account.isImport,
+    );
     const masterIns = this.component.masterIns;
-    if (unImportAccounts.length === 1 || !masterIns) {
+    if (!masterIns || !isImported) {
       throw new Error('Can not remove this account.');
     }
     const removedAccount = accounts.find(account =>
