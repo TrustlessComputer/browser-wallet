@@ -10,12 +10,14 @@ export interface IAssetsContext {
   tcBalance: string;
   btcBalance: string;
   getAssetsCreateTx: () => Promise<ICollectedUTXOResp | undefined>;
+  isLoadedAssets: boolean;
 }
 
 const initialValue: IAssetsContext = {
   tcBalance: '0',
   btcBalance: '0',
   getAssetsCreateTx: () => new Promise<ICollectedUTXOResp | undefined>(() => null),
+  isLoadedAssets: false,
 };
 
 export const AssetsContext = React.createContext<IAssetsContext>(initialValue);
@@ -24,6 +26,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const userInfo = useCurrentUserInfo();
   const [tcBalance, setTCBalance] = React.useState<string>('0');
   const [assets, setAssets] = React.useState<ICollectedUTXOResp | undefined>();
+  const [loadedState, setLoadedState] = React.useState<{ [key: string]: boolean }>({});
 
   const { run: onGetTCBalance } = useContractOperation({
     operation: useNativeBalance,
@@ -54,9 +57,12 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   };
 
   const debounceFetchAssets = React.useCallback(
-    debounce(() => {
-      _onGetTCBalance().then().catch();
-      _onGetCollectedUTXO().then().catch();
+    debounce(async () => {
+      if (!userInfo?.address) return;
+      await Promise.all([_onGetTCBalance().then().catch(), _onGetCollectedUTXO().then().catch()]);
+      setLoadedState({
+        [userInfo.address]: true,
+      });
     }, 300),
     [userInfo?.address, userInfo?.btcAddress],
   );
@@ -64,6 +70,11 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const btcBalance = React.useMemo(() => {
     return assets ? assets?.availableBalance.toString() : '0';
   }, [assets]);
+
+  const isLoadedAssets = React.useMemo(() => {
+    if (!userInfo?.address) return false;
+    return Boolean(loadedState[userInfo.address]);
+  }, [loadedState, userInfo?.address]);
 
   useEffect(() => {
     if (!userInfo?.address || !userInfo?.btcAddress) return;
@@ -79,8 +90,9 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
       tcBalance,
       btcBalance,
       getAssetsCreateTx: _onGetCollectedUTXO,
+      isLoadedAssets,
     };
-  }, [tcBalance, btcBalance, _onGetCollectedUTXO]);
+  }, [tcBalance, btcBalance, _onGetCollectedUTXO, isLoadedAssets]);
 
   return <AssetsContext.Provider value={contextValues}>{children}</AssetsContext.Provider>;
 };

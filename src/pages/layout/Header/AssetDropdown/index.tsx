@@ -19,6 +19,7 @@ import ExportKey from '@/components/icons/ExportKey';
 import ExportBTCKey from '@/pages/layout/Header/AccountDropdown/ExportBTCKeyModal';
 import ExportAccount from '@/pages/layout/Header/AccountDropdown/ExportAccountModal';
 import { IAccount } from '@/pages/layout/Header/AccountDropdown';
+import Spinner from '@/components/Spinner';
 
 const AssetDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
@@ -30,7 +31,7 @@ const AssetDropdown = React.memo(() => {
     onToggle: () => undefined,
   });
 
-  const { tcBalance, btcBalance } = useContext(AssetsContext);
+  const { tcBalance, btcBalance, isLoadedAssets } = useContext(AssetsContext);
   const { onOpenBTCModal, onOpenTCModal } = useContext(TransactorContext);
 
   const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });
@@ -150,6 +151,7 @@ const AssetDropdown = React.memo(() => {
             <p>{formatTcBalance} TC</p>
             <div className="indicator" />
             <p>{formatBtcBalance} BTC</p>
+            {!isLoadedAssets && <Spinner size={22} />}
           </Element>
         }
         width={384}

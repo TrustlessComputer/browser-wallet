@@ -31,6 +31,7 @@ import { TransactionContext } from '@/contexts/transaction.context';
 import SelectAccount from '@/components/SelectAccount';
 import { getConnector } from '@/lib/connector.helper';
 import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
+import { AssetsContext } from '@/contexts/assets.context';
 
 interface IProps {
   requestID: string;
@@ -44,6 +45,8 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   const userSecretKey = useUserSecretKey();
   const { estimateGas, createAndSendTransaction } = useSignTransaction();
   const { getTransactions } = useContext(TransactionContext);
+  const { isLoadedAssets } = useContext(AssetsContext);
+
   const { debounceGetTransactions, uninscribed, sizeByte } = useTransaction({
     isGetUnInscribedSize: true,
     isSignTransaction: true,
@@ -299,8 +302,8 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         </Button>
         <Button
           sizes="stretch"
-          disabled={estimating || submitting || !!error}
-          isLoading={estimating || submitting}
+          disabled={estimating || submitting || !!error || !isLoadedAssets}
+          isLoading={estimating || submitting || !isLoadedAssets}
           onClick={onSignRequest}
         >
           Sign
