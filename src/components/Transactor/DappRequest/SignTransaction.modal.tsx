@@ -119,7 +119,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   const debounceEstimateGas = React.useCallback(debounce(onEstimateGas, 300), [userSecretKey]);
 
   const onHide = async () => {
-    if (!requestID || !userSecretKey) return;
+    if (!requestID) return;
     const connector = getConnector(requestID);
     await connector.postResultSign({
       tcHash: '',

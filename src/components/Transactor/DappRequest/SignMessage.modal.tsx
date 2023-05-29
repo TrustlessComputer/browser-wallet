@@ -29,7 +29,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
   const provider = useProvider();
 
   const onHide = async () => {
-    if (!requestID || !userInfo) return;
+    if (!requestID) return;
     setLoading(true);
     const connector = getConnector(requestID);
     try {

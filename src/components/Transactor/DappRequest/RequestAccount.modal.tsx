@@ -29,7 +29,7 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
   const userSecretKey = useUserSecretKey();
 
   const onHide = async () => {
-    if (!requestID || !userInfo || !userSecretKey || !provider) return;
+    if (!requestID) return;
     setLoading(true);
     const connector = getConnector(requestID);
     try {
