@@ -7,7 +7,7 @@ const Container = styled.div<{ size: number }>`
   color: ${({ theme }) => theme['button-primary']};
   position: relative;
   display: inline-block;
-  border: 5px solid;
+  border: 4px solid;
   border-radius: 50%;
   border-right-color: #5a5a5a;
   animation: rotate 1.2s linear infinite; }
