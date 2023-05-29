@@ -21,7 +21,7 @@ const BaseModal = (props: Props) => {
     <StyledModal show={show} onHide={handleClose} centered width={width}>
       <Modal.Header>
         <IconSVG
-          className="cursor-pointer ic-close-anim"
+          className="cursor-pointer scale-up-anim"
           onClick={handleClose}
           src={`${CDN_URL_ICONS}/ic-close-dark.svg`}
           maxWidth="32"

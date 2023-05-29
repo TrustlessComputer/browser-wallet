@@ -43,7 +43,7 @@ const Header = () => {
         <Row gap="80px">
           <Link className="logo" to={ROUTE_PATH.HOME}>
             <LogoIcon
-              className="ic-logo"
+              className="ic-logo cursor-pointer scale-up-anim"
               onClick={() => {
                 setCounter(counter => ++counter);
                 if (counter >= 20) {
