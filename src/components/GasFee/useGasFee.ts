@@ -75,7 +75,7 @@ const useGasFee = (
     if (error) return error;
     if (!maxFee.feeOriginal.toNumber()) return '';
     if (!!requestAddress && !compareString({ str1: requestAddress, str2: userInfo?.address, method: 'equal' })) {
-      return `Please switch to the address ${requestAddress}`;
+      return `Please change to address ${requestAddress} to sign the transaction.`;
     }
     if (!compareString({ str1: userSecretKey?.address, str2: userInfo?.address, method: 'equal' })) {
       return `Syncing wallet error.`;
