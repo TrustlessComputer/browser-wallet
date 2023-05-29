@@ -22,3 +22,8 @@ export const userAccountInfoSelector = createSelector(getWalletSelector, wallet 
 });
 
 export const listAccountsSelector = createSelector(getWalletSelector, wallet => wallet?.accounts || []);
+
+export const getBalanceByAddressSelector = createSelector(
+  getWalletSelector,
+  wallet => (address: string) => (wallet?.addressBalance || {})[address],
+);

@@ -1,5 +1,5 @@
 import * as TC_SDK from 'trustless-computer-sdk';
-import { IListAccounts, IUserSecretKey } from '@/state/wallet/types';
+import { IAccountItem, IUserSecretKey } from '@/state/wallet/types';
 import WError, { ERROR_CODE } from '@/utils/error';
 import WalletStorage from '@/lib/wallet/wallet.storage';
 import { compareString } from '@/utils';
@@ -67,7 +67,7 @@ const getUserSecretKey = (masterIns: TC_SDK.MasterWallet): IUserSecretKey => {
   throw new WError(ERROR_CODE.FIND_CURRENT_ACCOUNT);
 };
 
-const getListAccounts = (masterIns: TC_SDK.MasterWallet): IListAccounts[] => {
+const getListAccounts = (masterIns: TC_SDK.MasterWallet): IAccountItem[] => {
   const { seedNodes, importedNodes } = getInstanceAndNodes(masterIns);
   const nodes = [
     ...seedNodes.map(node => ({

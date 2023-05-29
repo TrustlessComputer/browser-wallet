@@ -6,13 +6,13 @@ import { getListAccounts, getUserSecretKey, getInstanceAndNodes } from '@/lib/wa
 import { batch } from 'react-redux';
 import WalletStorage from '@/lib/wallet/wallet.storage';
 import { TC_SDK } from '@/lib';
-import { IListAccounts } from '@/state/wallet/types';
+import { IAccountItem } from '@/state/wallet/types';
 
 interface IComponent {
   setLoading: (loading: boolean) => void;
   password: string | undefined;
   masterIns: MasterWallet | undefined;
-  accounts: IListAccounts[];
+  accounts: IAccountItem[];
 }
 
 export interface ICreateAccountAction {

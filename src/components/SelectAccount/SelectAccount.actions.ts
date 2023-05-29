@@ -1,12 +1,12 @@
 import { setCurrentTCAccount, setMasterCreated } from '@/state/wallet/reducer';
 import WalletStorage from '@/lib/wallet/wallet.storage';
-import { IListAccounts } from '@/state/wallet/types';
+import { IAccountItem } from '@/state/wallet/types';
 import { compareString } from '@/utils';
 import { MasterWallet } from 'trustless-computer-sdk';
 import { getUserSecretKey } from '@/lib/wallet';
 
 interface IComponent {
-  accounts: IListAccounts[];
+  accounts: IAccountItem[];
   masterIns?: MasterWallet;
   password?: string;
 }

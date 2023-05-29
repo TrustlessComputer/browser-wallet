@@ -11,6 +11,8 @@ export interface IAssetsContext {
   btcBalance: string;
   getAssetsCreateTx: () => Promise<ICollectedUTXOResp | undefined>;
   isLoadedAssets: boolean;
+
+  // address dropdown
 }
 
 const initialValue: IAssetsContext = {

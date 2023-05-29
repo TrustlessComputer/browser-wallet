@@ -7,10 +7,11 @@ export interface WalletState {
 
   tcAccount: ITCAccount | undefined;
   btcAddress: string | undefined;
-  accounts: IListAccounts[];
+  accounts: IAccountItem[];
 
   showSetup: boolean;
   isLocked: boolean;
+  addressBalance: IAddressBalance;
 }
 
 interface IUserSecretKey extends TC_SDK.IDeriveKey {
@@ -20,7 +21,11 @@ interface IUserSecretKey extends TC_SDK.IDeriveKey {
   btcAddress: string;
 }
 
-interface IListAccounts {
+interface IAddressBalance {
+  [address: string]: string;
+}
+
+interface IAccountItem {
   name: string;
   index: number;
   address: string;
@@ -46,4 +51,12 @@ interface IUserInfo extends ITCAccount {
   btcAddress: string;
 }
 
-export type { IUserSecretKey, ICreateAccountPayload, ISetMasterCreated, ITCAccount, IListAccounts, IUserInfo };
+export type {
+  IUserSecretKey,
+  ICreateAccountPayload,
+  ISetMasterCreated,
+  ITCAccount,
+  IAccountItem,
+  IUserInfo,
+  IAddressBalance,
+};

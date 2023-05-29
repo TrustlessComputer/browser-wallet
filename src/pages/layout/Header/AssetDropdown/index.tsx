@@ -18,8 +18,8 @@ import { ExportIcon } from '@/components/icons';
 import ExportKey from '@/components/icons/ExportKey';
 import ExportBTCKey from '@/pages/layout/Header/AccountDropdown/ExportBTCKeyModal';
 import ExportAccount from '@/pages/layout/Header/AccountDropdown/ExportAccountModal';
-import { IAccount } from '@/pages/layout/Header/AccountDropdown';
 import Spinner from '@/components/Spinner';
+import { IAccount } from '@/components/AccountItem/types';
 
 const AssetDropdown = React.memo(() => {
   const user = useCurrentUserInfo();

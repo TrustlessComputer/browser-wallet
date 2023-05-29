@@ -1,12 +1,12 @@
 import { setCurrentTCAccount } from '@/state/wallet/reducer';
 import WalletStorage from '@/lib/wallet/wallet.storage';
-import { IListAccounts } from '@/state/wallet/types';
+import { IAccountItem } from '@/state/wallet/types';
 import { compareString } from '@/utils';
 
 interface IComponent {}
 
 export interface ISwitchAccountAction {
-  switchAccount: (address: string, accounts: IListAccounts[]) => void;
+  switchAccount: (address: string, accounts: IAccountItem[]) => void;
 }
 
 export class SwitchAccountAction implements ISwitchAccountAction {
@@ -18,7 +18,7 @@ export class SwitchAccountAction implements ISwitchAccountAction {
     this.dispatch = props.dispatch;
   }
 
-  switchAccount = (address: string, accounts: IListAccounts[]) => {
+  switchAccount = (address: string, accounts: IAccountItem[]) => {
     const switchedAccount = accounts.find(account =>
       compareString({ str1: account.address, str2: address, method: 'equal' }),
     );

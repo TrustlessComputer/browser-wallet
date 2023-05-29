@@ -1,5 +1,5 @@
 import { MasterWallet } from 'trustless-computer-sdk';
-import { IListAccounts, IUserInfo } from '@/state/wallet/types';
+import { IAccountItem, IUserInfo } from '@/state/wallet/types';
 import { compareString } from '@/utils';
 import WalletStorage from '@/lib/wallet/wallet.storage';
 import { setCurrentTCAccount, setListAccounts } from '@/state/wallet/reducer';
@@ -8,7 +8,7 @@ import { TC_SDK } from '@/lib';
 interface IComponent {
   password: string;
   currentAccount: IUserInfo | undefined;
-  accounts: IListAccounts[];
+  accounts: IAccountItem[];
   setLoading: (loading: boolean) => void;
   masterIns: MasterWallet | undefined;
 }
