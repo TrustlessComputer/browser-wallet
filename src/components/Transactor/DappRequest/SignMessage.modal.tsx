@@ -62,6 +62,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
       if (userInfo.address.toLowerCase() !== userSecretKey.address.toLowerCase()) {
         return;
       }
+      setLoading(true);
       const walletSigner = getWalletSigner(userSecretKey.privateKey, provider);
       const signature = await walletSigner.signMessage(request.signMessage);
       const connector = getConnector(requestID);
@@ -82,6 +83,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
       toast.error(message);
     } finally {
       onRequestEnd();
+      setLoading(true);
     }
   };
 
