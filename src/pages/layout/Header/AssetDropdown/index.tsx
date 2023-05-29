@@ -8,17 +8,23 @@ import { useCurrentUserInfo } from '@/state/wallet/hooks';
 import { ellipsisCenter } from '@/utils';
 import format from '@/utils/amount';
 import copy from 'copy-to-clipboard';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import network from '@/lib/network.helpers';
 import { DropdownItem, DropdownList, Element, MoreDropdownItem, MoreDropdownList } from './styled';
 import { TransactorContext } from '@/contexts/transactor.context';
 import ToolTip from '@/components/Tooltip';
 import { ExportIcon } from '@/components/icons';
+import ExportKey from '@/components/icons/ExportKey';
+import ExportBTCKey from '@/pages/layout/Header/AccountDropdown/ExportBTCKeyModal';
+import ExportAccount from '@/pages/layout/Header/AccountDropdown/ExportAccountModal';
+import { IAccount } from '@/pages/layout/Header/AccountDropdown';
 
 const AssetDropdown = React.memo(() => {
   const user = useCurrentUserInfo();
   const selectNetwork = network.getSelectedNetwork();
+  const [exportBTCKey, setExportBTCKey] = useState<boolean>(false);
+  const [exportAccount, setExportAccount] = useState<IAccount | undefined>(undefined);
 
   const dropdownRef = React.useRef<IDropdownRef>({
     onToggle: () => undefined,
@@ -39,6 +45,7 @@ const AssetDropdown = React.memo(() => {
     {
       src: `${CDN_URL_ICONS}/${selectNetwork.Icon}`,
       address: user ? user.address : '',
+      symbol: Token.TRUSTLESS.symbol,
       formatAddress: `Trustless (
         ${ellipsisCenter({
           str: user ? user.address : '',
@@ -46,14 +53,24 @@ const AssetDropdown = React.memo(() => {
         })}
         )`,
       formatBalance: `${formatTcBalance} TC`,
-      moreItems: [
+      actions: [
         {
-          title: 'Transfer TC',
-          titleClass: 'text-normal',
-          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="18" />,
-          iconClass: 'icon-normal',
-          onClick: onOpenTCModal,
+          className: 'action',
+          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />,
+          onClick: () => onCopy(user?.address || ''),
+          tooltip: 'Copy TC address',
         },
+        {
+          className: 'action',
+          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="18" />,
+          onClick: () => {
+            onOpenTCModal();
+            dropdownRef.current.onToggle();
+          },
+          tooltip: 'Transfer TC',
+        },
+      ],
+      moreItems: [
         {
           title: 'View account in explorer',
           titleClass: 'text-normal',
@@ -63,11 +80,23 @@ const AssetDropdown = React.memo(() => {
             user && window.open(`${network.current.Explorer}/address/${user.address}`);
           },
         },
+        {
+          title: 'Export TC Key',
+          titleClass: 'text-normal',
+          icon: <ExportKey />,
+          iconClass: 'icon-normal',
+          onClick: () =>
+            setExportAccount({
+              name: user?.name || '',
+              address: user?.address || '',
+            }),
+        },
       ],
     },
     {
       src: `${CDN_URL_ICONS}/ic-bitcoin.svg`,
       address: user ? user.btcAddress : '',
+      symbol: Token.BITCOIN.symbol,
       formatAddress: `Bitcoin (
         ${ellipsisCenter({
           str: user ? user.btcAddress : '',
@@ -75,14 +104,24 @@ const AssetDropdown = React.memo(() => {
         })}
         )`,
       formatBalance: `${formatBtcBalance} BTC`,
-      moreItems: [
+      actions: [
         {
-          title: 'Transfer BTC',
-          titleClass: 'text-normal',
-          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="18" />,
-          iconClass: 'icon-normal',
-          onClick: onOpenBTCModal,
+          className: 'action',
+          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />,
+          onClick: () => onCopy(user?.btcAddress || ''),
+          tooltip: 'Copy BTC address',
         },
+        {
+          className: 'action',
+          icon: <IconSVG src={`${CDN_URL_ICONS}/ic-exchange.svg`} maxWidth="18" />,
+          onClick: () => {
+            onOpenBTCModal();
+            dropdownRef.current.onToggle();
+          },
+          tooltip: 'Transfer BTC',
+        },
+      ],
+      moreItems: [
         {
           title: 'View account in explorer',
           titleClass: 'text-normal',
@@ -92,92 +131,113 @@ const AssetDropdown = React.memo(() => {
             user && window.open(`${network.current.BTCExplorer}/address/${user.btcAddress}`);
           },
         },
+        {
+          title: 'Export BTC Key',
+          titleClass: 'text-normal',
+          icon: <ExportKey />,
+          iconClass: 'icon-normal',
+          onClick: () => setExportBTCKey(true),
+        },
       ],
     },
   ];
 
   return (
-    <Dropdown
-      element={
-        <Element>
-          <p>{formatTcBalance} TC</p>
-          <div className="indicator" />
-          <p>{formatBtcBalance} BTC</p>
-        </Element>
-      }
-      width={384}
-      type="hover"
-      ref={dropdownRef}
-    >
-      {user && (
-        <DropdownList>
-          {assets.map((asset, index) => {
-            return (
-              <DropdownItem key={index.toString()}>
-                <div className="item">
-                  <IconSVG src={asset.src} maxWidth="32" />
-                  <div>
-                    <Text color="text-secondary" fontWeight="light" size="note">
-                      {asset.formatAddress}
-                    </Text>
-                    <Text color="text-highlight" fontWeight="medium" size="body">
-                      {asset.formatBalance}
-                    </Text>
+    <>
+      <Dropdown
+        element={
+          <Element>
+            <p>{formatTcBalance} TC</p>
+            <div className="indicator" />
+            <p>{formatBtcBalance} BTC</p>
+          </Element>
+        }
+        width={384}
+        type="hover"
+        ref={dropdownRef}
+      >
+        {user && (
+          <DropdownList>
+            {assets.map((asset, index) => {
+              return (
+                <DropdownItem key={index.toString()}>
+                  <div className="item">
+                    <IconSVG src={asset.src} maxWidth="32" />
+                    <div>
+                      <Text color="text-secondary" fontWeight="light" size="note">
+                        {asset.formatAddress}
+                      </Text>
+                      <Text color="text-highlight" fontWeight="medium" size="body">
+                        {asset.formatBalance}
+                      </Text>
+                    </div>
                   </div>
-                </div>
-                <div className="item-actions">
-                  <ToolTip
-                    unwrapElement={
-                      <div className="action" onClick={() => onCopy(asset.address)}>
-                        <IconSVG src={`${CDN_URL_ICONS}/ic-copy-asset-dark.svg`} maxWidth="18" />
-                      </div>
-                    }
-                    width={300}
-                  >
-                    <Text size="tini">Copy address</Text>
-                  </ToolTip>
-
-                  <Dropdown
-                    unwrapElement={
-                      <ToolTip
-                        unwrapElement={
-                          <div className="action">
-                            <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
-                          </div>
-                        }
-                        width={300}
-                      >
-                        <Text size="tini">More</Text>
-                      </ToolTip>
-                    }
-                    width={300}
-                  >
-                    <MoreDropdownList>
-                      {asset.moreItems.map(item => {
-                        return (
-                          <MoreDropdownItem
-                            key={item.title}
-                            onClick={() => {
-                              item.onClick();
-                              dropdownRef.current.onToggle();
-                            }}
-                          >
-                            <div className={item.iconClass}>{item.icon}</div>
-                            <Text className={item.titleClass} size="note">
-                              {item.title}
-                            </Text>
-                          </MoreDropdownItem>
-                        );
-                      })}
-                    </MoreDropdownList>
-                  </Dropdown>
-                </div>
-              </DropdownItem>
-            );
-          })}
-        </DropdownList>
+                  <div className="item-actions">
+                    {asset.actions.map(action => {
+                      return (
+                        <ToolTip
+                          unwrapElement={
+                            <div className="action" onClick={action.onClick}>
+                              {action.icon}
+                            </div>
+                          }
+                          width={300}
+                        >
+                          <Text size="tini">{action.tooltip}</Text>
+                        </ToolTip>
+                      );
+                    })}
+                    <Dropdown
+                      unwrapElement={
+                        <ToolTip
+                          unwrapElement={
+                            <div className="action">
+                              <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
+                            </div>
+                          }
+                          width={300}
+                        >
+                          <Text size="tini">More</Text>
+                        </ToolTip>
+                      }
+                      width={300}
+                    >
+                      <MoreDropdownList>
+                        {asset.moreItems.map(item => {
+                          return (
+                            <MoreDropdownItem
+                              key={item.title}
+                              onClick={() => {
+                                item.onClick();
+                                dropdownRef.current.onToggle();
+                              }}
+                            >
+                              <div className={item.iconClass}>{item.icon}</div>
+                              <Text className={item.titleClass} size="note">
+                                {item.title}
+                              </Text>
+                            </MoreDropdownItem>
+                          );
+                        })}
+                      </MoreDropdownList>
+                    </Dropdown>
+                  </div>
+                </DropdownItem>
+              );
+            })}
+          </DropdownList>
+        )}
+      </Dropdown>
+      {exportBTCKey && <ExportBTCKey show={exportBTCKey} handleClose={() => setExportBTCKey(false)} />}
+      {!!exportAccount && (
+        <ExportAccount
+          show={!!exportAccount}
+          address={exportAccount.address}
+          name={exportAccount.name}
+          handleClose={() => setExportAccount(undefined)}
+        />
       )}
-    </Dropdown>
+    </>
   );
 });
 

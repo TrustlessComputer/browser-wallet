@@ -29,7 +29,7 @@ import ImportKey from '@/pages/layout/Header/AccountDropdown/ImportKeyModal';
 import storageLocal from '@/lib/storage.local';
 import { LocalStorageKey } from '@/enums/storage.keys';
 
-interface IAccount {
+export interface IAccount {
   name: string;
   address: string;
 }
@@ -78,7 +78,7 @@ const AccountDropdown = React.memo(() => {
       },
     },
     {
-      title: 'Export Key',
+      title: 'Export TC Key',
       titleClass: 'text-normal',
       icon: <ExportKeyIcon />,
       iconClass: 'icon-normal',
@@ -142,7 +142,7 @@ const AccountDropdown = React.memo(() => {
             }
             width={300}
           >
-            <Text size="tini">Copy address</Text>
+            <Text size="tini">Copy TC address</Text>
           </ToolTip>
 
           <Dropdown
