@@ -85,13 +85,18 @@ const AccountItem = (props: IProps) => {
       >
         <IconSVG className="icon" src={isChecked ? `${CDN_URL_ICONS}/ic-check-dark.svg` : ''} maxWidth="24" />
         <div>
-          <Row align="center" gap="4px">
+          <Row align="center" gap="6px">
             <Text color="text-primary" fontWeight="semibold" size="body">
               {account.name}
             </Text>
             <Text color="text-secondary" fontWeight="medium" size="note">
               ({formatAddress})
             </Text>
+            {account.isImport && (
+              <Text color="text-secondary" fontWeight="light" size="tini" className="imported">
+                Imported
+              </Text>
+            )}
           </Row>
           <Row align="center" gap="12px">
             <Text color="text-highlight" fontWeight="medium" size="body" className="balance">

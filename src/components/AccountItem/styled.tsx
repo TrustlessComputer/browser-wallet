@@ -21,6 +21,12 @@ export const DropdownItem = styled.div`
       width: ${px2rem(24)};
     }
 
+    .imported {
+      border: 1px solid ${({ theme }) => theme['border-third']};
+      padding: ${px2rem(2)} ${px2rem(8)};
+      border-radius: 40px;
+    }
+
     span {
       font-weight: 400;
       color: ${({ theme }) => theme['text-secondary']};

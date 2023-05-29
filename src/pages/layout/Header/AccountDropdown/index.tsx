@@ -144,7 +144,7 @@ const AccountDropdown = React.memo(() => {
             })}
           </Text>
         }
-        width={384}
+        width={450}
         closeDropdown={
           !!removeAccount || showCreateModal || !!exportAccount || exportMnemonic || exportBTCKey || showImportModal
         }
