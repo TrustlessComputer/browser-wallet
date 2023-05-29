@@ -11,7 +11,7 @@ const handleRequestEnd = (payload: IRequestEndPayload) => {
       // close browser
       window.close();
     }
-  }, 1500);
+  }, 500);
 };
 
 export { handleRequestEnd };
