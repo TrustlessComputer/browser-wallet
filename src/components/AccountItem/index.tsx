@@ -47,19 +47,21 @@ const AccountItem = (props: IProps) => {
 
   const formatTcBalance = format.shorterAmount({ originalAmount: balance || '0', decimals: Token.TRUSTLESS.decimal });
 
-  const getAccountBalance = async () => {
+  const getAccountBalance = async (address: string) => {
     if (!provider) return;
     try {
-      const balance = await provider.getBalance(account.address);
+      const balance = await provider.getBalance(address);
       dispatch(
         setAddressBalance({
-          address: account.address,
+          address: address,
           balance: balance.toString(),
         }),
       );
-      // setBalance(balance.toString());
     } catch (error) {
-      // setBalance('0');
+      setAddressBalance({
+        address: address,
+        balance: '0',
+      });
     }
   };
 
@@ -67,7 +69,7 @@ const AccountItem = (props: IProps) => {
 
   React.useEffect(() => {
     if (!account.address) return;
-    throttleGetAccountBalance();
+    throttleGetAccountBalance(account.address);
     const interval = setInterval(throttleGetAccountBalance, 10000);
     return () => clearInterval(interval);
   }, [account.address]);

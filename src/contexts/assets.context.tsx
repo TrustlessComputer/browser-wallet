@@ -5,6 +5,11 @@ import useNativeBalance from '@/hooks/contracts-operation.ts/useNativeBalance';
 import { debounce } from 'lodash';
 import { getCollectedUTXO } from '@/services/bitcoin';
 import { ICollectedUTXOResp } from '@/interfaces/api/bitcoin';
+import { setAddressBalance } from '@/state/wallet/reducer';
+import throttle from 'lodash/throttle';
+import useProvider from '@/hooks/useProvider';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { listAccountsSelector } from '@/state/wallet/selector';
 
 export interface IAssetsContext {
   tcBalance: string;
@@ -29,6 +34,9 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const [tcBalance, setTCBalance] = React.useState<string>('0');
   const [assets, setAssets] = React.useState<ICollectedUTXOResp | undefined>();
   const [loadedState, setLoadedState] = React.useState<{ [key: string]: boolean }>({});
+  const provider = useProvider();
+  const dispatch = useAppDispatch();
+  const accounts = useAppSelector(listAccountsSelector);
 
   const { run: onGetTCBalance } = useContractOperation({
     operation: useNativeBalance,
@@ -78,6 +86,31 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     return Boolean(loadedState[userInfo.address]);
   }, [loadedState, userInfo?.address]);
 
+  const getAccountBalance = async (address: string) => {
+    if (!provider) return;
+    try {
+      const balance = await provider.getBalance(address);
+      dispatch(
+        setAddressBalance({
+          address: address,
+          balance: balance.toString(),
+        }),
+      );
+    } catch (error) {
+      setAddressBalance({
+        address: address,
+        balance: '0',
+      });
+    }
+  };
+
+  const throttleGetAccountsBalance = React.useCallback(
+    throttle(async () => {
+      accounts.map(account => getAccountBalance(account.address));
+    }, 2000),
+    [provider],
+  );
+
   useEffect(() => {
     if (!userInfo?.address || !userInfo?.btcAddress) return;
     debounceFetchAssets();
@@ -86,6 +119,10 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     }, 10000);
     return () => clearInterval(interval);
   }, [userInfo?.address, userInfo?.btcAddress]);
+
+  useEffect(() => {
+    throttleGetAccountsBalance();
+  }, []);
 
   const contextValues = useMemo((): IAssetsContext => {
     return {

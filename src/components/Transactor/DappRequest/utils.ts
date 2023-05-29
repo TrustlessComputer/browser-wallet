@@ -4,7 +4,6 @@ interface IRequestEndPayload {
 }
 
 const handleRequestEnd = (payload: IRequestEndPayload) => {
-  console.log('SANG TEST: ', payload);
   setTimeout(() => {
     if (payload.target === '_self' && !!payload.redirectURL) {
       window.open(payload.redirectURL, '_self');
