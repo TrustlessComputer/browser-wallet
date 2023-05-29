@@ -7,6 +7,13 @@ const Container = styled.div``;
 const Content = styled(Row)`
   gap: ${px2rem(12)};
   --bs-gutter-x: 0;
+  .loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const ItemWrapper = styled(Col)<{ isActive: boolean }>`
@@ -21,14 +28,6 @@ const ItemWrapper = styled(Col)<{ isActive: boolean }>`
 
   :hover {
     border: 1px solid ${({ theme }) => theme['border-secondary']};
-  }
-
-  .loader {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
   }
 
   .price {
