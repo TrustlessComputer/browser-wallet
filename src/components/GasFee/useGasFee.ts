@@ -7,12 +7,15 @@ import format from '@/utils/amount';
 import Token from '@/constants/token';
 import { AssetsContext } from '@/contexts/assets.context';
 import { TC_SDK } from '@/lib';
+import { compareString } from '@/utils';
+import { useCurrentUserInfo, useUserSecretKey } from '@/state/wallet/hooks';
 
 interface IProps {
   defaultGasPrice?: number;
   defaultGasLimit?: number;
   sizeByte?: number;
   btcFeeRate?: number;
+  requestAddress?: string;
 }
 
 const useGasFee = (
@@ -21,15 +24,18 @@ const useGasFee = (
     defaultGasLimit: undefined,
     sizeByte: undefined,
     btcFeeRate: undefined,
+    requestAddress: undefined,
   },
 ) => {
-  const { defaultGasPrice, sizeByte, btcFeeRate, defaultGasLimit } = props;
+  const { defaultGasPrice, sizeByte, btcFeeRate, defaultGasLimit, requestAddress } = props;
   const { tcBalance, btcBalance } = useContext(AssetsContext);
   const [gasPrice, setGasPrice] = React.useState<number | undefined>(0);
   const [gasLimit, setGasLimit] = React.useState<number | undefined>(defaultGasLimit);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [estimating, setEstimating] = useState(false);
   const [error, setError] = React.useState<string>('');
+  const userInfo = useCurrentUserInfo();
+  const userSecretKey = useUserSecretKey();
 
   const provider = useProvider();
 
@@ -68,6 +74,12 @@ const useGasFee = (
   const customError = React.useMemo(() => {
     if (error) return error;
     if (!maxFee.feeOriginal.toNumber()) return '';
+    if (!!requestAddress && !compareString({ str1: requestAddress, str2: userInfo?.address, method: 'equal' })) {
+      return `Please switch to the address ${requestAddress}`;
+    }
+    if (!compareString({ str1: userSecretKey?.address, str2: userInfo?.address, method: 'equal' })) {
+      return `Syncing wallet error.`;
+    }
     if (maxFee.feeOriginal.gt(tcBalance)) {
       return `Your TC balance is insufficient. Please top up at least ${format.shorterAmount({
         decimals: Token.TRUSTLESS.decimal,
@@ -88,7 +100,17 @@ const useGasFee = (
       }
     }
     return '';
-  }, [maxFee.feeOriginal, tcBalance, error, btcFeeRate, btcBalance, sizeByte]);
+  }, [
+    maxFee.feeOriginal,
+    tcBalance,
+    error,
+    btcFeeRate,
+    btcBalance,
+    sizeByte,
+    requestAddress,
+    userInfo?.address,
+    userSecretKey?.address,
+  ]);
 
   useAsyncEffect(onGetGasPrice, [provider]);
 

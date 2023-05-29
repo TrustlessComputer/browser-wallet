@@ -64,6 +64,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     defaultGasPrice: request.gasPrice ? Number(request.gasPrice) : undefined,
     btcFeeRate: request.isInscribe ? currentRate : undefined,
     sizeByte: request.isInscribe ? sizeByte : undefined,
+    requestAddress: request.from || undefined,
   });
 
   const signMethod = React.useMemo(() => {
