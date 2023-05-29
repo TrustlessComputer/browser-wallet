@@ -28,13 +28,13 @@ const ContentBox = styled.div`
 `;
 
 const DropDownContainer = styled.div`
-  width: 250px;
+  width: 400px;
 `;
 
 const DropdownList = styled.div`
   display: grid;
   gap: ${px2rem(24)} !important;
-  max-height: ${px2rem(400)};
+  max-height: ${px2rem(300)};
   overflow: auto;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
@@ -61,8 +61,17 @@ const DropdownItem = styled.div`
       opacity: 0.8;
     }
 
-    .icon {
-      width: ${px2rem(24)};
+    .icon-wrapper {
+      min-width: ${px2rem(24)};
+      .icon {
+        width: ${px2rem(24)};
+      }
+    }
+
+    .imported {
+      border: 1px solid ${({ theme }) => theme['border-third']};
+      padding: ${px2rem(2)} ${px2rem(8)};
+      border-radius: 40px;
     }
 
     span {
