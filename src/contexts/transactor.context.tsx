@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useMemo } from 'react';
 import SendBTCModal from '@/components/Transactor/SendBTC.modal';
 import ResumeModal from '@/components/Transactor/Resume.modal';
 import SendTCModal from '@/components/Transactor/SendTC.modal';
+import DappRequest from '@/components/Transactor/DappRequest';
 
 export interface ITransactorContext {
   onOpenBTCModal: () => void;
@@ -46,6 +47,7 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
       {showBTCModal && <SendBTCModal show={showBTCModal} onClose={onCloseBTCModal} />}
       {showResumeModal && <ResumeModal show={showResumeModal} onClose={onCloseResumeModal} />}
       {showTCModal && <SendTCModal show={showTCModal} onClose={onCloseTCModal} />}
+      <DappRequest />
     </TransactorContext.Provider>
   );
 };

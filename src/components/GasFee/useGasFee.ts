@@ -81,9 +81,11 @@ const useGasFee = (
       return `Syncing wallet error.`;
     }
     if (maxFee.feeOriginal.gt(tcBalance)) {
-      return `Your TC balance is insufficient. Please top up at least ${format.shorterAmount({
+      return `Your TC balance is insufficient. Please top up at least ${format.formatAmount({
         decimals: Token.TRUSTLESS.decimal,
-        originalAmount: maxFee.feeOriginal.toString(),
+        originalAmount: maxFee.feeOriginal.toNumber(),
+        maxDigits: 6,
+        isCeil: true,
       })} TC to pay transaction fee.`;
     }
     if (sizeByte && btcFeeRate) {
@@ -93,9 +95,11 @@ const useGasFee = (
       });
       const balanceInBN = new BigNumber(btcBalance);
       if (balanceInBN.isLessThan(btcFee.totalFee)) {
-        return `Your BTC balance is insufficient. Please top up at least ${format.shorterAmount({
+        return `Your BTC balance is insufficient. Please top up at least ${format.formatAmount({
           decimals: Token.BITCOIN.decimal,
-          originalAmount: btcFee.totalFee.toString(),
+          originalAmount: btcFee.totalFee.toNumber(),
+          maxDigits: 6,
+          isCeil: true,
         })} BTC to pay network fee.`;
       }
     }

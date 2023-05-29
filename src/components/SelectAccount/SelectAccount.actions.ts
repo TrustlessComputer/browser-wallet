@@ -24,7 +24,7 @@ export class SelectAccountAction implements ISelectAccountAction {
     this.dispatch = props.dispatch;
   }
 
-  switchAccount = async (address: string) => {
+  switchAccount = (address: string) => {
     const accounts = this.component.accounts;
     const switchedAccount = accounts.find(account =>
       compareString({ str1: account.address, str2: address, method: 'equal' }),
@@ -43,7 +43,7 @@ export class SelectAccountAction implements ISelectAccountAction {
     if (!masterIns || !password) {
       throw new Error('Account undefined');
     }
-    const accountSecretKey = await getUserSecretKey(masterIns);
+    const accountSecretKey = getUserSecretKey(masterIns);
 
     this.dispatch(
       setCurrentTCAccount({

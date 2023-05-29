@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import px2rem from '@/utils/px2rem';
+import { MediaQueryBuilder } from '@/theme';
 
 const Container = styled.div`
   .title {
@@ -16,10 +17,6 @@ const ContentBox = styled.div`
     line-break: anywhere;
   }
 
-  * {
-    color: ${({ theme }) => theme['text-primary']};
-  }
-
   :hover {
     border-color: ${({ theme }) => theme['border-secondary']};
   }
@@ -27,8 +24,13 @@ const ContentBox = styled.div`
   justify-content: space-between;
 `;
 
+const DropDownContainerXXXL = css`
+  width: 350px;
+`;
+
 const DropDownContainer = styled.div`
-  width: 400px;
+  width: 450px;
+  ${MediaQueryBuilder('xxxl', DropDownContainerXXXL)}
 `;
 
 const DropdownList = styled.div`
@@ -44,69 +46,4 @@ const DropdownList = styled.div`
   }
 `;
 
-const DropdownItem = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${px2rem(32)};
-  cursor: pointer;
-
-  .item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: ${px2rem(12)};
-    :hover {
-      opacity: 0.8;
-    }
-
-    .icon-wrapper {
-      min-width: ${px2rem(24)};
-      .icon {
-        width: ${px2rem(24)};
-      }
-    }
-
-    .imported {
-      border: 1px solid ${({ theme }) => theme['border-third']};
-      padding: ${px2rem(2)} ${px2rem(8)};
-      border-radius: 40px;
-    }
-
-    span {
-      font-weight: 400;
-      color: ${({ theme }) => theme['text-secondary']};
-      font-size: ${px2rem(14)};
-    }
-  }
-
-  .item-actions {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: ${px2rem(12)};
-
-    .action {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      width: ${px2rem(28)};
-      height: ${px2rem(28)};
-
-      background: ${({ theme }) => theme.bg.third};
-      border-radius: ${px2rem(4)};
-
-      :hover {
-        opacity: 0.8;
-      }
-    }
-
-    .action-hide {
-      background-color: transparent;
-    }
-  }
-`;
-
-export { Container, ContentBox, DropDownContainer, DropdownItem, DropdownList };
+export { Container, ContentBox, DropDownContainer, DropdownList };

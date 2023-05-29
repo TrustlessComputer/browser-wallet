@@ -1,25 +1,15 @@
 import React from 'react';
 import Text from '@/components/Text';
-import { Container, ContentBox, DropDownContainer, DropdownItem, DropdownList } from './styled';
+import { Container, ContentBox, DropDownContainer, DropdownList } from './styled';
 import { useCurrentUserInfo, useUserSecretKey } from '@/state/wallet/hooks';
 import { ArrowDownIcon } from '@/components/icons';
 import Dropdown, { IDropdownRef } from '@/components/Popover';
-import { compareString, ellipsisCenter } from '@/utils';
+import { compareString } from '@/utils';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import {
-  getBalanceByAddressSelector,
-  listAccountsSelector,
-  masterWalletSelector,
-  passwordSelector,
-} from '@/state/wallet/selector';
-import IconSVG from '@/components/IconSVG';
-import { CDN_URL_ICONS } from '@/configs';
-import format from '@/utils/amount';
-import Token from '@/constants/token';
+import { listAccountsSelector, masterWalletSelector, passwordSelector } from '@/state/wallet/selector';
 import { SelectAccountAction } from '@/components/SelectAccount/SelectAccount.actions';
-import { Row } from '@/components/Row';
 import { IAccountItem } from '@/state/wallet/types';
-import Spinner from '@/components/Spinner';
+import AccountItem from '@/components/AccountItem';
 
 interface IProps {
   className?: string;
@@ -35,7 +25,6 @@ const SelectAccount = React.memo((props: IProps) => {
   const dropdownRef = React.useRef<IDropdownRef>({
     onToggle: () => undefined,
   });
-  const getBalanceSelector = useAppSelector(getBalanceByAddressSelector);
 
   const dispatch = useAppDispatch();
 
@@ -58,48 +47,18 @@ const SelectAccount = React.memo((props: IProps) => {
       str2: userSecretKey?.address,
       method: 'equal',
     });
-    const formatAddress = `${ellipsisCenter({
-      str: account.address,
-      limit: 4,
-    })}`;
-    const tcBalance = getBalanceSelector(account.address);
-    const formatTcBalance = format.shorterAmount({ originalAmount: tcBalance, decimals: Token.TRUSTLESS.decimal });
     return (
-      <DropdownItem key={`${account.address}-${isChecked}`}>
-        <div
-          className="item"
-          onClick={async () => {
-            if (isChecked) return dropdownRef.current.onToggle();
-            await onSelectAccount(account.address);
-            dropdownRef.current.onToggle();
-          }}
-        >
-          <div className="icon-wrapper">
-            <IconSVG className="icon" src={isChecked ? `${CDN_URL_ICONS}/ic-check-dark.svg` : ''} maxWidth="24" />
-          </div>
-          <div>
-            <Row align="center" gap="8px">
-              <Text color="text-primary" fontWeight="semibold" size="body">
-                {account.name}
-              </Text>
-              <Text color="text-secondary" fontWeight="medium" size="note">
-                ({formatAddress})
-              </Text>
-              {account.isImport && (
-                <Text color="text-secondary" fontWeight="light" size="tini" className="imported">
-                  Imported
-                </Text>
-              )}
-            </Row>
-            <Row align="center" gap="12px">
-              <Text color="text-highlight" fontWeight="medium" size="body" className="balance">
-                {formatTcBalance} TC
-              </Text>
-              {!tcBalance && <Spinner size={20} />}
-            </Row>
-          </div>
-        </div>
-      </DropdownItem>
+      <AccountItem
+        key={`${account.address}-${isChecked}`}
+        account={account}
+        isChecked={isChecked}
+        onSwitchAccount={async () => {
+          if (isChecked) return dropdownRef.current.onToggle();
+          onSelectAccount(account.address);
+          dropdownRef.current.onToggle();
+        }}
+        MoreList={[]}
+      />
     );
   };
 
@@ -119,7 +78,7 @@ const SelectAccount = React.memo((props: IProps) => {
             </ContentBox>
           }
           ref={dropdownRef}
-          width={350}
+          width={500}
         >
           <DropDownContainer>
             <DropdownList>

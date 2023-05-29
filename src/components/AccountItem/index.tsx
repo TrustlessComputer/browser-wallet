@@ -77,7 +77,7 @@ const AccountItem = (props: IProps) => {
   return (
     <DropdownItem>
       <div
-        className="item"
+        className="item cursor-pointer"
         onClick={() => {
           if (isChecked) return;
           onSwitchAccount(account.address);
@@ -117,46 +117,47 @@ const AccountItem = (props: IProps) => {
         >
           <Text size="tini">Copy TC address</Text>
         </ToolTip>
-
-        <Dropdown
-          unwrapElement={
-            <ToolTip
-              unwrapElement={
-                <div className="action">
-                  <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
-                </div>
-              }
-              width={300}
-            >
-              <Text size="tini">More</Text>
-            </ToolTip>
-          }
-          width={300}
-        >
-          <MoreDropdownList>
-            {MoreList.map(item => {
-              if (!account.isImport && item.title === 'Remove Account') {
-                return undefined;
-              }
-              return (
-                <MoreDropdownItem
-                  key={item.title}
-                  onClick={() => {
-                    item.onClick({
-                      name: account.name,
-                      address: account.address,
-                    });
-                  }}
-                >
-                  <div className={item.iconClass}>{item.icon}</div>
-                  <Text className={item.titleClass} size="note">
-                    {item.title}
-                  </Text>
-                </MoreDropdownItem>
-              );
-            })}
-          </MoreDropdownList>
-        </Dropdown>
+        {!!MoreList.length && (
+          <Dropdown
+            unwrapElement={
+              <ToolTip
+                unwrapElement={
+                  <div className="action">
+                    <IconSVG src={`${CDN_URL_ICONS}/ic-more-vertical.svg`} maxWidth="18" />
+                  </div>
+                }
+                width={300}
+              >
+                <Text size="tini">More</Text>
+              </ToolTip>
+            }
+            width={300}
+          >
+            <MoreDropdownList>
+              {MoreList.map(item => {
+                if (!account.isImport && item.title === 'Remove Account') {
+                  return undefined;
+                }
+                return (
+                  <MoreDropdownItem
+                    key={item.title}
+                    onClick={() => {
+                      item.onClick({
+                        name: account.name,
+                        address: account.address,
+                      });
+                    }}
+                  >
+                    <div className={item.iconClass}>{item.icon}</div>
+                    <Text className={item.titleClass} size="note">
+                      {item.title}
+                    </Text>
+                  </MoreDropdownItem>
+                );
+              })}
+            </MoreDropdownList>
+          </Dropdown>
+        )}
       </div>
     </DropdownItem>
   );

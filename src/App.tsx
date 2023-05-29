@@ -14,7 +14,6 @@ import { AssetsProvider } from '@/contexts/assets.context';
 import { InitialProvider } from '@/contexts/initial.context';
 import { TransactorProvider } from '@/contexts/transactor.context';
 import { TransactionProvider } from '@/contexts/transaction.context';
-import DappRequest from '@/components/Transactor/DappRequest';
 import { LoaderProvider } from '@/contexts/loader.context';
 
 let persistor = persistStore(store);
@@ -29,10 +28,7 @@ const App: React.FC = (): React.ReactElement => {
             <InitialProvider>
               <AssetsProvider>
                 <TransactionProvider>
-                  <TransactorProvider>
-                    {element}
-                    <DappRequest />
-                  </TransactorProvider>
+                  <TransactorProvider>{element}</TransactorProvider>
                 </TransactionProvider>
               </AssetsProvider>
             </InitialProvider>
