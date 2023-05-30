@@ -14,6 +14,8 @@ import useProvider from '@/hooks/useProvider';
 import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
 import { getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
+import { getOriginURL } from '@/utils';
+import storageConnected from '@/lib/storage/storage.connected';
 
 interface IProps {
   requestID: string;
@@ -81,6 +83,7 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
         accounts: listAccounts,
         signature,
       });
+      storageConnected.setConnectedSite(request.site);
       onClose();
     } catch (error) {
       const { message } = getErrorMessage(error, 'Connect');
@@ -101,7 +104,7 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
         <Text size="body-large">
           Approve this request to prove you have access to this wallet and you can start to use{' '}
           <a href={request.site} target="_blank">
-            {request.site}
+            {getOriginURL(request.site)}
           </a>
           .
         </Text>
