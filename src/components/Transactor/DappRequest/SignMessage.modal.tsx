@@ -69,6 +69,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
       const listAccounts = accounts.map(account => ({
         tcAddress: account.address,
         btcAddress: userInfo.btcAddress,
+        name: account.name,
       }));
       await connector.postResultAccount({
         btcAddress: userInfo.btcAddress,
