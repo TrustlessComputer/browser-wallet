@@ -132,6 +132,12 @@ const Tokens = () => {
 
   useEffect(() => {
     if (profileWallet) fetchTokensOwned();
+    let interval = setInterval(() => {
+      if (profileWallet) fetchTokensOwned();
+    }, 30000); // 30s
+    return () => {
+      clearInterval(interval);
+    };
   }, [profileWallet]);
 
   if (!tokensList || tokensList.length === 0 || !profileWallet) {
