@@ -65,8 +65,8 @@ const Header = () => {
         </Row>
         <Row className="buttons">
           <Button sizes="small" variants="ghost" isArrowRight={true}>
-            <a href="https://trustlessfaucet.io/" target="_blank">
-              Faucet
+            <a href="https://tcgasstation.com/" target="_blank">
+              Get TC
             </a>
           </Button>
           <Button sizes="small" variants="ghost" isArrowRight={true}>
