@@ -14,6 +14,7 @@ import useProvider from '@/hooks/useProvider';
 import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
 import { getErrorMessage } from '@/utils/error';
 import toast from 'react-hot-toast';
+import { compareString } from '@/utils';
 
 interface IProps {
   requestID: string;
@@ -27,6 +28,8 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
   const userInfo = useCurrentUserInfo();
   const userSecretKey = useUserSecretKey();
   const provider = useProvider();
+
+  const [error, setError] = React.useState('');
 
   const onHide = async () => {
     if (!requestID) return;
@@ -88,6 +91,17 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
     }
   };
 
+  React.useEffect(() => {
+    if (
+      request.fromAddress &&
+      !compareString({ str1: request.fromAddress, str2: userInfo?.address, method: 'equal' })
+    ) {
+      setError(`Please change to address ${request.fromAddress} to sign the transaction.`);
+    } else {
+      setError('');
+    }
+  }, [userInfo?.address, request.fromAddress]);
+
   return (
     <SignerModal show={!!requestID} onClose={onHide} title="Signature request" width={600}>
       <Container>
@@ -108,7 +122,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
           <Button disabled={loading} variants="outline" sizes="stretch" onClick={onRejectRequest}>
             Reject
           </Button>
-          <Button disabled={loading} sizes="stretch" onClick={onAcceptRequest}>
+          <Button disabled={loading || !!error} sizes="stretch" onClick={onAcceptRequest}>
             Sign
           </Button>
         </ButtonGroup>
