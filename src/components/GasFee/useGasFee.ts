@@ -7,8 +7,10 @@ import format from '@/utils/amount';
 import Token from '@/constants/token';
 import { AssetsContext } from '@/contexts/assets.context';
 import { TC_SDK } from '@/lib';
-import { compareString } from '@/utils';
+import { compareString, ellipsisCenter } from '@/utils';
 import { useCurrentUserInfo, useUserSecretKey } from '@/state/wallet/hooks';
+import { useAppSelector } from '@/state/hooks';
+import { listAccountsSelector } from '@/state/wallet/selector';
 
 interface IProps {
   defaultGasPrice?: number;
@@ -36,6 +38,7 @@ const useGasFee = (
   const [error, setError] = React.useState<string>('');
   const userInfo = useCurrentUserInfo();
   const userSecretKey = useUserSecretKey();
+  const accounts = useAppSelector(listAccountsSelector);
 
   const provider = useProvider();
 
@@ -72,14 +75,23 @@ const useGasFee = (
   }, [gasLimit, gasPrice]);
 
   const customError = React.useMemo(() => {
-    if (error) return error;
-    if (!maxFee.feeOriginal.toNumber()) return '';
     if (!!requestAddress && !compareString({ str1: requestAddress, str2: userInfo?.address, method: 'equal' })) {
-      return `Please change to address ${requestAddress} to sign the transaction.`;
+      const account = accounts.find(account =>
+        compareString({ str1: account.address, str2: requestAddress, method: 'equal' }),
+      );
+      if (account) {
+        return `Please switch to ${account.name} (${ellipsisCenter({
+          str: account.address,
+        })}) to sign the transaction.`;
+      } else {
+        return `Could not find this address ${requestAddress}, please try disconnect and reconnect on your dapp.`;
+      }
     }
     if (!compareString({ str1: userSecretKey?.address, str2: userInfo?.address, method: 'equal' })) {
       return `Syncing wallet error.`;
     }
+    if (error) return error;
+    if (!maxFee.feeOriginal.toNumber()) return '';
     if (maxFee.feeOriginal.gt(tcBalance)) {
       return `Your TC balance is insufficient. Please top up at least ${format.formatAmount({
         decimals: Token.TRUSTLESS.decimal,

@@ -32,6 +32,7 @@ import SelectAccount from '@/components/SelectAccount';
 import { getConnector } from '@/lib/connector.helper';
 import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
 import { AssetsContext } from '@/contexts/assets.context';
+import BigNumber from 'bignumber.js';
 
 interface IProps {
   requestID: string;
@@ -79,14 +80,14 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     try {
       setEstimating(true);
       const gasLimit = request.gasLimit
-        ? Number(request.gasLimit)
+        ? new BigNumber(request.gasLimit).toNumber()
         : await estimateGas({
             calldata: request.calldata,
             from: userSecretKey.address,
             to: request.to || '',
           });
 
-      if (request.gasLimit && !request.isExecuteTransaction) {
+      if (request.gasLimit && request.isExecuteTransaction) {
         await estimateGas({
           calldata: request.calldata,
           from: userSecretKey.address,
