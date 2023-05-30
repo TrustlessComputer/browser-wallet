@@ -43,3 +43,8 @@ export const compareString = ({
     return str1.toLowerCase() !== str2.toLowerCase();
   }
 };
+
+export const getOriginURL = (site: string) => {
+  const url = new URL(site);
+  return url.origin;
+};
