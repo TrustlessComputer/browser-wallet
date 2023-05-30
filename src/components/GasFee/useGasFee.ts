@@ -72,14 +72,14 @@ const useGasFee = (
   }, [gasLimit, gasPrice]);
 
   const customError = React.useMemo(() => {
-    if (error) return error;
-    if (!maxFee.feeOriginal.toNumber()) return '';
     if (!!requestAddress && !compareString({ str1: requestAddress, str2: userInfo?.address, method: 'equal' })) {
-      return `Please change to address ${requestAddress} to sign the transaction.`;
+      return `Please switch to address ${requestAddress} to sign the transaction.`;
     }
     if (!compareString({ str1: userSecretKey?.address, str2: userInfo?.address, method: 'equal' })) {
       return `Syncing wallet error.`;
     }
+    if (error) return error;
+    if (!maxFee.feeOriginal.toNumber()) return '';
     if (maxFee.feeOriginal.gt(tcBalance)) {
       return `Your TC balance is insufficient. Please top up at least ${format.formatAmount({
         decimals: Token.TRUSTLESS.decimal,

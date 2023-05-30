@@ -96,7 +96,7 @@ const SignMessageModal = ({ requestID, request, onClose }: IProps) => {
       request.fromAddress &&
       !compareString({ str1: request.fromAddress, str2: userInfo?.address, method: 'equal' })
     ) {
-      setError(`Please change to address ${request.fromAddress} to sign the transaction.`);
+      setError(`Please switch to address ${request.fromAddress} to sign the transaction.`);
     } else {
       setError('');
     }
