@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import px2rem from '@/utils/px2rem';
+import { CDN_URL_ICONS } from '@/configs';
 
 const PopoverWrapper = styled(Popover)<{ width?: number; hidePadding?: boolean }>`
   background-color: ${({ theme }) => theme.bg.secondary};
@@ -58,10 +59,25 @@ const Wrapper = styled.div<{ show?: boolean }>`
     p {
       color: ${({ theme, show }) => (show ? theme['text-parallel'] : theme['text-highlight'])};
     }
+
+    .arrow {
+      height: ${px2rem(14)};
+      width: ${px2rem(14)};
+      background-image: url(${({ show }) => `${CDN_URL_ICONS}/ic-arrow-down-${show ? 'light' : 'dark'}.svg`});
+    }
   }
 
   :hover {
-    opacity: ${({ show }) => (show ? 1 : 0.8)};
+    background: ${({ theme }) => theme['button-primary']};
+    .element {
+      p {
+        color: ${({ theme }) => theme['text-parallel']};
+      }
+
+      .arrow {
+        background-image: url('${CDN_URL_ICONS}/ic-arrow-down-light.svg');
+      }
+    }
   }
 `;
 

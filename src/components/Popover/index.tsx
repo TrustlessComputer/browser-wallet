@@ -1,7 +1,5 @@
 import React, { PropsWithChildren, useEffect, useImperativeHandle } from 'react';
 import { PopoverWrapper, OverlayWrapper, Wrapper } from './styled';
-import { CDN_URL_ICONS } from '@/configs';
-import IconSVG from '@/components/IconSVG';
 
 interface IProps extends PropsWithChildren {
   icon?: React.ReactNode;
@@ -72,11 +70,7 @@ const Dropdown = React.forwardRef(
               <div className="element">
                 {icon && icon}
                 {element && element}
-                <IconSVG
-                  src={`${CDN_URL_ICONS}/ic-arrow-down-${!show ? 'dark' : 'light'}.svg`}
-                  color="white"
-                  maxWidth="14"
-                />
+                <div className="arrow" />
               </div>
             </Wrapper>
           )}
