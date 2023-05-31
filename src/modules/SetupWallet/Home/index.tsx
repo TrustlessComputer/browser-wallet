@@ -26,7 +26,7 @@ const Home = React.memo(({ setStep }: IProps) => {
       </Text>
       <Text size="h6" className="mt-16" color="text-secondary" align="center">
         When you create a new wallet, new phrase are generated. Your phrase are the master key of your wallet accounts
-        and any value the hold.
+        and any value they hold.
       </Text>
       <Button variants="primary" sizes="stretch" className="mt-60" onClick={setCreate}>
         Create
