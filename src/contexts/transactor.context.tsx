@@ -45,7 +45,6 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
     <TransactorContext.Provider value={contextValues}>
       {children}
       {showBTCModal && <SendBTCModal show={showBTCModal} onClose={onCloseBTCModal} />}
-      <SendBTCModal show={true} onClose={onCloseBTCModal} />
       {showResumeModal && <ResumeModal show={showResumeModal} onClose={onCloseResumeModal} />}
       {showTCModal && <SendTCModal show={showTCModal} onClose={onCloseTCModal} />}
       <DappRequest />
