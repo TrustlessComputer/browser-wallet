@@ -15,6 +15,14 @@ const Container = styled.div`
     color: ${({ theme }: { theme: DefaultTheme }) => theme.red.A};
     margin-top: 4px;
   }
+  .buttonMax {
+    padding: 2px 12px;
+    border: 2px solid ${({ theme }: { theme: DefaultTheme }) => theme['border-primary']};
+    border-radius: 8px;
+    :hover {
+      opacity: 0.8;
+    }
+  }
 `;
 
 const InputWrapper = styled.div`
@@ -58,6 +66,7 @@ const InputWrapper = styled.div`
     margin-left: 20px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     :hover {
       opacity: 0.8;
       cursor: pointer;
@@ -77,6 +86,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   classInput?: string | undefined;
   title?: string | undefined;
   errorMsg?: string;
+  isMax?: boolean;
+  onMaxClick?: () => void;
 }
 
 const Input = (props: InputProps) => {
@@ -92,6 +103,8 @@ const Input = (props: InputProps) => {
     classInput,
     title,
     errorMsg,
+    isMax = false,
+    onMaxClick = () => undefined,
     ...rest
   } = props;
 
@@ -136,6 +149,13 @@ const Input = (props: InputProps) => {
         {inputTypeInit.current === 'password' && (
           <div className="icon-container" onClick={onClick}>
             <PasswordIcon isShow={showPassword} />
+          </div>
+        )}
+        {isMax && (
+          <div className="buttonMax cursor-pointer" onClick={onMaxClick}>
+            <Text fontWeight="semibold" size="note">
+              MAX
+            </Text>
           </div>
         )}
       </InputWrapper>
