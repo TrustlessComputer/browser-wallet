@@ -34,6 +34,7 @@ import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
 import { AssetsContext } from '@/contexts/assets.context';
 import BigNumber from 'bignumber.js';
 import useCountDown from '@/hooks/useCountDown';
+import { getOriginURL } from '@/utils';
 
 interface IProps {
   requestID: string;
@@ -50,9 +51,8 @@ const SignTransactionModal = ({ requestID, request, onClose, expiredAt }: IProps
   const { getTransactions } = useContext(TransactionContext);
   const { isLoadedAssets } = useContext(AssetsContext);
 
-  const { available, countDown } = useCountDown(0, Number(expiredAt) / 1000);
+  const { available } = useCountDown(0, Number(expiredAt) / 1000);
 
-  console.log('SANG TEST: ', countDown);
   const { debounceGetTransactions, uninscribed, sizeByte } = useTransaction({
     isGetUnInscribedSize: true,
     isSignTransaction: true,
@@ -259,6 +259,20 @@ const SignTransactionModal = ({ requestID, request, onClose, expiredAt }: IProps
                       <Text size="body">{maxFee.gasLimitText}</Text>
                     </div>
                   </>
+                )}
+                {!!request.site && (
+                  <div className="mt-16">
+                    <Text size="note" color="text-secondary">
+                      Request site
+                    </Text>
+                    <div className="box">
+                      <Text size="body">
+                        <a href={request.site} target="_blank">
+                          {getOriginURL(request.site)}
+                        </a>
+                      </Text>
+                    </div>
+                  </div>
                 )}
                 {!!functionName && (
                   <div className="mt-16">
