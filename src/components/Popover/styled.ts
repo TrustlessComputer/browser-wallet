@@ -2,12 +2,14 @@ import styled from 'styled-components';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import px2rem from '@/utils/px2rem';
 
-const PopoverWrapper = styled(Popover)<{ width?: number }>`
+const PopoverWrapper = styled(Popover)<{ width?: number; hidePadding?: boolean }>`
   background-color: ${({ theme }) => theme.bg.secondary};
   border: 1px solid ${({ theme }) => theme['border-primary']};
   max-width: ${({ width }) => px2rem(width || 200)} !important;
   border-radius: ${px2rem(8)};
-  padding: ${px2rem(12)} ${px2rem(16)};
+
+  ${({ hidePadding }) => (!hidePadding ? `padding: ${px2rem(12)} ${px2rem(16)};` : `padding: 0px;`)};
+
   /* margin-top: ${px2rem(6)}; */
 
   mix-blend-mode: normal;
