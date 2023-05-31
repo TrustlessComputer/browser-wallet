@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SignerModal from '@/components/SignerModal';
 import { Container } from '@/components/Transactor/styled';
 import { Input } from '@/components/Inputs';
@@ -11,6 +11,11 @@ import isNumber from 'lodash/isNumber';
 import toast from 'react-hot-toast';
 import { getErrorMessage } from '@/utils/error';
 import useBitcoin from '@/hooks/useBitcoin';
+import { AssetsContext } from '@/contexts/assets.context';
+import BigNumber from 'bignumber.js';
+import { TC_SDK } from '@/lib';
+import format from '@/utils/amount';
+import Token from '@/constants/token';
 
 interface IProps {
   show: boolean;
@@ -24,6 +29,7 @@ interface IFormValue {
 
 const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
   const [submitting, setSubmitting] = useState(false);
+  const { btcBalance } = useContext(AssetsContext);
 
   const {
     feeRate,
@@ -36,6 +42,11 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
   const { createSendBTCTx } = useBitcoin();
+  const { btcAssets } = useContext(AssetsContext);
+
+  const txSize = React.useMemo(() => {
+    return TC_SDK.estimateTxSize((btcAssets?.availableUTXOs || []).length, 2);
+  }, [btcAssets?.availableUTXOs]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -93,7 +104,7 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
           validate={validateForm}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+          {({ values, setFieldValue, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <form className="form" onSubmit={handleSubmit}>
               <Input
                 title="TRANSFER BTC TO"
@@ -119,6 +130,25 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
                 className="input"
                 placeholder={`Enter the amount`}
                 errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
+                isMax={true}
+                onMaxClick={() => {
+                  const fee = TC_SDK.estimateInscribeFee({
+                    tcTxSizeByte: txSize,
+                    feeRatePerByte: currentRate,
+                  }).totalFee.toNumber();
+                  const maxAmount = new BigNumber(btcBalance).minus(fee).toNumber();
+                  setFieldValue(
+                    'amount',
+                    new BigNumber(
+                      format.formatAmount({
+                        originalAmount: maxAmount,
+                        decimals: Token.BITCOIN.decimal,
+                        maxDigits: 6,
+                        isCeil: false,
+                      }),
+                    ).toNumber(),
+                  );
+                }}
               />
               <FeeRate
                 allRate={feeRate}
@@ -129,6 +159,9 @@ const SendBTCModal = React.memo(({ show, onClose }: IProps) => {
                 currentRate={currentRate}
                 customRate={customRate}
                 isLoading={isLoadingRate}
+                options={{
+                  sizeByte: txSize,
+                }}
               />
               <Button disabled={submitting} type="submit" className="confirm-btn" isLoading={submitting}>
                 {submitting ? 'Processing...' : 'Transfer'}
