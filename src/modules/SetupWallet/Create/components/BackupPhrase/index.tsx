@@ -1,13 +1,11 @@
 import Text from '@/components/Text';
 import { Content } from '@/modules/SetupWallet/Create/components/BackupPhrase/styled';
 import React from 'react';
-import copy from 'copy-to-clipboard';
 import throttle from 'lodash/throttle';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import AlertMessage from '@/components/AlertMessage';
 import { AlertMessageType } from '@/components/AlertMessage/AlertMessage';
-import toast from 'react-hot-toast';
 
 interface BackupPhraseProps {
   phrase: string;
@@ -23,8 +21,8 @@ const BackupPhrase = (props: BackupPhraseProps) => {
         if (hidePhrase) {
           setHidePhrase(false);
         } else {
-          copy(props.phrase);
-          toast.success('Copied');
+          // copy(props.phrase);
+          // toast.success('Copied');
         }
       },
       1500,
