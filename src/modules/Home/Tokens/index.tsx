@@ -173,6 +173,7 @@ const Tokens = () => {
           handleClose={handleCloseTransferModal}
           erc20TokenAddress={selectedToken.address}
           decimals={selectedToken.decimal}
+          balance={selectedToken.balance}
         />
       )}
     </StyledTokenProfile>

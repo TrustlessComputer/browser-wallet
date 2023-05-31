@@ -33,14 +33,16 @@ import { getConnector } from '@/lib/connector.helper';
 import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
 import { AssetsContext } from '@/contexts/assets.context';
 import BigNumber from 'bignumber.js';
+import useCountDown from '@/hooks/useCountDown';
 
 interface IProps {
   requestID: string;
   request: TC_CONNECT.IResultConnectResp;
   onClose: () => void;
+  expiredAt: string;
 }
 
-const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
+const SignTransactionModal = ({ requestID, request, onClose, expiredAt }: IProps) => {
   const [functionName, setFunctionName] = React.useState<FunctionItem | undefined>(undefined);
   const [submitting, setSubmitting] = React.useState(false);
   const userSecretKey = useUserSecretKey();
@@ -48,6 +50,9 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
   const { getTransactions } = useContext(TransactionContext);
   const { isLoadedAssets } = useContext(AssetsContext);
 
+  const { available, countDown } = useCountDown(0, Number(expiredAt) / 1000);
+
+  console.log('SANG TEST: ', countDown);
   const { debounceGetTransactions, uninscribed, sizeByte } = useTransaction({
     isGetUnInscribedSize: true,
     isSignTransaction: true,
@@ -207,7 +212,11 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         <Text color="text-highlight" fontWeight="semibold" size="h5" className="function-name">
           {signMethod}
         </Text>
-        <GasFee fee={maxFee.feeText} error={error} isShowBTC={request.isInscribe} />
+        <GasFee
+          fee={maxFee.feeText}
+          error={error || available ? '' : 'Request timeout.'}
+          isShowBTC={request.isInscribe}
+        />
         <Divider className="mb-24 mt-24" />
         <SelectAccount className="mb-16" error={addressError} />
         {!!request.to && (
@@ -303,7 +312,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         </Button>
         <Button
           sizes="stretch"
-          disabled={estimating || submitting || !!error || !isLoadedAssets || !!addressError}
+          disabled={estimating || submitting || !!error || !isLoadedAssets || !!addressError || !available}
           isLoading={estimating || submitting || !isLoadedAssets}
           onClick={onSignRequest}
         >

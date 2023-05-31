@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SEARCH_STR } from '@/components/Transactor/DappRequest/constants';
+import { EXPIRED_AT_STR, SEARCH_STR } from '@/components/Transactor/DappRequest/constants';
 import SignTransactionModal from '@/components/Transactor/DappRequest/SignTransaction.modal';
 import * as TC_CONNECT from 'tc-connect';
 import useAsyncEffect from 'use-async-effect';
@@ -17,6 +17,7 @@ const DappRequest = React.memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [request, setRequest] = React.useState<TC_CONNECT.IResultConnectResp | undefined>(undefined);
   const requestID = searchParams.get(SEARCH_STR);
+  const expiredAt = searchParams.get(EXPIRED_AT_STR);
 
   const onClose = () => {
     setSearchParams('');
@@ -28,6 +29,9 @@ const DappRequest = React.memo(() => {
       const connector = getConnector();
       const request = await connector.getRequest(requestID);
       setRequest(request);
+      if (!expiredAt) {
+        toast.error('Expired time does not exist.');
+      }
     } catch (error) {
       const { message } = getErrorMessage(error, 'requestData');
       toast.error(message);
@@ -39,14 +43,14 @@ const DappRequest = React.memo(() => {
 
   useAsyncEffect(debounceGetRequestData, [requestID, userInfo]);
 
-  if (!request || !requestID) return <></>;
+  if (!request || !requestID || !expiredAt) return <></>;
 
   if (request.method === TC_CONNECT.RequestMethod.account) {
     return <RequestAccountModal request={request} requestID={requestID} onClose={onClose} />;
   }
 
   if (request.method === TC_CONNECT.RequestMethod.sign) {
-    return <SignTransactionModal request={request} requestID={requestID} onClose={onClose} />;
+    return <SignTransactionModal request={request} requestID={requestID} onClose={onClose} expiredAt={expiredAt} />;
   }
 
   if (request.method === TC_CONNECT.RequestMethod.signMessage) {
