@@ -17,7 +17,7 @@ export interface IAssetsContext {
   getAssetsCreateTx: () => Promise<ICollectedUTXOResp | undefined>;
   isLoadedAssets: boolean;
 
-  // address dropdown
+  btcAssets: ICollectedUTXOResp | undefined;
 }
 
 const initialValue: IAssetsContext = {
@@ -25,6 +25,8 @@ const initialValue: IAssetsContext = {
   btcBalance: '0',
   getAssetsCreateTx: () => new Promise<ICollectedUTXOResp | undefined>(() => null),
   isLoadedAssets: false,
+
+  btcAssets: undefined,
 };
 
 export const AssetsContext = React.createContext<IAssetsContext>(initialValue);
@@ -130,8 +132,10 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
       btcBalance,
       getAssetsCreateTx: _onGetCollectedUTXO,
       isLoadedAssets,
+
+      btcAssets: assets,
     };
-  }, [tcBalance, btcBalance, _onGetCollectedUTXO, isLoadedAssets]);
+  }, [tcBalance, btcBalance, _onGetCollectedUTXO, isLoadedAssets, assets]);
 
   return <AssetsContext.Provider value={contextValues}>{children}</AssetsContext.Provider>;
 };

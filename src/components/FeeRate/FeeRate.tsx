@@ -22,8 +22,8 @@ interface IProps {
   error?: string;
 
   options?: {
-    type: 'inscribe';
-    sizeByte: number | undefined;
+    type?: 'inscribe';
+    sizeByte?: number | undefined;
   };
 }
 
@@ -48,9 +48,11 @@ const FeeRate = React.memo((props: IProps) => {
       tcTxSizeByte: txSize,
     });
     return {
-      amount: format.shorterAmount({
+      amount: format.formatAmount({
         decimals: Token.BITCOIN.decimal,
-        originalAmount: estimatedFee.totalFee.toString(),
+        originalAmount: estimatedFee.totalFee.toNumber(),
+        isCeil: true,
+        maxDigits: 5,
       }),
       symbol: 'BTC',
     };
