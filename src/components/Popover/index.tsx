@@ -64,11 +64,11 @@ const Dropdown = React.forwardRef(
           rootClose
         >
           {unwrapElement ? (
-            <div ref={ref} onClick={onClickWrapElement}>
+            <div ref={ref} onClick={show ? onClickWrapElement : undefined}>
               {unwrapElement}
             </div>
           ) : (
-            <Wrapper ref={ref} show={show} onClick={onClickWrapElement}>
+            <Wrapper ref={ref} show={show} onClick={show ? onClickWrapElement : undefined}>
               <div className="element">
                 {icon && icon}
                 {element && element}
@@ -89,7 +89,12 @@ const Dropdown = React.forwardRef(
         trigger={['hover', 'focus']}
         placement="bottom-start"
         overlay={
-          <PopoverWrapper width={width} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+          <PopoverWrapper
+            width={width}
+            hidePadding={!show}
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+          >
             {show && children}
           </PopoverWrapper>
         }
