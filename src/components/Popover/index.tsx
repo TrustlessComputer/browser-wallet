@@ -35,6 +35,13 @@ const Dropdown = React.forwardRef(
       setShow(!show);
     };
 
+    const onClickWrapElement = (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      e.preventDefault();
+      e.nativeEvent.stopImmediatePropagation();
+      onToggle();
+    };
+
     useEffect(() => {
       if (closeDropdown) {
         setShow(false);
@@ -57,9 +64,11 @@ const Dropdown = React.forwardRef(
           rootClose
         >
           {unwrapElement ? (
-            <div ref={ref}>{unwrapElement}</div>
+            <div ref={ref} onClick={onClickWrapElement}>
+              {unwrapElement}
+            </div>
           ) : (
-            <Wrapper ref={ref} show={show}>
+            <Wrapper ref={ref} show={show} onClick={onClickWrapElement}>
               <div className="element">
                 {icon && icon}
                 {element && element}
