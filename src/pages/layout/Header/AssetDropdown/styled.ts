@@ -11,7 +11,7 @@ export const Element = styled.div`
     font-weight: 500;
     font-size: ${px2rem(18)};
     color: ${({ theme }) => theme['button-primary']};
-    width: ${px2rem(108)};
+    width: ${px2rem(112)};
     text-align: center;
   }
 
