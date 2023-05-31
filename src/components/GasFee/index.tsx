@@ -12,9 +12,11 @@ interface IProps {
   fee: string;
   error: string;
   nonce?: number;
+  isShowBTC?: boolean;
 }
 
 const GasFee = React.memo((props: IProps) => {
+  const { isShowBTC = true } = props;
   const { tcBalance, btcBalance } = useContext(AssetsContext);
   return (
     <Container>
@@ -41,17 +43,19 @@ const GasFee = React.memo((props: IProps) => {
           <Text size="body">{props.nonce}</Text>
         </Row>
       )}
-      <Row justify="space-between">
-        <Text size="body">BTC Balance</Text>
-        <Text size="body">
-          {format.formatAmount({
-            originalAmount: new BigNumber(btcBalance).toNumber(),
-            decimals: Token.BITCOIN.decimal,
-            maxDigits: 7,
-          })}{' '}
-          BTC
-        </Text>
-      </Row>
+      {isShowBTC && (
+        <Row justify="space-between">
+          <Text size="body">BTC Balance</Text>
+          <Text size="body">
+            {format.formatAmount({
+              originalAmount: new BigNumber(btcBalance).toNumber(),
+              decimals: Token.BITCOIN.decimal,
+              maxDigits: 7,
+            })}{' '}
+            BTC
+          </Text>
+        </Row>
+      )}
       {!!props.error && (
         <Text className="error-text" size="note">
           {upperFirst(props.error)}

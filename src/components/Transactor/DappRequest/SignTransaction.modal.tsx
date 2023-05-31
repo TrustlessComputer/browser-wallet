@@ -64,7 +64,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
 
-  const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({
+  const { maxFee, setGasLimit, error, setEstimating, estimating, setError, addressError } = useGasFee({
     defaultGasPrice: request.gasPrice ? Number(request.gasPrice) : undefined,
     btcFeeRate: request.isInscribe ? currentRate : undefined,
     sizeByte: request.isInscribe ? sizeByte : undefined,
@@ -207,9 +207,9 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         <Text color="text-highlight" fontWeight="semibold" size="h5" className="function-name">
           {signMethod}
         </Text>
-        <GasFee fee={maxFee.feeText} error={error} />
+        <GasFee fee={maxFee.feeText} error={error} isShowBTC={request.isInscribe} />
         <Divider className="mb-24 mt-24" />
-        <SelectAccount className="mb-16" />
+        <SelectAccount className="mb-16" error={addressError} />
         {!!request.to && (
           <>
             <Text size="note" color="text-secondary">
@@ -303,7 +303,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         </Button>
         <Button
           sizes="stretch"
-          disabled={estimating || submitting || !!error || !isLoadedAssets}
+          disabled={estimating || submitting || !!error || !isLoadedAssets || !!addressError}
           isLoading={estimating || submitting || !isLoadedAssets}
           onClick={onSignRequest}
         >

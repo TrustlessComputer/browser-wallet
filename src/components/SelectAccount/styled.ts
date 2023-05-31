@@ -8,8 +8,8 @@ const Container = styled.div`
   }
 `;
 
-const ContentBox = styled.div`
-  border: 1px solid ${({ theme }) => theme['border-primary']};
+const ContentBox = styled.div<{ isError: boolean }>`
+  border: 1px solid ${({ theme, isError }) => (isError ? theme['text-error'] : theme['border-primary'])};
   border-radius: 8px;
   cursor: pointer;
   padding: 12px 16px 12px 12px;

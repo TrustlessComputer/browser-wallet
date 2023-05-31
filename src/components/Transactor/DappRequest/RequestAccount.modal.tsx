@@ -103,11 +103,11 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
     >
       <Container>
         <Text size="body-large">
-          Approve this request to prove you have access to this wallet and you can start to use{' '}
+          Connect to this dapp at{' '}
           <a href={request.site} target="_blank">
             {getOriginURL(request.site)}
-          </a>
-          .
+          </a>{' '}
+          to retrieve user wallet addresses and sign transactions.
         </Text>
         {!!request.signMessage && (
           <>
@@ -131,7 +131,7 @@ const RequestAccountModal = ({ requestID, request, onClose }: IProps) => {
             Reject
           </Button>
           <Button disabled={loading} sizes="stretch" onClick={onAcceptRequest}>
-            Sure
+            Connect
           </Button>
         </ButtonGroup>
       </Container>

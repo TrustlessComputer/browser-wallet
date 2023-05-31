@@ -75,21 +75,6 @@ const useGasFee = (
   }, [gasLimit, gasPrice]);
 
   const customError = React.useMemo(() => {
-    if (!!requestAddress && !compareString({ str1: requestAddress, str2: userInfo?.address, method: 'equal' })) {
-      const account = accounts.find(account =>
-        compareString({ str1: account.address, str2: requestAddress, method: 'equal' }),
-      );
-      if (account) {
-        return `Please switch to ${account.name} (${ellipsisCenter({
-          str: account.address,
-        })}) to sign the transaction.`;
-      } else {
-        return `Could not find this address ${requestAddress}, please try disconnect and reconnect on your dapp.`;
-      }
-    }
-    if (!compareString({ str1: userSecretKey?.address, str2: userInfo?.address, method: 'equal' })) {
-      return `Syncing wallet error.`;
-    }
     if (error) return error;
     if (!maxFee.feeOriginal.toNumber()) return '';
     if (maxFee.feeOriginal.gt(tcBalance)) {
@@ -128,6 +113,25 @@ const useGasFee = (
     userSecretKey?.address,
   ]);
 
+  const addressError = React.useMemo(() => {
+    if (!!requestAddress && !compareString({ str1: requestAddress, str2: userInfo?.address, method: 'equal' })) {
+      const account = accounts.find(account =>
+        compareString({ str1: account.address, str2: requestAddress, method: 'equal' }),
+      );
+      if (account) {
+        return `Please sign the transaction using ${account.name} (${ellipsisCenter({
+          str: account.address,
+        })}).`;
+      } else {
+        return `The address ${requestAddress} could not be found. Please disconnect and reconnect your wallet.`;
+      }
+    }
+    if (!compareString({ str1: userSecretKey?.address, str2: userInfo?.address, method: 'equal' })) {
+      return `Syncing wallet error.`;
+    }
+    return undefined;
+  }, [requestAddress, userInfo?.address, userSecretKey?.address]);
+
   useAsyncEffect(onGetGasPrice, [provider]);
 
   return {
@@ -136,6 +140,7 @@ const useGasFee = (
     setGasLimit,
     setGasPrice,
     error: customError,
+    addressError,
     setError,
     estimating,
     setEstimating,
