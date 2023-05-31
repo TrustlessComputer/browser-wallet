@@ -21,8 +21,6 @@ import network from '@/lib/network.helpers';
 import ExportMnemonic from '@/pages/layout/Header/AccountDropdown/ExportMnemonicModal';
 import ExportBTCKey from '@/pages/layout/Header/AccountDropdown/ExportBTCKeyModal';
 import ImportKey from '@/pages/layout/Header/AccountDropdown/ImportKeyModal';
-import storageLocal from '@/lib/storage.local';
-import { LocalStorageKey } from '@/enums/storage.keys';
 import { IAccount } from '@/components/AccountItem/types';
 import AccountItem from '@/components/AccountItem';
 import { IAccountItem } from '@/state/wallet/types';
@@ -37,7 +35,6 @@ const AccountDropdown = React.memo(() => {
     },
     dispatch: dispatch,
   });
-  const [showImportKey, setShowImportKey] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [removeAccount, setRemoveAccount] = useState<IAccount | undefined>(undefined);
   const [exportAccount, setExportAccount] = useState<IAccount | undefined>(undefined);
@@ -127,12 +124,6 @@ const AccountDropdown = React.memo(() => {
     );
   };
 
-  React.useEffect(() => {
-    if (storageLocal.get(LocalStorageKey.ADVANCE_USER)) {
-      setShowImportKey(true);
-    }
-  }, []);
-
   return (
     <>
       <Dropdown
@@ -152,8 +143,7 @@ const AccountDropdown = React.memo(() => {
         <DropDownContainer>
           <DropdownList>{accounts && accounts.length > 0 && accounts.map(account => renderItem(account))}</DropdownList>
           {renderAction('ic-plus-square-dark.svg', 'Create new account', () => setShowCreateModal(true))}
-          {showImportKey &&
-            renderAction('ic-import-tc-key-dark.svg', 'Import TC Private Key', () => setShowImportModal(true), false)}
+          {renderAction('ic-import-tc-key-dark.svg', 'Import TC Private Key', () => setShowImportModal(true), false)}
           {renderAction('ic-export-mnemoic-dark.svg', 'Export mnemonic', () => setExportMnemonic(true), false)}
           {renderAction('ic-export-key-dark.svg', 'Export BTC private key', () => setExportBTCKey(true), false)}
           {renderAction('ic-logout-dark.svg', 'Sign out', () => dispatch(setIsLockedWallet(true)), true, 'text-remove')}
