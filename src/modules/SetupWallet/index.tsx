@@ -18,7 +18,10 @@ const AuthWallet = React.memo(() => {
     return <Home setStep={setStep} />;
   }, [step, setStep]);
 
-  return <LayoutContent>{Component}</LayoutContent>;
+  if (step === 'import' || step === 'create') {
+    return <LayoutContent>{Component}</LayoutContent>;
+  }
+  return <>{Component}</>;
 });
 
 export default AuthWallet;
