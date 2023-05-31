@@ -17,12 +17,15 @@ import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
 import useGasFee from '@/components/GasFee/useGasFee';
 import { useUserSecretKey } from '@/state/wallet/hooks';
 import GasFee from '@/components/GasFee';
+import format from '@/utils/amount';
+import BigNumber from 'bignumber.js';
 
 type Props = {
   show: boolean;
   handleClose: () => void;
   erc20TokenAddress?: string;
   decimals: number;
+  balance: string;
 };
 
 interface IFormValue {
@@ -31,7 +34,7 @@ interface IFormValue {
 }
 
 const TransferModal = (props: Props) => {
-  const { show = false, handleClose, erc20TokenAddress, decimals } = props;
+  const { show = false, handleClose, erc20TokenAddress, decimals, balance = '0' } = props;
   const [submitting, setSubmitting] = useState(false);
   const [estimating, setEstimating] = useState(false);
   const userSecretKey = useUserSecretKey();
@@ -146,7 +149,7 @@ const TransferModal = (props: Props) => {
           validate={validateForm}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+          {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
             <form className="form" onSubmit={handleSubmit}>
               <Input
                 title="TRANSFER TOKEN TO"
@@ -172,6 +175,19 @@ const TransferModal = (props: Props) => {
                 className="input"
                 placeholder={`Enter the amount`}
                 errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
+                isMax={true}
+                onMaxClick={() => {
+                  const amount = new BigNumber(
+                    format.formatAmount({
+                      originalAmount: new BigNumber(balance || '0').toNumber(),
+                      decimals: decimals,
+                      isCeil: false,
+                      clipAmount: false,
+                      maxDigits: 9,
+                    }),
+                  );
+                  setFieldValue('amount', amount.toNumber());
+                }}
               />
               <GasFee fee={maxFee.feeText} error={error} />
               <FeeRate

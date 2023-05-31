@@ -13,10 +13,12 @@ import AccountItem from '@/components/AccountItem';
 
 interface IProps {
   className?: string;
+  error?: string;
 }
 
 const SelectAccount = React.memo((props: IProps) => {
-  const { className = '' } = props;
+  const { className = '', error = '' } = props;
+
   const userSecretKey = useUserSecretKey();
   const userInfo = useCurrentUserInfo();
   const accounts = useAppSelector(listAccountsSelector);
@@ -70,12 +72,14 @@ const SelectAccount = React.memo((props: IProps) => {
       {!!userSecretKey && (
         <Dropdown
           unwrapElement={
-            <ContentBox className="item">
-              <Text size="body" color="text-primary">
-                {userSecretKey.address}
-              </Text>
-              <ArrowDownIcon />
-            </ContentBox>
+            <>
+              <ContentBox className="item" isError={!!error}>
+                <Text size="body" color="text-primary">
+                  {userSecretKey.address}
+                </Text>
+                <ArrowDownIcon />
+              </ContentBox>
+            </>
           }
           ref={dropdownRef}
           width={500}
@@ -86,6 +90,11 @@ const SelectAccount = React.memo((props: IProps) => {
             </DropdownList>
           </DropDownContainer>
         </Dropdown>
+      )}
+      {!!error && (
+        <Text size="note" color="text-error" className="mt-8">
+          {error}
+        </Text>
       )}
     </Container>
   );

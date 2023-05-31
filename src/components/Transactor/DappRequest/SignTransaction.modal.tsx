@@ -33,20 +33,25 @@ import { getConnector } from '@/lib/connector.helper';
 import { handleRequestEnd } from '@/components/Transactor/DappRequest/utils';
 import { AssetsContext } from '@/contexts/assets.context';
 import BigNumber from 'bignumber.js';
+import useCountDown from '@/hooks/useCountDown';
+import { getOriginURL } from '@/utils';
 
 interface IProps {
   requestID: string;
   request: TC_CONNECT.IResultConnectResp;
   onClose: () => void;
+  expiredAt: string;
 }
 
-const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
+const SignTransactionModal = ({ requestID, request, onClose, expiredAt }: IProps) => {
   const [functionName, setFunctionName] = React.useState<FunctionItem | undefined>(undefined);
   const [submitting, setSubmitting] = React.useState(false);
   const userSecretKey = useUserSecretKey();
   const { estimateGas, createAndSendTransaction } = useSignTransaction();
   const { getTransactions } = useContext(TransactionContext);
   const { isLoadedAssets } = useContext(AssetsContext);
+
+  const { available } = useCountDown(0, Number(expiredAt) / 1000);
 
   const { debounceGetTransactions, uninscribed, sizeByte } = useTransaction({
     isGetUnInscribedSize: true,
@@ -64,7 +69,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
     onFetchFee,
   } = useFeeRate({ minFeeRate: undefined });
 
-  const { maxFee, setGasLimit, error, setEstimating, estimating, setError } = useGasFee({
+  const { maxFee, setGasLimit, error, setEstimating, estimating, setError, addressError } = useGasFee({
     defaultGasPrice: request.gasPrice ? Number(request.gasPrice) : undefined,
     btcFeeRate: request.isInscribe ? currentRate : undefined,
     sizeByte: request.isInscribe ? sizeByte : undefined,
@@ -207,9 +212,13 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         <Text color="text-highlight" fontWeight="semibold" size="h5" className="function-name">
           {signMethod}
         </Text>
-        <GasFee fee={maxFee.feeText} error={error} />
+        <GasFee
+          fee={maxFee.feeText}
+          error={error || available ? '' : 'Request timeout.'}
+          isShowBTC={request.isInscribe}
+        />
         <Divider className="mb-24 mt-24" />
-        <SelectAccount className="mb-16" />
+        <SelectAccount className="mb-16" error={addressError} />
         {!!request.to && (
           <>
             <Text size="note" color="text-secondary">
@@ -250,6 +259,20 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
                       <Text size="body">{maxFee.gasLimitText}</Text>
                     </div>
                   </>
+                )}
+                {!!request.site && (
+                  <div className="mt-16">
+                    <Text size="note" color="text-secondary">
+                      Request site
+                    </Text>
+                    <div className="box">
+                      <Text size="body">
+                        <a href={request.site} target="_blank">
+                          {getOriginURL(request.site)}
+                        </a>
+                      </Text>
+                    </div>
+                  </div>
                 )}
                 {!!functionName && (
                   <div className="mt-16">
@@ -303,7 +326,7 @@ const SignTransactionModal = ({ requestID, request, onClose }: IProps) => {
         </Button>
         <Button
           sizes="stretch"
-          disabled={estimating || submitting || !!error || !isLoadedAssets}
+          disabled={estimating || submitting || !!error || !isLoadedAssets || !!addressError || !available}
           isLoading={estimating || submitting || !isLoadedAssets}
           onClick={onSignRequest}
         >
